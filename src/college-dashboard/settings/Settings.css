@@ -1,0 +1,81 @@
+.settings-container {
+  max-width: 800px;
+  margin: 3rem auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settings-header {
+  background-color: #3f51b5;
+  color: white;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-button {
+  font-size: 1.5rem;
+  border: none;
+  background: none;
+  color: white;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-button:hover {
+  color: #ffcccb;
+}
+
+.tab-header {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  background-color: #f5f7fa;
+}
+
+.tab-header button {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-header button:hover {
+  background-color: #eef1f6;
+}
+
+.tab-header button.active {
+  border-bottom: 3px solid #3f51b5;
+  background-color: #e8eaf6;
+  font-weight: 600;
+  color: #3f51b5;
+}
+
+.tab-content {
+  padding: 2rem;
+  animation: fadeIn 0.3s ease-in;
+}

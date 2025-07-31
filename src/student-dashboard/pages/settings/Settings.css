@@ -1,0 +1,65 @@
+.settings-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #f9fafb;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  margin-left: 340px;
+
+}
+
+.settings-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #333;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.settings-section h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.settings-form label {
+  display: block;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.settings-form input[type="text"],
+.settings-form input[type="email"],
+.settings-form input[type="password"] {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.toggle-options label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.save-button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: #5b2ecc;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.save-button:hover {
+  background: #4725a7;
+}

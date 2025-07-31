@@ -1,0 +1,181 @@
+.recruiters-container {
+  padding: 32px;
+  background-color: #f9fafb;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+.filter-buttons {
+  margin-bottom: 24px;
+}
+
+.btn {
+  margin-right: 12px;
+  padding: 8px 18px;
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  color: #333;
+}
+
+.btn:hover {
+  background-color: #f0f0f0;
+}
+
+.btn.active {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.recruiters-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.recruiters-table th,
+.recruiters-table td {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  font-size: 14px;
+  color: #444;
+}
+
+.recruiters-table th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+.badge.active {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badge.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge.hold {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.badge.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.badge.new {
+  background-color: #ede9fe;
+  color: #5b21b6;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background-color: #fff;
+  padding: 30px 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 420px;
+  position: relative;
+}
+
+.modal h2 {
+  margin-bottom: 12px;
+  font-size: 20px;
+  color: #111827;
+}
+
+.modal p {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.modal-actions button {
+  padding: 8px 16px;
+  border: none;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-actions button:nth-child(1) {
+  background-color: #e5e7eb;
+  color: #111;
+}
+
+.modal-actions button:nth-child(1):hover {
+  background-color: #d1d5db;
+}
+
+.modal-actions button:nth-child(2) {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+.modal-actions button:nth-child(2):hover {
+  background-color: #1e40af;
+}
+
+.close-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #6b7280;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #111827;
+}

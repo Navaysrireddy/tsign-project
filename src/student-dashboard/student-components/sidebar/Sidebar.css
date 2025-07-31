@@ -1,0 +1,84 @@
+.student-sidebar {
+  width: 240px;
+  background-color: #1e293b;
+  color: #ffffff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  height: 100vh;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 30px;
+  background-color: white;
+  height: 60px;
+  border-radius: 20px;
+}
+
+.logo img {
+  width: 170px;
+  height: 45px;
+  margin-bottom: 10px;
+}
+
+.logo h3 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.subtext {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 0;
+
+}
+
+.nav-list li {
+  margin-bottom: 12px;
+}
+
+/* NavLink base style */
+.nav-list li a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #d1d5db;
+  font-size: 15px;
+  transition: background 0.2s ease-in-out;
+}
+
+/* Hover effect */
+.nav-list li a:hover {
+  background-color: #334155;
+}
+
+/* Active link style */
+.nav-list li a.active {
+  background-color: #475569;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Student Info */
+.student-info {
+  font-size: 14px;
+  border-top: 1px solid #334155;
+  padding-top: 20px;
+  color: #d1d5db;
+}
+
+.student-info p {
+  margin: 4px 0;
+}

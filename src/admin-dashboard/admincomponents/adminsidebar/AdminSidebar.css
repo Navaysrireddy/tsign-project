@@ -1,0 +1,42 @@
+/* admin-dashboard/admincomponents/adminsidebar/Adminsidebar.css */
+
+.sidebar {
+  width: 240px;
+  background-color: #0F172A;
+  color: white;
+  min-height: 100vh;
+  padding: 1.5rem 1rem;
+}
+
+.logo-img {
+  width: 60px;
+  margin: 0 auto 1rem;
+  display: block;
+}
+
+.logo {
+  text-align: center;
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.nav a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  transition: background 0.3s;
+}
+
+.nav a:hover,
+.nav a.active {
+  background-color: #1D4ED8;
+}
+
+.settings-link {
+  margin-top: auto;
+  color: #a0aec0;
+}
