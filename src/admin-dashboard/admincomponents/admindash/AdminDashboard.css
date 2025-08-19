@@ -1,11 +1,10 @@
-/* Admin-dashboard.css */
-
+/* 
 .admin-dashboard {
   display: flex;
   min-height: 100vh;
   background-color: #f9fafb;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin-left: 250px;
+  margin-left:-840px;
 }
 
 .main-content {
@@ -41,11 +40,65 @@
   margin-bottom: 24px;
 }
 
-/* Optional: smooth scroll for long content */
 .main-content::-webkit-scrollbar {
   width: 8px;
 }
 .main-content::-webkit-scrollbar-thumb {
   background-color: #cbd5e0;
   border-radius: 4px;
+} */
+
+
+
+
+
+/* Root container */
+.admin-dashboard {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9fafb;
+  margin: 0; /* removes unwanted spacing */
+  margin-left: 235px;
+}
+
+/* Sidebar fully left */
+.sidebar {
+  width: 250px;
+  background-color: #0f172a; /* dark navy */
+  color: white;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  flex-shrink: 0;
+}
+
+/* Main content next to sidebar */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background-color: #f9fafb;
+  height: 100vh;
+  box-sizing: border-box;
+  margin: 0; /* remove any margin */
+}
+
+/* Sections */
+.summary-section,
+.entity-panels,
+.charts,
+.bottom-section {
+  margin-bottom: 24px;
+}
+
+/* Responsive panel layout */
+.entity-panels,
+.charts,
+.bottom-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 }

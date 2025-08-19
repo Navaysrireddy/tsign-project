@@ -5,67 +5,68 @@ import { FaWhatsapp } from 'react-icons/fa';
 import './Services.css';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
-import TSignServices from '../../assests/TSIGNServices-removebg-preview.png';
+import TsignID from '../../assests/TSIGNServices-removebg-preview.png';
+
 
 const Services = () => {
   const [activeTab, setActiveTab] = useState('identity');
   const [email, setEmail] = useState('');
 
   const services = [
-    {
-      id: 'identity',
-      icon: <FiUser />,
-      title: 'Next-Gen Identity Verification',
-      description: 'Revolutionary blockchain-powered student authentication with biometric matching and tamper-proof digital credentials.',
-      features: [
-    'Secure QR code-based ID verification',
-   "Time-bound credential validity checks",
-    'Tamper-proof digital certificates',
-    'Seamless integration with institutions & employers'
-  ],
-  cta: 'Explore T-SIGN'
-},
-   {
-  id: 'registration',
-  icon: <FiBook />,
-  title: 'T-SIGN Institutional Enrollment',
-  description: 'Streamlined digital onboarding for colleges and students in Telangana with automated verification and transparent status tracking.',
-  features: [
-    'AI-assisted form validation',
-    'Auto-verification of documents with state databases',
-    'Multi-tier approval workflow (Student → College → Admin)',
-    'Real-time enrollment progress dashboard'
-  ],
-  cta: 'Start Onboarding'
-},
   {
-  id: 'recruitment',
-  icon: <FiBriefcase />,
-  title: 'T-SIGN Career Connect',
-  description: 'Bridge between verified Telangana students and recruiters, ensuring trusted hiring through authenticated academic data.',
-  features: [
-    'Pre-verified student profiles',
-    'AI-powered skill and role matching',
-    'Integrated interview scheduling system',
-    'Insights for recruiters and colleges'
-  ],
-  cta: 'Join Talent Network'
-},
-   {
-  id: 'documents',
-  icon: <FiFileText />,
-  title: 'T-SIGN Digital Credentials',
-  description: 'Generate and share tamper-proof academic certificates, transcripts, and badges—trusted across institutions and industries.',
-  features: [
-    'Blockchain-secured digital documents',
-    'Institution-branded templates',
-    "Instant QR code-based validation",
-    'QR-based lifetime verification'
-  ],
-  cta: 'View Credentials'
-}
+    id: 'identity',
+    icon: <FiUser />,
+    title: 'T-SIGN Digital Identity',
+    description: 'A secure and unified platform for Telangana students to manage, verify, and share academic identity through blockchain-enabled digital credentials.',
+    features: [
+      'Secure QR code-based ID verification',
+      'Time-bound credential validity checks',
+      'Tamper-proof digital certificates',
+      'Seamless integration with institutions & employers'
+    ],
+    cta: 'Explore T-SIGN'
+  },
+  {
+    id: 'registration',
+    icon: <FiBook />,
+    title: 'T-SIGN Institutional Enrollment',
+    description: 'Streamlined digital onboarding for colleges and students in Telangana with automated verification and transparent status tracking.',
+    features: [
+      'AI-assisted form validation',
+      'Auto-verification of documents with state databases',
+      'Multi-tier approval workflow (Student → College → Admin)',
+      'Real-time enrollment progress dashboard'
+    ],
+    cta: 'Start Onboarding'
+  },
+  {
+    id: 'recruitment',
+    icon: <FiBriefcase />,
+    title: 'T-SIGN Career Connect',
+    description: 'Bridge between verified Telangana students and recruiters, ensuring trusted hiring through authenticated academic data.',
+    features: [
+      'Pre-verified student profiles',
+      'AI-powered skill and role matching',
+      'Integrated interview scheduling system',
+      'Insights for recruiters and colleges'
+    ],
+    cta: 'Join Talent Network'
+  },
+  {
+    id: 'documents',
+    icon: <FiFileText />,
+    title: 'T-SIGN Digital Credentials',
+    description: 'Generate and share tamper-proof academic certificates, transcripts, and badges—trusted across institutions and industries.',
+    features: [
+      'Blockchain-secured digital documents',
+      'Institution-branded templates',
+      'Instant QR code-based validation',
+      'QR-based lifetime verification'
+    ],
+    cta: 'View Credentials'
+  }
+];
 
-  ];
 
   const testimonials = [
     {
@@ -102,8 +103,7 @@ const Services = () => {
             className="services-hero-text"
           >
             <h1>
-              <span className="gradient-text"><span className='line-tsign'>T</span>elangana <br /><span className='line-tsign'>S</span>tudent  
-             <br /><span className='line-tsign-i'>I</span>dentity</span><br /><span className='line-tsign'>G</span>enerated <br /><span className='line-tsign'>N</span>umber
+              <span className="gradient-text">Telangana Student Identity</span>  Generated Number
             </h1>
             <p>The complete platform for verifiable academic credentials and seamless institutional operations</p>
             <div className="hero-buttons">
@@ -125,13 +125,19 @@ const Services = () => {
 >
   <div className="floating-card-container">
     {/* Animated Circle Background */}
-    
+    <motion.div 
+      className="circle-overlay"
+      initial={{ scale: 0.9 }}
+      animate={{ scale: 1 }}
+      transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
+    />
     
     {/* Floating Card */}
-    <div className="floating-card">
-      <img className='id-img' src={TSignServices} alt="Verified Student ID" />
-      
-    </div>
+   <div className="floating-card">
+
+    <img className="base-img" src={TsignID} alt="Base Verified Student ID" />
+  </div>
+
 
   </div>
 </motion.div>
@@ -273,20 +279,24 @@ const Services = () => {
             <div className="contact-card">
               <FiPhone className="contact-icon" />
               <h4>Global Support</h4>
-              <p>+1 (555) 123-4567</p>
-              <a href="tel:+15551234567">Call now</a>
+              <p>+91 9996662221</p>
+              {/* <a href="tel:+15551234567">Call now</a> */}
             </div>
             <div className="contact-card">
               <FaWhatsapp className="contact-icon" />
               <h4>Instant Chat</h4>
               <p>Message our team</p>
-              <a href="https://wa.me/15551234567">Start chat</a>
+              <a href="/">Start chat</a>
             </div>
             <div className="contact-card">
               <FiMapPin className="contact-icon" />
               <h4>Visit Us</h4>
-              <p>San Francisco • Hyderabad • London</p>
-              <a href="#map">View locations</a>
+              <p>  5th Floor Ektha Towers,<br />
+                  White Field Rd, Ashok Nagar,<br />
+                  Golden Habitat Whitefields,<br />
+                  HITEC City, Hyderabad,<br />
+                  Kondapur, Telangana 500084</p>
+              {/* <a href="#map">View locations</a> */}
             </div>
           </div>
         </div>

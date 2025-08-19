@@ -46,15 +46,15 @@ const EventsCalendar = ({
   }
   // Find events for each day
   const getEventsForDay = (day) => {
-  const monthName = months[currentMonth];
-  // Removed dayStr as it's not used
-  return events.filter(event => {
-    const [monthShort, eventDay] = event.date.split(' ');
-    const eventDayNum = parseInt(eventDay, 10);
-    return monthShort === monthName.substring(0, 3) && eventDayNum === day;
-  });
-};
-
+    const monthName = months[currentMonth];
+    const dayStr = day < 10 ? `0${day}` : `${day}`;
+    // This is a simplification - in a real app you'd parse the date properly
+    return events.filter(event => {
+      const [monthShort, eventDay] = event.date.split(' ');
+      const eventDayNum = parseInt(eventDay, 10);
+      return monthShort === monthName.substring(0, 3) && eventDayNum === day;
+    });
+  };
   // Get color for event category
   const getCategoryColor = (category) => {
     switch (category) {

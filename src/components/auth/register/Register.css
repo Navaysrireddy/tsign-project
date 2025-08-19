@@ -3,10 +3,35 @@
   margin: 2rem auto;
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8f9fa;
-  border-radius: 10px;
+  /* background-color: #f8f9fa; */
+  /* border-radius: 10px; */
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
+.register-header {
+  display: flex;
+  align-items: center; /* vertical alignment */
+  gap: 1rem;
+  padding: 1rem 2rem;
+  /* background-color: #fff; */
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.register-logo {
+  width: 220px;
+  height: auto;
+  object-fit: contain;
+}
+
+.register-title {
+  font-size: 1.4rem;
+  color: #222;
+  font-weight: 600;
+  margin: 0;
+  padding-top: 8px; /* <-- this moves it slightly down */
+}
+
 .custom-hr {
   border: none;
   height: 3px;
@@ -334,3 +359,4 @@
     font-size: 0.8rem;
   }
 }
+

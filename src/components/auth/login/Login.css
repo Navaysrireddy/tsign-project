@@ -1,163 +1,278 @@
-/* Full-page layout */
-body,
-html {
+Login.css
+
+/* Reset some default styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
   margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f6fa;
+  color: #333;
 }
 
-
-.login-heading{
-  margin-left: 50px;
-}
+/* Center the login card vertically and horizontally */
 .login-page {
-  background: url('../../../assests/background.png') no-repeat center center fixed;
-  background-size: cover;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Card container for form */
+.login-card {
+  background: #fff;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 420px;
+  padding: 40px 30px 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
   position: relative;
 }
 
-/* Centered login card */
-.login-card {
-  background-color: white;
-  padding: 40px 30px;
-  width: 100%;
-  max-width: 420px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  z-index: 2;
-  text-align: left;
+/* Logo styling */
+.login-logo {
+  width: 220px;
+  margin: 0 auto 30px; /* centers horizontally, keeps 30px bottom margin */
+  display: block;       /* makes margin auto work for centering */
+  user-select: none;
 }
 
-.login-card h2 {
-  color: #0053a0;
-  font-size: 26px;
-  margin-bottom: 6px;
+/* Roles options container */
+.role-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 25px;
 }
 
-.login-card p {
-  color: #444;
-  margin-bottom: 20px;
-}
-
-/* Form styles */
-form label {
-  font-weight: 500;
-  display: block;
-  margin-bottom: 6px;
-}
-
-form input[type='text'],
-form input[type='password'],
-form input[type='number'] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-form input:focus {
-  border-color: #0078d7;
-  outline: none;
-}
-
-.btn-primary {
-  background-color: #0053a0;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  width: 100%;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 15px;
+.role-options label {
+  font-weight: 600;
+  color: #555;
   cursor: pointer;
-  transition: background 0.2s ease-in-out;
+}
+
+.role-options input[type="radio"] {
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+/* Labels for inputs */
+form label {
+  display: block;
+  text-align: left;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Input fields */
+form input[type="text"],
+form input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1.8px solid #d1d8e0;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 6px rgba(74, 144, 226, 0.5);
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+/* Primary button (Login) */
+.btn-primary {
+  background-color: #4a90e2;
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+  padding: 14px 0;
+  width: 100%;
+  margin-top: 10px;
 }
 
 .btn-primary:hover {
-  background-color: #003d80;
+  background-color: #357abd;
 }
 
+/* Secondary button (Send OTP) */
 .btn-secondary {
-  background-color: #0078d7;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-bottom: 10px;
+  background-color: #f0f0f0;
+  color: #555;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: 1.5px solid #ccc;
+  margin-bottom: 15px;
 }
 
-.role-options {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0;
-  font-size: 14px;
+.btn-secondary:hover {
+  background-color: #e2e2e2;
 }
 
+/* Error message styling */
+.error {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: -8px;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+/* Form options (checkbox and forgot link) */
 .form-options {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
-  margin-bottom: 16px;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #555;
 }
 
+.form-options label {
+  cursor: pointer;
+  user-select: none;
+}
+
+.form-options input[type="checkbox"] {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+/* Forgot password link */
+.form-options a {
+  color: #4a90e2;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.form-options a:hover {
+  text-decoration: underline;
+}
+
+/* Signup link at bottom */
 .signup-link {
-  font-size: 13px;
-  text-align: center;
-  margin-top: 16px;
+  font-size: 14px;
+  margin-top: 20px;
+  color: #666;
 }
 
 .signup-link a {
-  color: #0053a0;
+  color: #4a90e2;
   font-weight: 600;
   text-decoration: none;
 }
 
-/* Error message */
-.error {
-  color: #d32f2f;
-  font-size: 13px;
-  margin-top: -12px;
-  margin-bottom: 10px;
+.signup-link a:hover {
+  text-decoration: underline;
 }
 
-/* Modal */
+/* Modal overlay */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.6);
-  height: 100%;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
+/* Modal content box */
 .modal-content {
   background: white;
-  padding: 30px;
   border-radius: 10px;
-  width: 90%;
-  max-width: 400px;
+  padding: 30px 25px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
   text-align: center;
+  position: relative;
 }
 
+/* Modal heading */
 .modal-content h3 {
-  color: #d32f2f;
+  margin: 0 0 15px;
+  font-size: 22px;
+  color: #e74c3c;
+  font-weight: 700;
 }
 
-.modal-content .register-link {
-  margin-top: 12px;
+/* Modal paragraph */
+.modal-content p {
+  margin: 0 0 25px;
+  color: #555;
+  font-size: 16px;
+}
+
+/* Modal buttons and links */
+.modal-content button {
+  background-color: #e74c3c;
+  color: white;
+  padding: 12px 22px;
+  font-weight: 700;
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #c0392b;
+}
+
+.register-link {
   display: inline-block;
-  color: #0078d7;
-  text-decoration: none;
   font-weight: 600;
+  color: #4a90e2;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 20px;
+  }
+
+  .role-options {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn-primary {
+    font-size: 16px;
+  }
+
+  .modal-content {
+    padding: 25px 18px;
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpenIcon, UsersIcon, ClockIcon, ArrowRightIcon, FilterIcon } from 'lucide-react';
 import EnrollmentTrendsChart from './EnrollmentTrendsChart';
@@ -9,321 +9,453 @@ const Courses = ({ darkMode }) => {
   const [semester, setSemester] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedView, setSelectedView] = useState('courses'); // 'courses' or 'analytics'
+  const [expandedCourseId, setExpandedCourseId] = useState(null); // <---- new state for expanded course
+
   const departments = ['All', 'Computer Science', 'Mechanical', 'Electrical', 'Engineering'];
   const semesters = ['All', 'SEM1', 'SEM2', 'SEM3'];
-  // Enhanced courses data with more department-specific subjects
+
+  // Courses with sample content added
   const allCourses = [
-  // Computer Science courses
-  {
-    id: 1,
-    code: 'CS101',
-    name: 'Introduction to Programming',
-    instructor: 'Dr. Jane Smith',
-    // credits: 3,
-    department: 'Computer Science',
-    semester: 'SEM1',
-    enrolled: 120,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 2,
-    code: 'CS201',
-    name: 'Data Structures',
-    instructor: 'Dr. John Doe',
-    // credits: 4,
-    department: 'Computer Science',
-    semester: 'SEM2',
-    enrolled: 95,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 3,
-    code: 'CS301',
-    name: 'Algorithms',
-    instructor: 'Dr. Alan Turing',
-    // credits: 4,
-    department: 'Computer Science',
-    semester: 'SEM2',
-    enrolled: 85,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 8,
-    code: 'CS401',
-    name: 'Artificial Intelligence',
-    instructor: 'Dr. James Wilson',
-    // credits: 4,
-    department: 'Computer Science',
-    semester: 'SEM3',
-    enrolled: 75,
-    category: 'Elective',
-    degree: 'B.Tech'
-  }, {
-    id: 9,
-    code: 'CS501',
-    name: 'Machine Learning',
-    instructor: 'Dr. Emily Chen',
-    // credits: 4,
-    department: 'Computer Science',
-    semester: 'SEM1',
-    enrolled: 65,
-    category: 'Elective',
-    degree: 'M.Tech'
-  }, {
-    id: 10,
-    code: 'CS601',
-    name: 'Deep Learning',
-    instructor: 'Dr. Robert Brown',
-    // credits: 4,
-    department: 'Computer Science',
-    semester: 'SEM2',
-    enrolled: 55,
-    category: 'Elective',
-    degree: 'M.Tech'
-  },
-  // Mechanical Engineering courses
-  {
-    id: 4,
-    code: 'ME101',
-    name: 'Engineering Mechanics',
-    instructor: 'Dr. Robert Brown',
-    // credits: 3,
-    department: 'Mechanical',
-    semester: 'SEM1',
-    enrolled: 110,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 5,
-    code: 'ME201',
-    name: 'Thermodynamics',
-    instructor: 'Dr. Lisa Green',
-    // credits: 4,
-    department: 'Mechanical',
-    semester: 'SEM2',
-    enrolled: 90,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 11,
-    code: 'ME301',
-    name: 'Fluid Mechanics',
-    instructor: 'Dr. Thomas White',
-    // credits: 4,
-    department: 'Mechanical',
-    semester: 'SEM1',
-    enrolled: 85,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 12,
-    code: 'ME401',
-    name: 'Machine Design',
-    instructor: 'Dr. Maria Garcia',
-    // credits: 4,
-    department: 'Mechanical',
-    semester: 'SEM2',
-    enrolled: 80,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 13,
-    code: 'ME501',
-    name: 'Advanced Manufacturing',
-    instructor: 'Dr. David Lee',
-    // credits: 3,
-    department: 'Mechanical',
-    semester: 'SEM3',
-    enrolled: 50,
-    category: 'Elective',
-    degree: 'M.Tech'
-  },
-  // Electrical Engineering courses
-  {
-    id: 6,
-    code: 'EE101',
-    name: 'Electric Circuits',
-    instructor: 'Dr. Michael Chen',
-    // credits: 3,
-    department: 'Electrical',
-    semester: 'SEM1',
-    enrolled: 100,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 7,
-    code: 'EE201',
-    name: 'Digital Electronics',
-    instructor: 'Dr. Sarah Johnson',
-    // credits: 4,
-    department: 'Electrical',
-    semester: 'SEM2',
-    enrolled: 85,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 14,
-    code: 'EE301',
-    name: 'Control Systems',
-    instructor: 'Dr. Kevin Zhang',
-    // credits: 4,
-    department: 'Electrical',
-    semester: 'SEM1',
-    enrolled: 80,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 15,
-    code: 'EE401',
-    name: 'Power Systems',
-    instructor: 'Dr. Anna Williams',
-    // credits: 4,
-    department: 'Electrical',
-    semester: 'SEM2',
-    enrolled: 75,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 16,
-    code: 'EE501',
-    name: 'VLSI Design',
-    instructor: 'Dr. Jason Kim',
-    // credits: 3,
-    department: 'Electrical',
-    semester: 'SEM3',
-    enrolled: 45,
-    category: 'Elective',
-    degree: 'M.Tech'
-  },
-  // General Engineering courses
-  {
-    id: 17,
-    code: 'GE101',
-    name: 'Engineering Drawing',
-    instructor: 'Dr. Laura Martinez',
-    // credits: 3,
-    department: 'Engineering',
-    semester: 'SEM1',
-    enrolled: 150,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 18,
-    code: 'GE201',
-    name: 'Engineering Mathematics',
-    instructor: 'Dr. Paul Robinson',
-    // credits: 4,
-    department: 'Engineering',
-    semester: 'SEM2',
-    enrolled: 140,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 19,
-    code: 'GE301',
-    name: 'Engineering Economics',
-    instructor: 'Dr. Susan Taylor',
-    // credits: 3,
-    department: 'Engineering',
-    semester: 'SEM1',
-    enrolled: 130,
-    category: 'Core',
-    degree: 'B.Tech'
-  }, {
-    id: 20,
-    code: 'GE401',
-    name: 'Project Management',
-    instructor: 'Dr. Richard Davis',
-    // credits: 3,
-    department: 'Engineering',
-    semester: 'SEM2',
-    enrolled: 120,
-    category: 'Elective',
-    degree: 'B.Tech'
-  }];
+    // Computer Science courses
+    {
+      id: 1,
+      code: 'CS101',
+      name: 'Introduction to Programming',
+      instructor: 'Dr. Jane Smith',
+      credits: 3,
+      department: 'Computer Science',
+      semester: 'SEM1',
+      enrolled: 120,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Programming basics',
+        'Variables and types',
+        'Control flow statements',
+        'Basic functions',
+      ],
+    },
+    {
+      id: 2,
+      code: 'CS201',
+      name: 'Data Structures',
+      instructor: 'Dr. John Doe',
+      credits: 4,
+      department: 'Computer Science',
+      semester: 'SEM2',
+      enrolled: 95,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Arrays and linked lists',
+        'Stacks and queues',
+        'Trees and graphs',
+        'Hashing techniques',
+      ],
+    },
+    {
+      id: 3,
+      code: 'CS301',
+      name: 'Algorithms',
+      instructor: 'Dr. Alan Turing',
+      credits: 4,
+      department: 'Computer Science',
+      semester: 'SEM2',
+      enrolled: 85,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Sorting algorithms',
+        'Greedy algorithms',
+        'Divide and conquer',
+        'Dynamic programming',
+      ],
+    },
+    {
+      id: 8,
+      code: 'CS401',
+      name: 'Artificial Intelligence',
+      instructor: 'Dr. James Wilson',
+      credits: 4,
+      department: 'Computer Science',
+      semester: 'SEM3',
+      enrolled: 75,
+      category: 'Elective',
+      degree: 'B.Tech',
+      content: [
+        'Search algorithms',
+        'Knowledge representation',
+        'Machine learning basics',
+        'Natural language processing',
+      ],
+    },
+    {
+      id: 9,
+      code: 'CS501',
+      name: 'Machine Learning',
+      instructor: 'Dr. Emily Chen',
+      credits: 4,
+      department: 'Computer Science',
+      semester: 'SEM1',
+      enrolled: 65,
+      category: 'Elective',
+      degree: 'M.Tech',
+      content: [
+        'Supervised learning',
+        'Unsupervised learning',
+        'Neural networks',
+        'Model evaluation',
+      ],
+    },
+    {
+      id: 10,
+      code: 'CS601',
+      name: 'Deep Learning',
+      instructor: 'Dr. Robert Brown',
+      credits: 4,
+      department: 'Computer Science',
+      semester: 'SEM2',
+      enrolled: 55,
+      category: 'Elective',
+      degree: 'M.Tech',
+      content: [
+        'Deep neural networks',
+        'CNNs and RNNs',
+        'Training and optimization',
+        'Applications in vision and speech',
+      ],
+    },
+    // Mechanical Engineering courses
+    {
+      id: 4,
+      code: 'ME101',
+      name: 'Engineering Mechanics',
+      instructor: 'Dr. Robert Brown',
+      credits: 3,
+      department: 'Mechanical',
+      semester: 'SEM1',
+      enrolled: 110,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Statics',
+        'Dynamics',
+        'Forces and moments',
+        'Equilibrium analysis',
+      ],
+    },
+    {
+      id: 5,
+      code: 'ME201',
+      name: 'Thermodynamics',
+      instructor: 'Dr. Lisa Green',
+      credits: 4,
+      department: 'Mechanical',
+      semester: 'SEM2',
+      enrolled: 90,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Laws of thermodynamics',
+        'Energy systems',
+        'Heat transfer',
+        'Thermodynamic cycles',
+      ],
+    },
+    {
+      id: 11,
+      code: 'ME301',
+      name: 'Fluid Mechanics',
+      instructor: 'Dr. Thomas White',
+      credits: 4,
+      department: 'Mechanical',
+      semester: 'SEM1',
+      enrolled: 85,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Fluid properties',
+        'Fluid statics',
+        'Fluid dynamics',
+        'Flow measurement',
+      ],
+    },
+    {
+      id: 12,
+      code: 'ME401',
+      name: 'Machine Design',
+      instructor: 'Dr. Maria Garcia',
+      credits: 4,
+      department: 'Mechanical',
+      semester: 'SEM2',
+      enrolled: 80,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Design fundamentals',
+        'Stress analysis',
+        'Mechanical components',
+        'Failure theories',
+      ],
+    },
+    {
+      id: 13,
+      code: 'ME501',
+      name: 'Advanced Manufacturing',
+      instructor: 'Dr. David Lee',
+      credits: 3,
+      department: 'Mechanical',
+      semester: 'SEM3',
+      enrolled: 50,
+      category: 'Elective',
+      degree: 'M.Tech',
+      content: [
+        'Advanced fabrication processes',
+        'Automation',
+        'Quality control',
+        'CNC machining',
+      ],
+    },
+    // Electrical Engineering courses
+    {
+      id: 6,
+      code: 'EE101',
+      name: 'Electric Circuits',
+      instructor: 'Dr. Michael Chen',
+      credits: 3,
+      department: 'Electrical',
+      semester: 'SEM1',
+      enrolled: 100,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Circuit elements',
+        'KCL and KVL',
+        'Network theorems',
+        'Transient analysis',
+      ],
+    },
+    {
+      id: 7,
+      code: 'EE201',
+      name: 'Digital Electronics',
+      instructor: 'Dr. Sarah Johnson',
+      credits: 4,
+      department: 'Electrical',
+      semester: 'SEM2',
+      enrolled: 85,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Logic gates',
+        'Combinational circuits',
+        'Sequential circuits',
+        'Microprocessors basics',
+      ],
+    },
+    {
+      id: 14,
+      code: 'EE301',
+      name: 'Control Systems',
+      instructor: 'Dr. Kevin Zhang',
+      credits: 4,
+      department: 'Electrical',
+      semester: 'SEM1',
+      enrolled: 80,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Feedback principles',
+        'System modeling',
+        'Stability analysis',
+        'Control design',
+      ],
+    },
+    {
+      id: 15,
+      code: 'EE401',
+      name: 'Power Systems',
+      instructor: 'Dr. Anna Williams',
+      credits: 4,
+      department: 'Electrical',
+      semester: 'SEM2',
+      enrolled: 75,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Power generation',
+        'Transmission lines',
+        'Distribution systems',
+        'Protection systems',
+      ],
+    },
+    {
+      id: 16,
+      code: 'EE501',
+      name: 'VLSI Design',
+      instructor: 'Dr. Jason Kim',
+      credits: 3,
+      department: 'Electrical',
+      semester: 'SEM3',
+      enrolled: 45,
+      category: 'Elective',
+      degree: 'M.Tech',
+      content: [
+        'CMOS technology',
+        'Logic design',
+        'Chip layout',
+        'Testing methodologies',
+      ],
+    },
+    // General Engineering courses
+    {
+      id: 17,
+      code: 'GE101',
+      name: 'Engineering Drawing',
+      instructor: 'Dr. Laura Martinez',
+      credits: 3,
+      department: 'Engineering',
+      semester: 'SEM1',
+      enrolled: 150,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Orthographic projection',
+        'Isometric drawing',
+        'Sectional views',
+        'Dimensioning and tolerances',
+      ],
+    },
+    {
+      id: 18,
+      code: 'GE201',
+      name: 'Engineering Mathematics',
+      instructor: 'Dr. Paul Robinson',
+      credits: 4,
+      department: 'Engineering',
+      semester: 'SEM2',
+      enrolled: 140,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Linear algebra',
+        'Calculus',
+        'Differential equations',
+        'Probability and statistics',
+      ],
+    },
+    {
+      id: 19,
+      code: 'GE301',
+      name: 'Engineering Economics',
+      instructor: 'Dr. Susan Taylor',
+      credits: 3,
+      department: 'Engineering',
+      semester: 'SEM1',
+      enrolled: 130,
+      category: 'Core',
+      degree: 'B.Tech',
+      content: [
+        'Cost analysis',
+        'Economic evaluation',
+        'Project appraisal',
+        'Financial management',
+      ],
+    },
+    {
+      id: 20,
+      code: 'GE401',
+      name: 'Project Management',
+      instructor: 'Dr. Richard Davis',
+      credits: 3,
+      department: 'Engineering',
+      semester: 'SEM2',
+      enrolled: 120,
+      category: 'Elective',
+      degree: 'B.Tech',
+      content: [
+        'Project planning',
+        'Scheduling',
+        'Risk management',
+        'Quality management',
+      ],
+    },
+  ];
+
   // Filter courses based on department, semester, and search query
   const filteredCourses = allCourses.filter(course => {
     const departmentMatch = department === 'All' || course.department === department;
     const semesterMatch = semester === 'All' || course.semester === semester;
-    const searchMatch = course.name.toLowerCase().includes(searchQuery.toLowerCase()) || course.code.toLowerCase().includes(searchQuery.toLowerCase()) || course.instructor.toLowerCase().includes(searchQuery.toLowerCase());
+    const searchMatch =
+      course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.instructor.toLowerCase().includes(searchQuery.toLowerCase());
     return departmentMatch && semesterMatch && searchMatch;
   });
+
   // Calculate total enrolled credits
   const enrolledCourses = allCourses.filter(course => department === 'All' || course.department === department);
   const totalCredits = enrolledCourses.reduce((sum, course) => sum + course.credits, 0);
+
   // Calculate degree-wise course distribution
   const degreeDistribution = enrolledCourses.reduce((acc, course) => {
     acc[course.degree] = (acc[course.degree] || 0) + 1;
     return acc;
   }, {});
+
   // Calculate category-wise course distribution
   const categoryDistribution = enrolledCourses.reduce((acc, course) => {
     acc[course.category] = (acc[course.category] || 0) + 1;
     return acc;
   }, {});
-  
 
+  // Sample GPA and progress
+  const averageGPA = 3.7;
+  const completedCourses = 4;
+  const totalCourses = 6;
 
-
-
-  const averageGPA = 3.7; // Sample GPA
-  const completedCourses = 4; // Sample completed courses
-  const totalCourses = 6; // Sample total courses
   const container = {
-    hidden: {
-      opacity: 0
-    },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
+
   const item = {
-    hidden: {
-      opacity: 0,
-      y: 20
-    },
-    show: {
-      opacity: 1,
-      y: 0
-    }
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
   };
-  return <div className="space-y-6">
+
+  return (
+    <div className="space-y-6">
+      {/* Header and view selector */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.5
-      }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <h1 className="text-2xl font-bold">Courses</h1>
         </motion.div>
-        <motion.div initial={{
-        opacity: 0,
-        y: -10
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.5,
-        delay: 0.2
-      }} className="mt-4 md:mt-0 flex space-x-4">
+
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-4 md:mt-0 flex space-x-4"
+        >
           <div className={`inline-flex rounded-lg overflow-hidden ${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-            <button className={`px-4 py-2 text-sm ${selectedView === 'courses' ? `${darkMode ? 'bg-gray-600' : 'bg-white'} font-medium` : ''}`} onClick={() => setSelectedView('courses')}>
+            <button
+              className={`px-4 py-2 text-sm ${selectedView === 'courses' ? `${darkMode ? 'bg-gray-600' : 'bg-white'} font-medium` : ''}`}
+              onClick={() => setSelectedView('courses')}
+            >
               Courses
             </button>
-            <button className={`px-4 py-2 text-sm ${selectedView === 'analytics' ? `${darkMode ? 'bg-gray-600' : 'bg-white'} font-medium` : ''}`} onClick={() => setSelectedView('analytics')}>
+            <button
+              className={`px-4 py-2 text-sm ${selectedView === 'analytics' ? `${darkMode ? 'bg-gray-600' : 'bg-white'} font-medium` : ''}`}
+              onClick={() => setSelectedView('analytics')}
+            >
               Analytics
             </button>
           </div>
         </motion.div>
       </div>
 
+      {/* Filters */}
       <div className={`p-4 rounded-lg ${darkMode ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'}`}>
         <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0">
           <div className="flex items-center mr-4">
@@ -331,11 +463,21 @@ const Courses = ({ darkMode }) => {
             <span className="text-sm text-gray-500">Filters:</span>
           </div>
           <div className="flex flex-wrap gap-2">
-            <div className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'} border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-              <select value={department} onChange={e => setDepartment(e.target.value)} className="appearance-none bg-transparent py-2 pl-3 pr-10 outline-none text-sm">
-                {departments.map(dept => <option key={dept} value={dept}>
+            <div
+              className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${
+                darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
+              } border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}
+            >
+              <select
+                value={department}
+                onChange={e => setDepartment(e.target.value)}
+                className="appearance-none bg-transparent py-2 pl-3 pr-10 outline-none text-sm"
+              >
+                {departments.map(dept => (
+                  <option key={dept} value={dept}>
                     {dept}
-                  </option>)}
+                  </option>
+                ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
                 <svg className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -343,11 +485,21 @@ const Courses = ({ darkMode }) => {
                 </svg>
               </div>
             </div>
-            <div className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'} border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-              <select value={semester} onChange={e => setSemester(e.target.value)} className="appearance-none bg-transparent py-2 pl-3 pr-10 outline-none text-sm">
-                {semesters.map(sem => <option key={sem} value={sem}>
+            <div
+              className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${
+                darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
+              } border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}
+            >
+              <select
+                value={semester}
+                onChange={e => setSemester(e.target.value)}
+                className="appearance-none bg-transparent py-2 pl-3 pr-10 outline-none text-sm"
+              >
+                {semesters.map(sem => (
+                  <option key={sem} value={sem}>
                     {sem}
-                  </option>)}
+                  </option>
+                ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
                 <svg className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -355,48 +507,79 @@ const Courses = ({ darkMode }) => {
                 </svg>
               </div>
             </div>
-            <div className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'} border ${darkMode ? 'border-gray-600' : 'border-gray-200'} flex-grow max-w-xs`}>
-              <input type="text" placeholder="Search courses..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="bg-transparent py-2 px-3 outline-none w-full text-sm" />
+            <div
+              className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${
+                darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
+              } border ${darkMode ? 'border-gray-600' : 'border-gray-200'} flex-grow max-w-xs`}
+            >
+              <input
+                type="text"
+                placeholder="Search courses..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="bg-transparent py-2 px-3 outline-none w-full text-sm"
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {selectedView === 'courses' ? <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.5,
-        delay: 0.1
-      }} className="lg:col-span-2">
-            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
+      {/* Main Content View */}
+      {selectedView === 'courses' ? (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Course List - spans 2 columns */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-2"
+          >
+            <div
+              className={`p-6 rounded-xl ${
+                darkMode
+                  ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]'
+                  : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
+              }`}
+            >
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold">Course List</h2>
-                <div className={`px-3 py-1 rounded-full text-sm ${darkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800'}`}>
+                <div
+                  className={`px-3 py-1 rounded-full text-sm ${
+                    darkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800'
+                  }`}
+                >
                   {filteredCourses.length} courses
                 </div>
               </div>
-              {filteredCourses.length === 0 ? <div className="text-center py-10">
-                  <p className="text-gray-500">
-                    No courses found matching your filters.
-                  </p>
-                </div> : <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {filteredCourses.map(course => <motion.div key={course.id} variants={item} whileHover={{
-              y: -5,
-              transition: {
-                duration: 0.2
-              }
-            }} className={`p-4 rounded-xl ${darkMode ? 'bg-gray-700 shadow-[3px_3px_6px_#1a202c,-3px_-3px_6px_#2d3748]' : 'bg-gray-50 shadow-[3px_3px_6px_#d1d5db,-3px_-3px_6px_#ffffff]'}`}>
+
+              {filteredCourses.length === 0 ? (
+                <div className="text-center py-10">
+                  <p className="text-gray-500">No courses found matching your filters.</p>
+                </div>
+              ) : (
+                <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredCourses.map(course => (
+                    <motion.div
+                      key={course.id}
+                      variants={item}
+                      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                      className={`p-4 rounded-xl ${
+                        darkMode
+                          ? 'bg-gray-700 shadow-[3px_3px_6px_#1a202c,-3px_-3px_6px_#2d3748]'
+                          : 'bg-gray-50 shadow-[3px_3px_6px_#d1d5db,-3px_-3px_6px_#ffffff]'
+                      }`}
+                    >
+                      {/* Course Summary */}
                       <div className="flex justify-between">
                         <div>
                           <h3 className="font-semibold">{course.name}</h3>
                           <p className="text-sm text-gray-500">{course.code}</p>
                         </div>
-                        <div className={`px-2 py-1 rounded text-xs ${darkMode ? 'bg-teal-900/30 text-teal-300' : 'bg-teal-100 text-teal-800'}`}>
+                        <div
+                          className={`px-2 py-1 rounded text-xs ${
+                            darkMode ? 'bg-teal-900/30 text-teal-300' : 'bg-teal-100 text-teal-800'
+                          }`}
+                        >
                           {course.credits} Credits
                         </div>
                       </div>
@@ -415,46 +598,79 @@ const Courses = ({ darkMode }) => {
                         </div>
                       </div>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <span className={`text-xs px-2 py-1 rounded ${darkMode ? 'bg-purple-900/30 text-purple-300' : 'bg-purple-100 text-purple-800'}`}>
+                        <span
+                          className={`text-xs px-2 py-1 rounded ${
+                            darkMode ? 'bg-purple-900/30 text-purple-300' : 'bg-purple-100 text-purple-800'
+                          }`}
+                        >
                           {course.category}
                         </span>
-                        <span className={`text-xs px-2 py-1 rounded ${darkMode ? 'bg-orange-900/30 text-orange-300' : 'bg-orange-100 text-orange-800'}`}>
+                        <span
+                          className={`text-xs px-2 py-1 rounded ${
+                            darkMode ? 'bg-orange-900/30 text-orange-300' : 'bg-orange-100 text-orange-800'
+                          }`}
+                        >
                           {course.degree}
                         </span>
                       </div>
+
+                      {/* View Details Button */}
                       <div className="mt-4 flex justify-end">
-                        <motion.button whileHover={{
-                  scale: 1.05
-                }} whileTap={{
-                  scale: 0.95
-                }} className={`flex items-center text-sm font-medium ${darkMode ? 'bg-gradient-to-r from-teal-500 to-blue-600' : 'bg-gradient-to-r from-teal-400 to-blue-500'} text-white px-3 py-1.5 rounded-lg`}>
-                          View Details{' '}
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className={`flex items-center text-sm font-medium ${
+                            darkMode ? 'bg-gradient-to-r from-teal-500 to-blue-600' : 'bg-gradient-to-r from-teal-400 to-blue-500'
+                          } text-white px-3 py-1.5 rounded-lg`}
+                          onClick={() => setExpandedCourseId(expandedCourseId === course.id ? null : course.id)}
+                        >
+                          {expandedCourseId === course.id ? 'Hide Details' : 'View Details'}{' '}
                           <ArrowRightIcon className="h-3.5 w-3.5 ml-1" />
                         </motion.button>
                       </div>
-                    </motion.div>)}
-                </motion.div>}
+
+                      {/* Detailed Content Section */}
+                      {expandedCourseId === course.id && (
+                        <div
+                          className={`mt-4 p-4 border-t ${
+                            darkMode ? 'border-gray-600 text-gray-300' : 'border-gray-200 text-gray-700'
+                          }`}
+                        >
+                          <h4 className="font-semibold mb-2">Course Content:</h4>
+                          <ul className="list-disc list-inside space-y-1 text-sm">
+                            {course.content ? (
+                              course.content.map((topic, idx) => <li key={idx}>{topic}</li>)
+                            ) : (
+                              <li>No detailed content available.</li>
+                            )}
+                          </ul>
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
             </div>
           </motion.div>
-          <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.5,
-        delay: 0.2
-      }} className="space-y-6">
-            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-              <h2 className="text-xl font-semibold mb-4">
-                Course Load Summary
-              </h2>
+
+          {/* Summary and Enrollment Trends Column */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="space-y-6"
+          >
+            <div
+              className={`p-6 rounded-xl ${
+                darkMode
+                  ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]'
+                  : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
+              }`}
+            >
+              <h2 className="text-xl font-semibold mb-4">Course Load Summary</h2>
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500">
-                    Total Enrolled Credits
-                  </p>
+                  <p className="text-sm text-gray-500">Total Enrolled Credits</p>
                   <p className="text-2xl font-bold">{totalCredits}</p>
                 </div>
                 <div>
@@ -467,115 +683,122 @@ const Courses = ({ darkMode }) => {
                     {completedCourses}/{totalCourses} Completed
                   </p>
                   <div className="mt-2 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <motion.div initial={{
-                  width: 0
-                }} animate={{
-                  width: `${completedCourses / totalCourses * 100}%`
-                }} transition={{
-                  duration: 1,
-                  delay: 0.5
-                }} className="h-full bg-gradient-to-r from-teal-400 to-blue-500" />
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(completedCourses / totalCourses) * 100}%` }}
+                      transition={{ duration: 1, delay: 0.5 }}
+                      className="h-full bg-gradient-to-r from-teal-400 to-blue-500"
+                    />
                   </div>
                 </div>
               </div>
             </div>
-            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
+
+            <div
+              className={`p-6 rounded-xl ${
+                darkMode
+                  ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]'
+                  : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
+              }`}
+            >
               <h2 className="text-xl font-semibold mb-4">Enrollment Trends</h2>
               <div className="h-64">
                 <EnrollmentTrendsChart darkMode={darkMode} department={department} />
               </div>
             </div>
           </motion.div>
-        </div> :
-        
-    // Analytics View
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.5,
-        delay: 0.1
-      }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-            <h2 className="text-xl font-semibold mb-4">
-              Department Subjects Distribution
-            </h2>
+        </div>
+      ) : (
+        /* Analytics View */
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Department Subjects Distribution Chart */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className={`p-6 rounded-xl ${
+              darkMode
+                ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]'
+                : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
+            }`}
+          >
+            <h2 className="text-xl font-semibold mb-4">Department Subjects Distribution</h2>
             <div className="h-80">
               <DepartmentSubjectsChart darkMode={darkMode} department={department} />
             </div>
           </motion.div>
-          <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.5,
-        delay: 0.2
-      }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
+
+          {/* Course Distribution by Degree and Category */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className={`p-6 rounded-xl ${
+              darkMode
+                ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]'
+                : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
+            }`}
+          >
             <h2 className="text-xl font-semibold mb-4">Course Distribution</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <h3 className="text-lg font-medium mb-3">By Degree</h3>
                 <div className="space-y-4">
-                  {Object.entries(degreeDistribution).map(([degree, count]) => <div key={degree}>
+                  {Object.entries(degreeDistribution).map(([degree, count]) => (
+                    <div key={degree}>
                       <div className="flex justify-between text-sm mb-1">
                         <span>{degree}</span>
                         <span>{count} courses</span>
                       </div>
                       <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <motion.div initial={{
-                    width: 0
-                  }} animate={{
-                    width: `${count / enrolledCourses.length * 100}%`
-                  }} transition={{
-                    duration: 1,
-                    delay: 0.5
-                  }} className={`h-full ${degree === 'B.Tech' ? 'bg-blue-500' : 'bg-purple-500'}`} />
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${(count / enrolledCourses.length) * 100}%` }}
+                          transition={{ duration: 1, delay: 0.5 }}
+                          className={`h-full ${degree === 'B.Tech' ? 'bg-blue-500' : 'bg-purple-500'}`}
+                        />
                       </div>
-                    </div>)}
+                    </div>
+                  ))}
                 </div>
               </div>
+
               <div>
                 <h3 className="text-lg font-medium mb-3">By Category</h3>
                 <div className="space-y-4">
-                  {Object.entries(categoryDistribution).map(([category, count]) => <div key={category}>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>{category}</span>
-                          <span>{count} courses</span>
-                        </div>
-                        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                          <motion.div initial={{
-                    width: 0
-                  }} animate={{
-                    width: `${count / enrolledCourses.length * 100}%`
-                  }} transition={{
-                    duration: 1,
-                    delay: 0.5
-                  }} className={`h-full ${category === 'Core' ? 'bg-teal-500' : 'bg-orange-500'}`} />
-                        </div>
-                      </div>)}
+                  {Object.entries(categoryDistribution).map(([category, count]) => (
+                    <div key={category}>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span>{category}</span>
+                        <span>{count} courses</span>
+                      </div>
+                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${(count / enrolledCourses.length) * 100}%` }}
+                          transition={{ duration: 1, delay: 0.5 }}
+                          className={`h-full ${category === 'Core' ? 'bg-teal-500' : 'bg-orange-500'}`}
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </motion.div>
-          <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.5,
-        delay: 0.3
-      }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'} lg:col-span-2`}>
-            <h2 className="text-xl font-semibold mb-6">
-              Department-wise Course Enrollment
-            </h2>
+
+          {/* Department-wise Course Enrollment Table */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className={`p-6 rounded-xl ${
+              darkMode
+                ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]'
+                : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
+            } lg:col-span-2`}
+          >
+            <h2 className="text-xl font-semibold mb-6">Department-wise Course Enrollment</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full">
                 <thead>
@@ -598,38 +821,37 @@ const Courses = ({ darkMode }) => {
                     <th className={`px-4 py-2 text-left text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                       M.Tech Courses
                     </th>
-                    {/* <th className={`px-4 py-2 text-left text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Total Credits
-                    </th> */}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {departments.filter(dept => dept !== 'All').map(dept => {
-                const deptCourses = allCourses.filter(course => course.department === dept);
-                const coreCourses = deptCourses.filter(course => course.category === 'Core').length;
-                const electiveCourses = deptCourses.filter(course => course.category === 'Elective').length;
-                const btechCourses = deptCourses.filter(course => course.degree === 'B.Tech').length;
-                const mtechCourses = deptCourses.filter(course => course.degree === 'M.Tech').length;
-                // const totalCredits = deptCourses.reduce((sum, course) => sum + course.credits, 0);
-                return <tr key={dept} className={darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
+                  {departments
+                    .filter(dept => dept !== 'All')
+                    .map(dept => {
+                      const deptCourses = allCourses.filter(course => course.department === dept);
+                      const coreCourses = deptCourses.filter(course => course.category === 'Core').length;
+                      const electiveCourses = deptCourses.filter(course => course.category === 'Elective').length;
+                      const btechCourses = deptCourses.filter(course => course.degree === 'B.Tech').length;
+                      const mtechCourses = deptCourses.filter(course => course.degree === 'M.Tech').length;
+
+                      return (
+                        <tr key={dept} className={darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
                           <td className="px-4 py-3 text-sm">{dept}</td>
-                          <td className="px-4 py-3 text-sm">
-                            {deptCourses.length}
-                          </td>
+                          <td className="px-4 py-3 text-sm">{deptCourses.length}</td>
                           <td className="px-4 py-3 text-sm">{coreCourses}</td>
-                          <td className="px-4 py-3 text-sm">
-                            {electiveCourses}
-                          </td>
+                          <td className="px-4 py-3 text-sm">{electiveCourses}</td>
                           <td className="px-4 py-3 text-sm">{btechCourses}</td>
                           <td className="px-4 py-3 text-sm">{mtechCourses}</td>
-                          {/* <td className="px-4 py-3 text-sm">{totalCredits}</td> */}
-                        </tr>;
-              })}
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </div>
           </motion.div>
-        </div>}
-    </div>;
+        </div>
+      )}
+    </div>
+  );
 };
+
 export default Courses;

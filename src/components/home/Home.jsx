@@ -68,6 +68,7 @@ const features = [
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  // eslint-disable-next-line
   const [scrollPosition, setScrollPosition] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animatedStats, setAnimatedStats] = useState(statsData.map(() => 0));
@@ -89,7 +90,7 @@ const Home = () => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, []);
 
   const itemWidth = 280;
 
@@ -264,7 +265,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
       <CollegeSearch />
 
       {/* === Services Slider Section === */}

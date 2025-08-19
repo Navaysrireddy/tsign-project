@@ -5,8 +5,9 @@ import {
   BarChart, Bar,
   AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  // Legend
 } from 'recharts';
+import Sidebar from '../admincomponents/adminsidebar/AdminSidebar';
+import './AdminStudents.css'; // Import your CSS file
 
 const AdminStudents = () => {
   const studentStats = {
@@ -19,7 +20,10 @@ const AdminStudents = () => {
   };
 
   const pieData = Object.entries(studentStats).filter(([key]) => key !== 'total')
-    .map(([key, value]) => ({ name: key.charAt(0).toUpperCase() + key.slice(1), value }));
+    .map(([key, value]) => ({
+      name: key.charAt(0).toUpperCase() + key.slice(1),
+      value,
+    }));
 
   const COLORS = {
     Active: '#10b981',
@@ -38,26 +42,14 @@ const AdminStudents = () => {
     { month: 'Jun', students: 400 },
   ];
 
-  const styles = {
-    container: { padding: '2rem', backgroundColor: '#f9fafb' },
-    header: { fontSize: '1.5rem', fontWeight: '600', marginBottom: '1.5rem' },
-    charts: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', flexWrap: 'wrap' },
-    chartBox: {
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-      padding: '1rem',
-      height: '320px',
-    },
-  };
-
   return (
-    <div style={styles.container}>
-      <h2 style={styles.header}>Student Analytics</h2>
+    <div className="admin-container">
+      <Sidebar />
+      <h2 className="admin-header">Student Analytics</h2>
 
-      <div style={styles.charts}>
+      <div className="admin-charts">
         {/* Pie Chart */}
-        <div style={styles.chartBox}>
+        <div className="admin-chart-box">
           <h4>Status Distribution (Pie)</h4>
           <ResponsiveContainer width="100%" height="90%">
             <PieChart>
@@ -78,7 +70,7 @@ const AdminStudents = () => {
         </div>
 
         {/* Bar Chart */}
-        <div style={styles.chartBox}>
+        <div className="admin-chart-box">
           <h4>Status Count (Bar Chart)</h4>
           <ResponsiveContainer width="100%" height="90%">
             <BarChart data={pieData}>
@@ -92,7 +84,7 @@ const AdminStudents = () => {
         </div>
 
         {/* Line Chart */}
-        <div style={styles.chartBox}>
+        <div className="admin-chart-box">
           <h4>Monthly Registration (Line)</h4>
           <ResponsiveContainer width="100%" height="90%">
             <LineChart data={trendData}>
@@ -100,13 +92,18 @@ const AdminStudents = () => {
               <XAxis dataKey="month" />
               <YAxis />
               <Tooltip />
-              <Line type="monotone" dataKey="students" stroke="#10b981" strokeWidth={2} />
+              <Line
+                type="monotone"
+                dataKey="students"
+                stroke="#10b981"
+                strokeWidth={2}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         {/* Area Chart */}
-        <div style={styles.chartBox}>
+        <div className="admin-chart-box">
           <h4>Growth Trend (Area)</h4>
           <ResponsiveContainer width="100%" height="90%">
             <AreaChart data={trendData}>
@@ -120,7 +117,13 @@ const AdminStudents = () => {
               <YAxis />
               <CartesianGrid strokeDasharray="3 3" />
               <Tooltip />
-              <Area type="monotone" dataKey="students" stroke="#3b82f6" fillOpacity={1} fill="url(#colorStudents)" />
+              <Area
+                type="monotone"
+                dataKey="students"
+                stroke="#3b82f6"
+                fillOpacity={1}
+                fill="url(#colorStudents)"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </div>

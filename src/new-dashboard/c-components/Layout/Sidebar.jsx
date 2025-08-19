@@ -1,91 +1,140 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { HomeIcon, BookOpenIcon, ClipboardListIcon, CalendarIcon, BriefcaseIcon, SettingsIcon } from 'lucide-react';
+import {
+  HomeIcon,
+  BookOpenIcon,
+  ClipboardListIcon,
+  CalendarIcon,
+  BriefcaseIcon,
+  SettingsIcon
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const Sidebar = ({
-  collapsed,
-  darkMode
-}) => {
+const Sidebar = ({ collapsed, darkMode }) => {
   const location = useLocation();
- const basePath = '/new-dashboard';
 
-const menuItems = [
-  { path: `${basePath}`, label: 'Dashboard', icon: HomeIcon },
-  { path: `${basePath}/courses`, label: 'Courses', icon: BookOpenIcon },
-  { path: `${basePath}/assignments`, label: 'Assignments', icon: ClipboardListIcon },
-  { path: `${basePath}/events`, label: 'Events', icon: CalendarIcon },
-  { path: `${basePath}/placements`, label: 'Placements', icon: BriefcaseIcon },
-  { path: `${basePath}/settings`, label: 'Settings', icon: SettingsIcon },
-];
+  const menuItems = [
+    {
+      path: '/new-dashboard',
+      label: 'Dashboard',
+      icon: HomeIcon
+    },
+    {
+      path: '/new-dashboard/courses',
+      label: 'Courses',
+      icon: BookOpenIcon
+    },
+    {
+      path: '/new-dashboard/assignments',
+      label: 'Assignments',
+      icon: ClipboardListIcon
+    },
+    {
+      path: '/new-dashboard/events',
+      label: 'Events',
+      icon: CalendarIcon
+    },
+    {
+      path: '/new-dashboard/placements',
+      label: 'Placements',
+      icon: BriefcaseIcon
+    },
+    {
+      path: '/new-dashboard/students',
+      label: 'Students',
+      icon: BriefcaseIcon
+    },
+    {
+      path: '/new-dashboard/settings',
+      label: 'Settings',
+      icon: SettingsIcon
+    }
+  ];
 
-  return <motion.aside initial={{
-    width: collapsed ? 80 : 240
-  }} animate={{
-    width: collapsed ? 80 : 240
-  }} transition={{
-    duration: 0.3
-  }} className={`${darkMode ? 'bg-gray-800' : 'bg-white'} border-r ${darkMode ? 'border-gray-700' : 'border-gray-200'} h-full overflow-y-auto flex-shrink-0 hidden md:block`}>
+  return (
+    <motion.aside
+      initial={{ width: collapsed ? 80 : 240 }}
+      animate={{ width: collapsed ? 80 : 240 }}
+      transition={{ duration: 0.3 }}
+      className={`${
+        darkMode ? 'bg-gray-800' : 'bg-white'
+      } border-r ${darkMode ? 'border-gray-700' : 'border-gray-200'} h-full overflow-y-auto flex-shrink-0 hidden md:block`}
+    >
       <div className="py-6 flex flex-col h-full">
         <div className="px-4 mb-8 flex justify-center">
-          {!collapsed && <motion.div initial={{
-          opacity: 0
-        }} animate={{
-          opacity: 1
-        }} exit={{
-          opacity: 0
-        }} className="h-10 w-10 bg-gradient-to-br from-teal-400 to-blue-500 rounded-md flex items-center justify-center text-white font-bold">
-              XC
-            </motion.div>}
-          {collapsed && <motion.div initial={{
-          scale: 0.8
-        }} animate={{
-          scale: 1
-        }} className="h-10 w-10 bg-gradient-to-br from-teal-400 to-blue-500 rounded-md flex items-center justify-center text-white font-bold">
-              XC
-            </motion.div>}
+          {collapsed && (
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              className="h-10 w-10 bg-gradient-to-br from-teal-400 to-blue-500 rounded-md flex items-center justify-center text-white font-bold"
+            >
+              C
+            </motion.div>
+          )}
         </div>
         <nav className="flex-1">
           <ul className="space-y-2 px-2">
-            {menuItems.map(item => {
-            const isActive = location.pathname === item.path;
-            const Icon = item.icon;
-            return <li key={item.path}>
+            {menuItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              const Icon = item.icon;
+
+              return (
+                <li key={item.path} className="relative">
                   <Link to={item.path}>
-                    <motion.div whileHover={{
-                  scale: 1.05
-                }} whileTap={{
-                  scale: 0.95
-                }} className={`flex items-center py-3 px-4 rounded-xl ${isActive ? `${darkMode ? 'bg-gray-700' : 'bg-gray-100'} shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]` : `${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}`}>
-                      <Icon className={`h-5 w-5 ${isActive ? 'text-teal-500' : 'text-gray-500'}`} />
-                      {!collapsed && <motion.span initial={{
-                    opacity: 0
-                  }} animate={{
-                    opacity: 1
-                  }} exit={{
-                    opacity: 0
-                  }} className={`ml-3 ${isActive ? 'font-medium' : ''}`}>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`flex items-center py-3 px-4 rounded-xl ${
+                        isActive
+                          ? `${darkMode ? 'bg-gray-700' : 'bg-gray-100'} shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]`
+                          : `${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`
+                      }`}
+                    >
+                      <Icon
+                        className={`h-5 w-5 ${
+                          isActive ? 'text-teal-500' : 'text-gray-500'
+                        }`}
+                      />
+                      {!collapsed && (
+                        <motion.span
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className={`ml-3 ${isActive ? 'font-medium' : ''}`}
+                        >
                           {item.label}
-                        </motion.span>}
-                      {isActive && !collapsed && <motion.div layoutId="sidebar-indicator" className="absolute left-0 w-1 h-8 bg-gradient-to-b from-teal-400 to-blue-500 rounded-r-full" />}
+                        </motion.span>
+                      )}
+                      {isActive && !collapsed && (
+                        <motion.div
+                          layoutId="sidebar-indicator"
+                          className="absolute left-0 w-1 h-8 bg-gradient-to-b from-teal-400 to-blue-500 rounded-r-full"
+                        />
+                      )}
                     </motion.div>
                   </Link>
-                </li>;
-          })}
+                </li>
+              );
+            })}
           </ul>
         </nav>
         <div className="mt-auto px-4 py-2">
-          {!collapsed && <motion.div initial={{
-          opacity: 0
-        }} animate={{
-          opacity: 1
-        }} exit={{
-          opacity: 0
-        }} className={`text-xs text-center ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+          {!collapsed && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className={`text-xs text-center ${
+                darkMode ? 'text-gray-400' : 'text-gray-500'
+              }`}
+            >
               {/* XYZ College © 2025 */}
-            </motion.div>}
+            </motion.div>
+          )}
         </div>
       </div>
-    </motion.aside>;
+    </motion.aside>
+  );
 };
+
 export default Sidebar;

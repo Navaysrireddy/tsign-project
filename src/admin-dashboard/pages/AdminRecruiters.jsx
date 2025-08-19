@@ -5,6 +5,8 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   Legend
 } from 'recharts';
+import Sidebar from '../admincomponents/adminsidebar/AdminSidebar';
+import './AdminRecruiters.css'; // Import the CSS
 
 const AdminRecruiters = () => {
   const recruiterStats = {
@@ -29,41 +31,36 @@ const AdminRecruiters = () => {
     Rejected: '#ef4444',
   };
 
-  const styles = {
-    card: 'bg-white p-4 rounded-lg shadow-md text-center',
-    cardTitle: 'text-sm text-gray-500',
-    cardValue: 'text-2xl font-semibold text-gray-800',
-  };
-
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h2 className="text-2xl font-bold mb-6">Recruiter Overview</h2>
+    <div className="admin-container">
+      <Sidebar />
+      <h2 className="admin-header">Recruiter Overview</h2>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className={styles.card}>
-          <p className={styles.cardTitle}>Total Recruiters</p>
-          <p className={styles.cardValue}>{recruiterStats.total}</p>
+      <div className="admin-stats">
+        <div className="stat-card">
+          <p className="stat-title">Total Recruiters</p>
+          <p className="stat-value">{recruiterStats.total}</p>
         </div>
-        <div className={styles.card}>
-          <p className={styles.cardTitle}>Active</p>
-          <p className={styles.cardValue}>{recruiterStats.active}</p>
+        <div className="stat-card">
+          <p className="stat-title">Active</p>
+          <p className="stat-value">{recruiterStats.active}</p>
         </div>
-        <div className={styles.card}>
-          <p className={styles.cardTitle}>New</p>
-          <p className={styles.cardValue}>{recruiterStats.new}</p>
+        <div className="stat-card">
+          <p className="stat-title">New</p>
+          <p className="stat-value">{recruiterStats.new}</p>
         </div>
-        <div className={styles.card}>
-          <p className={styles.cardTitle}>Suspended</p>
-          <p className={styles.cardValue}>{recruiterStats.suspended}</p>
+        <div className="stat-card">
+          <p className="stat-title">Suspended</p>
+          <p className="stat-value">{recruiterStats.suspended}</p>
         </div>
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="charts-grid">
         {/* Pie Chart */}
-        <div className="bg-white rounded-lg shadow-md p-4">
-          <h4 className="text-lg font-semibold mb-2">Recruiter Status Distribution</h4>
+        <div className="chart-box">
+          <h4>Recruiter Status Distribution</h4>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -74,9 +71,8 @@ const AdminRecruiters = () => {
                 label
               >
                 {pieData.map((entry, idx) => (
-  <Cell key={`cell-${idx}`} fill={COLORS[entry.name] || '#8884d8'} />
-))}
-
+                  <Cell key={`cell-${idx}`} fill={COLORS[entry.name]} />
+                ))}
               </Pie>
               <Tooltip />
               <Legend />
@@ -85,8 +81,8 @@ const AdminRecruiters = () => {
         </div>
 
         {/* Bar Chart */}
-        <div className="bg-white rounded-lg shadow-md p-4">
-          <h4 className="text-lg font-semibold mb-2">Recruiter Status Count</h4>
+        <div className="chart-box">
+          <h4>Recruiter Status Count</h4>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={pieData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -100,8 +96,8 @@ const AdminRecruiters = () => {
       </div>
 
       {/* CTA Button */}
-      <div className="mt-8 text-center">
-        <button className="px-6 py-3 bg-purple-600 text-white font-semibold rounded hover:bg-purple-700 transition">
+      <div className="cta-container">
+        <button className="cta-button">
           View Full Recruiter List
         </button>
       </div>

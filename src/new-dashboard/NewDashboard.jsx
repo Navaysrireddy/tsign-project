@@ -7,6 +7,7 @@ import Assignments from './c-components/Assignments/Assignments';
 import Events from './c-components/Events/Events';
 import Placements from './c-components/Placements/Placements';
 import Settings from './c-components/Settings/Settings';
+import Students from './c-components/Students/Students';
 import Header from './c-components/Layout/Header';
 import Sidebar from './c-components/Layout/Sidebar';
 
@@ -29,6 +30,7 @@ const NewDashboard = () => {
             <Route path="assignments" element={<Assignments darkMode={darkMode} />} />
             <Route path="events" element={<Events darkMode={darkMode} />} />
             <Route path="placements" element={<Placements darkMode={darkMode} />} />
+            <Route path='students' element={<Students darkMode={darkMode}/>} />
             <Route path="settings" element={<Settings darkMode={darkMode} />} />
           </Routes>
         </main>

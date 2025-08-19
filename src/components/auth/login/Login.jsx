@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import logo from '../../../assests/TG-SIGN (2).png';
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -14,10 +15,13 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
   const [showModal, setShowModal] = useState(false);
+
   const navigate = useNavigate();
 
   const mobileRegex = /^[6-9]\d{9}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // Password validation regex: min 6 chars, at least one uppercase, one lowercase, one digit, one special char
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
   useEffect(() => {
     const remembered = localStorage.getItem('rememberedUser');
@@ -28,39 +32,68 @@ const Login = () => {
     }
   }, []);
 
+  // Dynamic placeholder text based on role
+  const getPlaceholder = () => {
+    switch (loginData.role) {
+      case 'student':
+        return 'Enter student email or mobile';
+      case 'college':
+        return 'Enter college email or mobile';
+      case 'recruiter':
+        return 'Enter recruiter email or mobile';
+      default:
+        return 'Enter email or mobile';
+    }
+  };
+
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: '' }); // Clear the error for the field being typed
   };
 
   const validate = () => {
     const newErrors = {};
     const { identifier, password, role } = loginData;
 
+    // Validate identifier
     if (!identifier) {
-      newErrors.identifier = 'Enter email or mobile number';
+      newErrors.identifier = `Enter ${role} email or mobile number`;
     } else if (role === 'student') {
       if (!emailRegex.test(identifier) && !mobileRegex.test(identifier)) {
-        newErrors.identifier = 'Enter valid email or mobile number';
+        newErrors.identifier = 'Enter valid student email or mobile number';
       }
     } else if (role === 'college') {
-      if (!emailRegex.test(identifier) || !identifier.includes('college')) {
+      if (!emailRegex.test(identifier) || !identifier.toLowerCase().includes('college')) {
         newErrors.identifier = 'Use college email (must include "college")';
       }
     } else if (role === 'recruiter') {
-      if (!emailRegex.test(identifier) || !identifier.includes('recruiter')) {
+      if (!emailRegex.test(identifier) || !identifier.toLowerCase().includes('recruiter')) {
         newErrors.identifier = 'Use recruiter email (must include "recruiter")';
       }
     }
 
-    if (!mobileRegex.test(identifier) && !password && !otpSent) {
-      newErrors.password = 'Password required unless using OTP';
+    // Validate rememberMe (mandatory now)
+    if (!rememberMe) {
+      newErrors.rememberMe = 'You must accept Remember Me to continue';
+    }
+
+    // Validate password (only if OTP not sent and identifier is not a mobile number)
+    if (!mobileRegex.test(identifier) && !otpSent) {
+      if (!password) {
+        newErrors.password = 'Password is required';
+      } else if (!passwordRegex.test(password)) {
+        newErrors.password = 'Password must be at least 6 characters, ' +
+                             'include uppercase, lowercase, digit, and special character';
+      }
     }
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
   const sendOtp = async () => {
+    // OTP only for mobile numbers
     if (!mobileRegex.test(loginData.identifier)) {
       setErrors({ identifier: 'Enter valid mobile number for OTP' });
       return;
@@ -80,6 +113,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!validate()) return;
 
     if (otpSent && mobileRegex.test(loginData.identifier)) {
@@ -90,7 +124,9 @@ const Login = () => {
         });
 
         if (res.data.success) {
-          navigate('/studentdashboard');
+          if (loginData.role === 'student') navigate('/studentdashboard');
+          if (loginData.role === 'college') navigate('/college-dashboard');
+          if (loginData.role === 'recruiter') navigate('/recruiter-dashboard');
         } else {
           alert('Invalid OTP');
         }
@@ -100,6 +136,7 @@ const Login = () => {
       return;
     }
 
+    // Dummy users for password login
     const dummyUsers = [
       { identifier: 'student@example.com', password: '123456', role: 'student' },
       { identifier: 'admin@college.edu.in', password: 'college123', role: 'college' },
@@ -120,6 +157,8 @@ const Login = () => {
 
     if (rememberMe) {
       localStorage.setItem('rememberedUser', JSON.stringify(loginData));
+    } else {
+      localStorage.removeItem('rememberedUser');
     }
 
     if (user.role === 'student') navigate('/studentdashboard');
@@ -127,14 +166,18 @@ const Login = () => {
     if (user.role === 'recruiter') navigate('/recruiter-dashboard');
   };
 
+  // Close modal and navigate away immediately on close button click
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate('/'); // Change '/' to whatever page you want to close to (home page here)
+  };
+
   return (
     <div className="login-page">
       <div className="login-card">
-        <h2>Welcome back ✦</h2>
-        <p className='login-heading'>Login using Email or Phone Number</p>
+        <img src={logo} alt="T-Sign Logo" className="login-logo" />
 
         <form onSubmit={handleSubmit}>
-          <label>Login As</label>
           <div className="role-options">
             {['student', 'college', 'recruiter'].map((role) => (
               <label key={role}>
@@ -149,11 +192,12 @@ const Login = () => {
               </label>
             ))}
           </div>
+
           <label>Email or Mobile Number</label>
           <input
             type="text"
             name="identifier"
-            placeholder="Enter email or mobile"
+            placeholder={getPlaceholder()}
             value={loginData.identifier}
             onChange={handleChange}
           />
@@ -191,25 +235,28 @@ const Login = () => {
             </>
           )}
 
-          
-
           <div className="form-options">
             <label>
               <input
                 type="checkbox"
                 checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
+                onChange={() => {
+                  setRememberMe(!rememberMe);
+                  setErrors({ ...errors, rememberMe: '' });
+                }}
               />{' '}
               Remember me
             </label>
+            {errors.rememberMe && <p className="error">{errors.rememberMe}</p>}
             <a href="/forgot">Forgot Password?</a>
           </div>
 
           <button type="submit" className="btn-primary">
             Login
           </button>
+
           <p className="signup-link">
-            Don’t have an account? <a href="/register">Register</a>
+            Don’t have an account? <Link to="/register">Register</Link>
           </p>
         </form>
       </div>
@@ -219,10 +266,10 @@ const Login = () => {
           <div className="modal-content">
             <h3>Account Not Found</h3>
             <p>Please register to continue.</p>
-            <button onClick={() => setShowModal(false)}>Close</button>
-            <a className="register-link" href="/sign up">
+            <button onClick={handleCloseModal}>Close</button>
+            <Link className="register-link" to="/register">
               Go to Register →
-            </a>
+            </Link>
           </div>
         </div>
       )}

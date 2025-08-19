@@ -7,6 +7,8 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   Legend
 } from 'recharts';
+import Sidebar from '../admincomponents/adminsidebar/AdminSidebar';
+import './AdminCollege.css'; // ✅ Import the CSS file
 
 const Admin_Colleges = () => {
   const collegeStats = {
@@ -46,40 +48,34 @@ const Admin_Colleges = () => {
     { x: 25, y: 50 },
   ];
 
-  const styles = {
-    container: { padding: '2rem', backgroundColor: '#f9fafb' },
-    header: { fontSize: '1.5rem', fontWeight: '600', marginBottom: '1.5rem' },
-    charts: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', flexWrap: 'wrap' },
-    chartBox: {
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-      padding: '1rem',
-      height: '320px',
-    },
-  };
-
   return (
-    <div style={styles.container}>
-      <h2 style={styles.header}>College Analytics</h2>
+    <div className="admin-container">
+      <Sidebar />
+      <h2 className="admin-header">College Analytics</h2>
 
-      <div style={styles.charts}>
+      <div className="admin-charts">
         {/* Radar Chart */}
-        <div style={styles.chartBox}>
+        <div className="admin-chart-box">
           <h4>Status Comparison (Radar)</h4>
           <ResponsiveContainer width="100%" height="90%">
             <RadarChart data={radarData}>
               <PolarGrid />
               <PolarAngleAxis dataKey="status" />
               <PolarRadiusAxis />
-              <Radar name="Colleges" dataKey="value" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
+              <Radar
+                name="Colleges"
+                dataKey="value"
+                stroke="#3b82f6"
+                fill="#3b82f6"
+                fillOpacity={0.6}
+              />
               <Tooltip />
             </RadarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Radial Bar Chart */}
-        <div style={styles.chartBox}>
+        <div className="admin-chart-box">
           <h4>Status Distribution (RadialBar)</h4>
           <ResponsiveContainer width="100%" height="90%">
             <RadialBarChart
@@ -89,15 +85,25 @@ const Admin_Colleges = () => {
               startAngle={180}
               endAngle={0}
             >
-              <RadialBar minAngle={15} background clockWise dataKey="value" />
-              <Legend iconSize={10} layout="vertical" verticalAlign="middle" align="right" />
+              <RadialBar
+                minAngle={15}
+                background
+                clockWise
+                dataKey="value"
+              />
+              <Legend
+                iconSize={10}
+                layout="vertical"
+                verticalAlign="middle"
+                align="right"
+              />
               <Tooltip />
             </RadialBarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Composed Chart */}
-        <div style={styles.chartBox}>
+        <div className="admin-chart-box">
           <h4>Composed Analytics</h4>
           <ResponsiveContainer width="100%" height="90%">
             <ComposedChart data={composedData}>
@@ -106,15 +112,24 @@ const Admin_Colleges = () => {
               <Tooltip />
               <Legend />
               <CartesianGrid stroke="#f5f5f5" />
-              <Area type="monotone" dataKey="colleges" fill="#8884d8" stroke="#8884d8" />
+              <Area
+                type="monotone"
+                dataKey="colleges"
+                fill="#8884d8"
+                stroke="#8884d8"
+              />
               <Bar dataKey="new" barSize={20} fill="#413ea0" />
-              <Line type="monotone" dataKey="new" stroke="#ff7300" />
+              <Line
+                type="monotone"
+                dataKey="new"
+                stroke="#ff7300"
+              />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
 
         {/* Scatter Chart */}
-        <div style={styles.chartBox}>
+        <div className="admin-chart-box">
           <h4>Scatter Analysis</h4>
           <ResponsiveContainer width="100%" height="90%">
             <ScatterChart>
@@ -123,7 +138,11 @@ const Admin_Colleges = () => {
               <YAxis type="number" dataKey="y" name="Verifications" unit="%" />
               <ZAxis range={[60, 400]} />
               <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-              <Scatter name="Colleges" data={scatterData} fill="#3b82f6" />
+              <Scatter
+                name="Colleges"
+                data={scatterData}
+                fill="#3b82f6"
+              />
             </ScatterChart>
           </ResponsiveContainer>
         </div>

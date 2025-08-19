@@ -27,9 +27,13 @@
   display: flex;
   align-items: center;
   padding: 6rem 8% 4rem;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  background: linear-gradient(135deg, #c7e3f5 0%, #e0f2fe 100%);
   position: relative;
   overflow: hidden;
+}
+
+.service-imgs {
+  width: 120px;
 }
 
 .contact-hero::before {
@@ -37,10 +41,10 @@
   position: absolute;
   top: -100px;
   right: -100px;
-  width: 300px;
+  width: 500px;
   height: 300px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, rgba(79, 70, 229, 0) 70%);
+  background: radial-gradient(circle, rgba(52, 46, 158, 0.1) 0%, rgba(79, 70, 229, 0) 70%);
 }
 
 .hero-content {
@@ -74,7 +78,8 @@
   gap: 1rem;
 }
 
-.primary-btn, .secondary-btn {
+.primary-btn,
+.secondary-btn {
   padding: 0.9rem 2rem;
   border-radius: 8px;
   font-weight: 600;
@@ -131,9 +136,17 @@
 }
 
 @keyframes pulse {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.1); }
-  100% { transform: translate(-50%, -50%) scale(1); }
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 .graphic-element {
@@ -170,9 +183,17 @@
 }
 
 @keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 
 /* Expertise Section */
@@ -199,45 +220,50 @@
   color: var(--gray);
   line-height: 1.7;
 }
+.expertise-section {
+  padding: 40px 20px;
+  background: #f9fafb;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
 
 .expertise-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center; /* center cards horizontally */
+  gap: 30px;
+  flex-wrap: wrap;
 }
 
 .expertise-card {
-  background: #f9fbfd;
-  border-radius: 16px;
-  padding: 2.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding: 20px;
+  width: 300px; /* fixed width or adjust as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center all content horizontally */
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  border: 1px solid var(--light-gray);
-}
-
-.expertise-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 40px rgba(79, 70, 229, 0.1);
 }
 
 .card-icon {
-  font-size: 3.5rem;
-  margin-bottom: 1.5rem;
+  width: 80px;  /* give fixed size for icon container */
+  height: 80px;
+  display: flex;
+  justify-content: center;  /* horizontally center image */
+  align-items: center;      /* vertically center image */
+  margin-bottom: 15px;
 }
 
-.expertise-card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: var(--dark);
+.service-imgs {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* maintain aspect ratio */
 }
 
-.expertise-card p {
-  color: var(--gray);
-  line-height: 1.7;
-}
 
 /* Contact Form Section */
 .form-section {
@@ -258,6 +284,24 @@
 .form-content {
   flex: 1;
   padding: 3rem;
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+}
+
+.form-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+.form-content::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .form-header {
@@ -360,7 +404,7 @@
 
 .contact-info {
   flex: 1;
-  background: linear-gradient(135deg, #716afc 0%, #50259a 100%);
+  background: linear-gradient(135deg, #15154A 0%, #253B84, #3B5CB1 100%);
   color: white;
   padding: 3rem;
   display: flex;
@@ -369,7 +413,6 @@
 
 .info-card {
   width: 100%;
-
 }
 
 .info-card h3 {
@@ -404,7 +447,6 @@
 
 .info-detail {
   line-height: 1.7;
-  color: white;
 }
 
 .info-detail a {
@@ -445,24 +487,30 @@
     text-align: center;
     padding: 4rem 5%;
   }
-  
+
   .hero-content {
     margin-bottom: 3rem;
   }
-  
+
   .hero-buttons {
     justify-content: center;
   }
-  
+
   .hero-graphic {
     width: 100%;
     max-width: 400px;
   }
-  
+
   .form-container {
     flex-direction: column;
   }
-  
+
+  .form-content {
+    max-height: none;
+    overflow: visible;
+    padding: 2rem;
+  }
+
   .contact-info {
     padding: 2rem;
   }
@@ -472,24 +520,24 @@
   .hero-content h1 {
     font-size: 2.5rem;
   }
-  
+
   .hero-buttons {
     flex-direction: column;
   }
-  
+
   .section-header h2 {
     font-size: 2rem;
   }
-  
+
   .form-row {
     flex-direction: column;
     gap: 0;
   }
-  
+
   .form-content {
     padding: 2rem;
   }
-  
+
   .map-section h2 {
     font-size: 2rem;
   }

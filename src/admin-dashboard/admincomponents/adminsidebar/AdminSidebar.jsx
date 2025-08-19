@@ -12,7 +12,6 @@ const AdminSidebar = () => {
       <Link to="/admindashboard">
         <img src={Logo} alt="TG Sign Logo" className="logo-img" />
       </Link>
-      <h3 className="logo">Admin</h3>
 
       <nav className="nav">
         <Link to="/admindashboard">Dashboard</Link>

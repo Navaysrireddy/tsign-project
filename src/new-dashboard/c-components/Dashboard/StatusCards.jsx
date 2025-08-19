@@ -47,7 +47,7 @@ const StatusCards = ({ darkMode, department }) => {
     switch (department) {
       case 'Computer Science':
         return {
-          totalStudents: 450,
+          totalStudents:   450,
           selectedStudents: 320,
           rejectedStudents: 50,
           placements: 322,
@@ -191,7 +191,8 @@ const StatusCards = ({ darkMode, department }) => {
               </div>
               <div className="text-left">
                 <p className="text-sm text-gray-500">{card.title}</p>
-                <h3 className="text-2xl font-bold mt-1">{card.value}</h3>
+                <h3 className="text-2xl font-bold mt-1 pl-4">{card.value}</h3>
+
               </div>
             </div>
           </motion.div>
