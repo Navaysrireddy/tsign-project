@@ -6,15 +6,15 @@ import BarChart  from './chart/BarChart';
 import PieChart  from './chart/PieChart';
 import { useData } from '../context/DataContext';
 import { useTheme } from '../context/ThemeContext';
- 
+
 const Dashboard = () => {
   const { data } = useData();
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
- 
+
   const [selectedDepartment, setSelectedDepartment] = useState('all');
   const [selectedCourse, setSelectedCourse] = useState('all');
- 
+
   const departments = [
     { value: 'all', label: 'All Departments' },
     { value: 'Engineering', label: 'Engineering' },
@@ -22,7 +22,7 @@ const Dashboard = () => {
     { value: 'Electrical', label: 'Electrical' },
     { value: 'Computer Science', label: 'Computer Science' }
   ];
- 
+
   const courses = [
     { value: 'all', label: 'All Courses' },
     { value: 'CSE', label: 'CSE' },
@@ -30,7 +30,7 @@ const Dashboard = () => {
     { value: 'IT', label: 'IT' },
     { value: 'Business', label: 'Business' }
   ];
- 
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -41,7 +41,7 @@ const Dashboard = () => {
       }
     }
   };
- 
+
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
@@ -50,7 +50,7 @@ const Dashboard = () => {
       transition: { duration: 0.5 }
     }
   };
- 
+
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -58,39 +58,48 @@ const Dashboard = () => {
           Dashboard Overview
         </motion.h2>
         <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
-          <select
-            value={selectedDepartment}
-            onChange={e => setSelectedDepartment(e.target.value)}
-            className={`
-              rounded-lg px-3 py-2 text-sm
-              ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
-              border shadow-sm backdrop-blur-md
-            `}
-          >
-            {departments.map(dept => (
-              <option key={dept.value} value={dept.value}>
-                {dept.label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={selectedCourse}
-            onChange={e => setSelectedCourse(e.target.value)}
-            className={`
-              rounded-lg px-3 py-2 text-sm
-              ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
-              border shadow-sm backdrop-blur-md
-            `}
-          >
-            {courses.map(course => (
-              <option key={course.value} value={course.value}>
-                {course.label}
-              </option>
-            ))}
-          </select>
-        </motion.div>
+  {/* Department Dropdown */}
+  <select
+    value={selectedDepartment}
+    onChange={e => {
+      setSelectedDepartment(e.target.value);
+      setSelectedCourse('all'); // reset course when department changes
+    }}
+    className={`
+      rounded-lg px-3 py-2 text-sm
+      ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
+      border shadow-sm backdrop-blur-md
+    `}
+  >
+    {departments.map(dept => (
+      <option key={dept.value} value={dept.value}>
+        {dept.label}
+      </option>
+    ))}
+  </select>
+
+  {/* Course Dropdown - Only visible for Engineering */}
+  {selectedDepartment === 'Engineering' && (
+    <select
+      value={selectedCourse}
+      onChange={e => setSelectedCourse(e.target.value)}
+      className={`
+        rounded-lg px-3 py-2 text-sm
+        ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
+        border shadow-sm backdrop-blur-md
+      `}
+    >
+      {courses.map(course => (
+        <option key={course.value} value={course.value}>
+          {course.label}
+        </option>
+      ))}
+    </select>
+  )}
+</motion.div>
+
       </div>
- 
+
       {/* Stats Cards */}
       <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard title="Total Candidates" value={data.stats.totalCandidates} icon="users" trend={8} />
@@ -98,7 +107,7 @@ const Dashboard = () => {
         <StatsCard title="Rejected" value={data.stats.rejected} icon="x" trend={-5} color="red" />
         <StatsCard title="In Review" value={data.stats.inReview} icon="clock" trend={3} color="yellow" />
       </motion.div>
- 
+
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div
@@ -129,7 +138,7 @@ const Dashboard = () => {
             />
           </div>
         </motion.div>
- 
+
         <motion.div
           variants={itemVariants}
           className={`
@@ -140,32 +149,36 @@ const Dashboard = () => {
         >
           <h3 className="font-medium mb-4">Selections per Department</h3>
           <div className="h-80">
-            <BarChart
-              labels={data.departmentSelections.labels}
-              datasets={[
-                {
-                  label: 'Selections',
-                  data: data.departmentSelections.data,
-                  backgroundColor: isDarkMode
-                    ? [
-                        'rgba(168, 85, 247, 0.8)',
-                        'rgba(168, 85, 247, 0.6)',
-                        'rgba(168, 85, 247, 0.4)',
-                        'rgba(168, 85, 247, 0.2)'
-                      ]
-                    : [
-                        'rgba(79, 70, 229, 0.8)',
-                        'rgba(79, 70, 229, 0.6)',
-                        'rgba(79, 70, 229, 0.4)',
-                        'rgba(79, 70, 229, 0.2)'
-                      ]
-                }
-              ]}
-            />
+           {/* Department / Course Graph */}
+<BarChart
+  labels={
+    selectedDepartment === "all"
+      ? Object.keys(data.departmentData).flatMap(
+          dept => data.departmentData[dept]?.labels || []
+        )
+      : data.departmentData[selectedDepartment]?.labels || []
+  }
+  datasets={[
+    {
+      label:
+        selectedDepartment === "all"
+          ? "All Departments"
+          : `${selectedDepartment} Courses`,
+      data:
+        selectedDepartment === "all"
+          ? Object.keys(data.departmentData).flatMap(
+              dept => data.departmentData[dept]?.data || []
+            )
+          : data.departmentData[selectedDepartment]?.data || [],
+      backgroundColor: "rgba(59,130,246,0.6)",
+    },
+  ]}
+/>
+
           </div>
         </motion.div>
       </div>
- 
+
       <motion.div
         variants={itemVariants}
         className={`
@@ -197,7 +210,7 @@ const Dashboard = () => {
           />
         </div>
       </motion.div>
- 
+
       <motion.div
         variants={itemVariants}
         className={`
@@ -275,5 +288,5 @@ const Dashboard = () => {
     </motion.div>
   );
 };
- 
+
 export default Dashboard;

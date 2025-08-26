@@ -209,7 +209,7 @@ const Attendance = () => {
   const attendanceRecords = [
     {
       id: 'a1',
-      course: 'CS101: Introduction to Programming',
+      course:'C programming',
       date: '2025-01-15',
       status: 'present',
       time: '10:00 AM - 12:00 PM',
@@ -217,7 +217,7 @@ const Attendance = () => {
     },
     {
       id: 'a2',
-      course: 'CS201: Data Structures',
+      course: ' Data Structures',
       date: '2025-01-14',
       status: 'present',
       time: '1:00 PM - 3:00 PM',
@@ -225,7 +225,7 @@ const Attendance = () => {
     },
     {
       id: 'a3',
-      course: 'CS301: Algorithms',
+      course: ' Algorithms',
       date: '2025-01-13',
       status: 'absent',
       time: '3:30 PM - 5:30 PM',
@@ -233,7 +233,7 @@ const Attendance = () => {
     },
     {
       id: 'a4',
-      course: 'CS401: Machine Learning',
+      course: ' MachineLearning',
       date: '2025-01-12',
       status: 'late',
       time: '9:00 AM - 11:00 AM',
@@ -241,7 +241,7 @@ const Attendance = () => {
     },
     {
       id: 'a5',
-      course: 'MATH201: Discrete Mathematics',
+      course: ' DiscreteMath',
       date: '2025-01-11',
       status: 'present',
       time: '2:00 PM - 4:00 PM',
@@ -249,7 +249,7 @@ const Attendance = () => {
     },
     {
       id: 'a6',
-      course: 'CS101: Introduction to Programming',
+      course: ' C++Programming',
       date: '2025-01-10',
       status: 'present',
       time: '10:00 AM - 12:00 PM',
@@ -257,7 +257,7 @@ const Attendance = () => {
     },
     {
       id: 'a7',
-      course: 'CS201: Data Structures',
+      course: ' Data Structures',
       date: '2025-01-09',
       status: 'absent',
       time: '1:00 PM - 3:00 PM',
@@ -265,7 +265,7 @@ const Attendance = () => {
     },
     {
       id: 'a8',
-      course: 'CS301: Algorithms',
+      course: ' Algorithms',
       date: '2025-01-08',
       status: 'present',
       time: '3:30 PM - 5:30 PM',

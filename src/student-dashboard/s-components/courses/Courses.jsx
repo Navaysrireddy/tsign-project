@@ -113,7 +113,7 @@ const Courses = () => {
   const courses = [
     {
       id: 'cs101',
-      title: 'CS101: Introduction to Programming',
+      title: ' IntroductiontoProgramming',
       instructor: 'Dr. Alan Turing',
       progress: 85,
       credits: 4,
@@ -134,7 +134,7 @@ const Courses = () => {
     },
     {
       id: 'cs201',
-      title: 'CS201: Data Structures',
+      title: ' Data Structures',
       instructor: 'Dr. Jane Smith',
       progress: 72,
       credits: 4,
@@ -155,7 +155,7 @@ const Courses = () => {
     },
     {
       id: 'cs301',
-      title: 'CS301: Algorithms',
+      title: ' Algorithms',
       instructor: 'Prof. John Doe',
       progress: 60,
       credits: 4,
@@ -175,7 +175,7 @@ const Courses = () => {
     },
     {
       id: 'cs401',
-      title: 'CS401: Machine Learning',
+      title: ' Machine Learning',
       instructor: 'Dr. Ada Lovelace',
       progress: 45,
       credits: 3,
@@ -195,7 +195,7 @@ const Courses = () => {
     },
     {
       id: 'math201',
-      title: 'MATH201: Discrete Mathematics',
+      title: ' Discrete Mathematics',
       instructor: 'Prof. Euclid',
       progress: 90,
       credits: 3,
@@ -216,7 +216,7 @@ const Courses = () => {
     },
     {
       id: 'eng101',
-      title: 'ENG101: Technical Writing',
+      title: ' Technical Writing',
       instructor: 'Dr. William Shakespeare',
       progress: 95,
       credits: 2,

@@ -59,7 +59,7 @@ const StatsCard = ({ title, value, icon, trend = 0, color = 'default' }) => {
       <div className="flex justify-between items-start">
         <div>
           <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{title}</p>
-          <h3 className="text-2xl font-bold mt-1">{value.toLocaleString()}</h3>
+          <h3 className="text-2xl font-bold mt-1 pl-6">{value.toLocaleString()}</h3>
           {trend !== 0 && (
             <div className="flex items-center mt-2">
               {trend > 0 ? (

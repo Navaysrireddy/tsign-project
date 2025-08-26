@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { SearchIcon, FilterIcon, PlusIcon } from 'lucide-react';
+import { SearchIcon, FilterIcon, PlusIcon, CalendarIcon } from 'lucide-react';
 import  InterviewList  from './InterviewList';
-import  BarChart  from '../dashboard/chart/BarChart';
+import  LineChart  from '../dashboard/chart/LineChart';
 import  PieChart  from '../dashboard/chart/PieChart';
 import { useData}  from '../context/DataContext';
 import  {useTheme } from '../context/ThemeContext';
@@ -14,13 +14,17 @@ const InterviewsView = () => {
   const { theme } = useTheme();
   const { isScheduleInterviewOpen, openScheduleInterview, closeScheduleInterview } = useModal();
   const isDarkMode = theme === 'dark';
- 
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
   const [selectedCourse, setSelectedCourse] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
- 
+  
+  // New state for chart filters
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+   
   const departments = [
     { value: 'all', label: 'All Departments' },
     { value: 'Engineering', label: 'Engineering' },
@@ -28,7 +32,7 @@ const InterviewsView = () => {
     { value: 'Electrical', label: 'Electrical' },
     { value: 'Computer Science', label: 'Computer Science' }
   ];
- 
+
   const courses = [
     { value: 'all', label: 'All Courses' },
     { value: 'CSE', label: 'CSE' },
@@ -36,7 +40,7 @@ const InterviewsView = () => {
     { value: 'IT', label: 'IT' },
     { value: 'Business', label: 'Business' }
   ];
- 
+
   const statuses = [
     { value: 'all', label: 'All Statuses' },
     { value: 'Scheduled', label: 'Scheduled' },
@@ -44,7 +48,27 @@ const InterviewsView = () => {
     { value: 'Completed', label: 'Completed' },
     { value: 'No Show', label: 'No Show' }
   ];
- 
+
+  // Generate years (from 2020 to current year + 1)
+  const years = Array.from({ length: new Date().getFullYear() - 2019 + 1 }, 
+    (_, i) => 2020 + i
+  );
+
+  const months = [
+    { value: 1, label: 'January' },
+    { value: 2, label: 'February' },
+    { value: 3, label: 'March' },
+    { value: 4, label: 'April' },
+    { value: 5, label: 'May' },
+    { value: 6, label: 'June' },
+    { value: 7, label: 'July' },
+    { value: 8, label: 'August' },
+    { value: 9, label: 'September' },
+    { value: 10, label: 'October' },
+    { value: 11, label: 'November' },
+    { value: 12, label: 'December' }
+  ];
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -52,12 +76,12 @@ const InterviewsView = () => {
       transition: { staggerChildren: 0.1, delayChildren: 0.1 }
     }
   };
- 
+
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
   };
- 
+
   // Filter interviews based on search and filters
   const filteredInterviews = data.interviews.filter(interview => {
     const matchesSearch =
@@ -69,7 +93,47 @@ const InterviewsView = () => {
     const matchesStatus = selectedStatus === 'all' || interview.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesCourse && matchesStatus;
   });
- 
+
+  // Process data for the line chart based on selected filters
+  const lineChartData = useMemo(() => {
+    // This is a placeholder - you'll need to adjust based on your actual data structure
+    // Filter interviews by selected year and month
+    const filteredByDate = data.interviews.filter(interview => {
+      const interviewDate = new Date(interview.date);
+      return interviewDate.getFullYear() === selectedYear && 
+             interviewDate.getMonth() + 1 === selectedMonth;
+    });
+    
+    // Group by week or day based on your preference
+    // This example groups by week
+    const weeks = {};
+    filteredByDate.forEach(interview => {
+      const interviewDate = new Date(interview.date);
+      const weekNumber = Math.ceil(interviewDate.getDate() / 7);
+      weeks[weekNumber] = (weeks[weekNumber] || 0) + 1;
+    });
+    
+    // Format for the chart
+    const labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+    const chartData = [weeks[1] || 0, weeks[2] || 0, weeks[3] || 0, weeks[4] || 0];
+    
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Interviews',
+          data: chartData,
+          borderColor: isDarkMode ? 'rgba(45, 212, 191, 0.8)' : 'rgba(20, 184, 166, 0.8)',
+          backgroundColor: isDarkMode 
+            ? 'rgba(45, 212, 191, 0.2)' 
+            : 'rgba(20, 184, 166, 0.2)',
+          tension: 0.4,
+          fill: true
+        }
+      ]
+    };
+  }, [data.interviews, selectedYear, selectedMonth, isDarkMode]);
+
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -92,7 +156,7 @@ const InterviewsView = () => {
           <span>Schedule Interview</span>
         </motion.button>
       </div>
- 
+
       {/* Search and Filters */}
       <motion.div
         variants={itemVariants}
@@ -192,7 +256,7 @@ const InterviewsView = () => {
           </motion.div>
         )}
       </motion.div>
- 
+
       {/* Interviews List */}
       <motion.div
         variants={itemVariants}
@@ -203,7 +267,7 @@ const InterviewsView = () => {
       >
         <InterviewList interviews={filteredInterviews} />
       </motion.div>
- 
+
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div
@@ -214,34 +278,46 @@ const InterviewsView = () => {
             p-5
           `}
         >
-          <h3 className="font-medium mb-4">Weekly Interview Count (August 2025)</h3>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-medium">Interview Trends</h3>
+            <div className="flex items-center gap-2">
+              <CalendarIcon size={16} className={isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
+              <select
+                value={selectedYear}
+                onChange={e => setSelectedYear(parseInt(e.target.value))}
+                className={`
+                  rounded-lg px-2 py-1 text-sm
+                  ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
+                  border shadow-sm
+                `}
+              >
+                {years.map(year => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={selectedMonth}
+                onChange={e => setSelectedMonth(parseInt(e.target.value))}
+                className={`
+                  rounded-lg px-2 py-1 text-sm
+                  ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
+                  border shadow-sm
+                `}
+              >
+                {months.map(month => (
+                  <option key={month.value} value={month.value}>
+                    {month.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
           <div className="h-80">
-            <BarChart
-              labels={data.weeklyInterviews.labels}
-              datasets={[
-                {
-                  label: 'Interviews',
-                  data:
-                    data.weeklyInterviews.datasets[
-                      selectedDepartment === 'all'
-                        ? 'Engineering (CSE)'
-                        : `${selectedDepartment}${selectedCourse !== 'all' ? ` (${selectedCourse})` : ''}`
-                    ] || data.weeklyInterviews.datasets['Engineering (CSE)'],
-                  backgroundColor: isDarkMode
-                    ? [
-                        'rgba(45, 212, 191, 0.8)',
-                        'rgba(45, 212, 191, 0.6)',
-                        'rgba(45, 212, 191, 0.4)',
-                        'rgba(45, 212, 191, 0.2)'
-                      ]
-                    : [
-                        'rgba(20, 184, 166, 0.8)',
-                        'rgba(20, 184, 166, 0.6)',
-                        'rgba(20, 184, 166, 0.4)',
-                        'rgba(20, 184, 166, 0.2)'
-                      ]
-                }
-              ]}
+            <LineChart
+              labels={lineChartData.labels}
+              datasets={lineChartData.datasets}
             />
           </div>
         </motion.div>
@@ -277,13 +353,10 @@ const InterviewsView = () => {
           </div>
         </motion.div>
       </div>
- 
+
       {/* Schedule Interview Modal */}
       <ScheduleInterviewModal isOpen={isScheduleInterviewOpen} onClose={closeScheduleInterview} />
     </motion.div>
   );
 };
- 
 export default InterviewsView;
- 
- 

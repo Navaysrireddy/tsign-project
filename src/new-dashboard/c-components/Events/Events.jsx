@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CalendarIcon, MapPinIcon, TagIcon, UsersIcon, FilterIcon, CheckCircleIcon, ArrowRightIcon } from 'lucide-react';
+import { CalendarIcon, MapPinIcon, TagIcon, UsersIcon, FilterIcon, CheckCircleIcon, ArrowRightIcon,XIcon,PlusIcon } from 'lucide-react';
 import EventsCalendar from './EventsCalendar';
 import EventCategoryChart from './EventCategoryChart';
 import EventAttendanceChart from './EventAttendanceChart';
@@ -13,11 +13,26 @@ const Events = ({
   const [selectedDepartment, setSelectedDepartment] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+   const [isAddEventModalOpen, setIsAddEventModalOpen] = useState(false);
+  const [newEvent, setNewEvent] = useState({
+    title: '',
+    date: '',
+    time: '',
+    location: '',
+    description: '',
+    departments: [],
+    category: '',
+    attendees: 0,
+    maxCapacity: 0,
+    status: 'Upcoming',
+    month: ''
+  });
+
   const months = ['All', 'January', 'February', 'March', 'April', 'May', 'June'];
   const departments = ['All', 'Computer Science', 'Mechanical', 'Electrical', 'Engineering'];
   const categories = ['All', 'Workshop', 'Conference', 'Recruitment', 'Competition', 'Seminar'];
   // Sample events data
-  const allEvents = [{
+    const [allEvents, setAllEvents] = useState([{
     id: 1,
     title: 'Google Recruitment Drive',
     date: 'Jan 20, 2025',
@@ -173,7 +188,7 @@ const Events = ({
     maxCapacity: 500,
     status: 'Upcoming',
     month: 'May'
-  }];
+  }]);
   // Filter events based on selected filters
   const filteredEvents = allEvents.filter(event => {
     const monthMatch = selectedMonth === 'All' || event.month === selectedMonth;
@@ -188,6 +203,63 @@ const Events = ({
   const recruitmentEvents = filteredEvents.filter(e => e.category === 'Recruitment').length;
   // const competitionEvents = filteredEvents.filter(e => e.category === 'Competition').length;
   const averageAttendance = filteredEvents.reduce((sum, event) => sum + event.attendees / event.maxCapacity * 100, 0) / (filteredEvents.length || 1);
+   // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewEvent({
+      ...newEvent,
+      [name]: value
+    });
+  };
+
+  // Handle department selection
+  const handleDepartmentChange = (dept) => {
+    if (newEvent.departments.includes(dept)) {
+      setNewEvent({
+        ...newEvent,
+        departments: newEvent.departments.filter(d => d !== dept)
+      });
+    } else {
+      setNewEvent({
+        ...newEvent,
+        departments: [...newEvent.departments, dept]
+      });
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Generate a unique ID for the new event
+    const newId = Math.max(...allEvents.map(event => event.id), 0) + 1;
+    
+    // Add the new event to the list
+    setAllEvents([...allEvents, {
+      ...newEvent,
+      id: newId,
+      attendees: parseInt(newEvent.attendees),
+      maxCapacity: parseInt(newEvent.maxCapacity)
+    }]);
+    
+    // Reset form and close modal
+    setNewEvent({
+      title: '',
+      date: '',
+      time: '',
+      location: '',
+      description: '',
+      departments: [],
+      category: '',
+      attendees: 0,
+      maxCapacity: 0,
+      status: 'Upcoming',
+      month: ''
+    });
+    
+    setIsAddEventModalOpen(false);
+  };
+
   const container = {
     hidden: {
       opacity: 0
@@ -210,19 +282,230 @@ const Events = ({
     }
   };
   return <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <motion.div initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        duration: 0.5
-      }}>
+     {/* Add Event Modal */}
+     
+{isAddEventModalOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className={`relative rounded-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
+    >
+      <button 
+        onClick={() => setIsAddEventModalOpen(false)}
+        className="absolute top-4 right-4 p-1 rounded-full"
+      >
+        <XIcon className={`h-5 w-5 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`} />
+      </button>
+      
+      <h2 className={`text-xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Add New Event</h2>
+      
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            Event Title *
+          </label>
+          <input
+            type="text"
+            name="title"
+            value={newEvent.title}
+            onChange={handleInputChange}
+            required
+            className={`w-full p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white placeholder-gray-400' : 'bg-gray-100 text-gray-900 placeholder-gray-500'}`}
+            placeholder="Enter event title"
+          />
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Date *
+            </label>
+            <input
+              type="text"
+              name="date"
+              value={newEvent.date}
+              onChange={handleInputChange}
+              placeholder="Jan 1, 2025"
+              required
+              className={`w-full p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white placeholder-gray-400' : 'bg-gray-100 text-gray-900 placeholder-gray-500'}`}
+            />
+          </div>
+          
+          <div>
+            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Time *
+            </label>
+            <input
+              type="text"
+              name="time"
+              value={newEvent.time}
+              onChange={handleInputChange}
+              placeholder="10:00 AM - 2:00 PM"
+              required
+              className={`w-full p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white placeholder-gray-400' : 'bg-gray-100 text-gray-900 placeholder-gray-500'}`}
+            />
+          </div>
+        </div>
+        
+        <div>
+          <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            Location *
+          </label>
+          <input
+            type="text"
+            name="location"
+            value={newEvent.location}
+            onChange={handleInputChange}
+            required
+            className={`w-full p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white placeholder-gray-400' : 'bg-gray-100 text-gray-900 placeholder-gray-500'}`}
+            placeholder="Enter event location"
+          />
+        </div>
+        
+        <div>
+          <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            Description
+          </label>
+          <textarea
+            name="description"
+            value={newEvent.description}
+            onChange={handleInputChange}
+            rows={3}
+            className={`w-full p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white placeholder-gray-400' : 'bg-gray-100 text-gray-900 placeholder-gray-500'}`}
+            placeholder="Enter event description"
+          />
+        </div>
+        
+        <div>
+          <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            Departments *
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {departments.filter(dept => dept !== 'All').map(dept => (
+              <button
+                type="button"
+                key={dept}
+                onClick={() => handleDepartmentChange(dept)}
+                className={`px-3 py-1 rounded-full text-sm ${
+                  newEvent.departments.includes(dept) 
+                    ? (darkMode ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-800')
+                    : (darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-800')
+                }`}
+              >
+                {dept}
+              </button>
+            ))}
+          </div>
+        </div>
+        
+        <div>
+          <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            Category *
+          </label>
+          <select
+            name="category"
+            value={newEvent.category}
+            onChange={handleInputChange}
+            required
+            className={`w-full p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'}`}
+          >
+            <option value="" className={darkMode ? 'text-gray-400' : 'text-gray-500'}>Select Category</option>
+            {categories.filter(cat => cat !== 'All').map(cat => (
+              <option key={cat} value={cat} className={darkMode ? 'text-white' : 'text-gray-900'}>{cat}</option>
+            ))}
+          </select>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Attendees
+            </label>
+            <input
+              type="number"
+              name="attendees"
+              value={newEvent.attendees}
+              onChange={handleInputChange}
+              min="0"
+              className={`w-full p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'}`}
+            />
+          </div>
+          
+          <div>
+            <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Max Capacity *
+            </label>
+            <input
+              type="number"
+              name="maxCapacity"
+              value={newEvent.maxCapacity}
+              onChange={handleInputChange}
+              min="1"
+              required
+              className={`w-full p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'}`}
+            />
+          </div>
+        </div>
+        
+        <div>
+          <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            Month *
+          </label>
+          <select
+            name="month"
+            value={newEvent.month}
+            onChange={handleInputChange}
+            required
+            className={`w-full p-2 rounded-lg ${darkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'}`}
+          >
+            <option value="" className={darkMode ? 'text-gray-400' : 'text-gray-500'}>Select Month</option>
+            {months.filter(m => m !== 'All').map(month => (
+              <option key={month} value={month} className={darkMode ? 'text-white' : 'text-gray-900'}>{month}</option>
+            ))}
+          </select>
+        </div>
+        
+        <div className="flex justify-end gap-3 pt-4">
+          <button
+            type="button"
+            onClick={() => setIsAddEventModalOpen(false)}
+            className={`px-4 py-2 rounded-lg ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-800'}`}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-teal-500 to-blue-600 text-white shadow-md"
+          >
+            Add Event
+          </button>
+        </div>
+      </form>
+    </motion.div>
+  </div>
+)}
+ <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <h1 className="text-2xl font-bold">Events</h1>
         </motion.div>
+        
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          onClick={() => setIsAddEventModalOpen(true)}
+          className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-teal-500 to-blue-600 text-white shadow-md`}
+        >
+          <PlusIcon className="h-4 w-4 mr-2" />
+          Add Event
+        </motion.button>
       </div>
+
       <div className={`p-4 rounded-lg ${darkMode ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'}`}>
         <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0">
           <div className="flex items-center mr-4">

@@ -173,18 +173,50 @@ const Header = ({ darkMode, toggleDarkMode, toggleSidebar }) => {
               </>
             ) : (
               <>
-                <h2 className="text-xl font-bold mb-4">Edit College Details</h2>
-                {Object.keys(college).map((key) =>
-                  key === "about" ? (
-                    <textarea key={key} name={key} value={college[key]} onChange={handleInputChange} placeholder="About" className="w-full p-2 mb-2 border rounded h-20" />
-                  ) : (
-                    <input key={key} type="text" name={key} value={college[key]} onChange={handleInputChange} placeholder={key.charAt(0).toUpperCase() + key.slice(1)} className="w-full p-2 mb-2 border rounded" />
-                  )
-                )}
-                <div className="mt-4 flex gap-2">
-                  <button onClick={saveCollegeDetails} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Save</button>
-                  <button onClick={() => setEditMode(false)} className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">Cancel</button>
-                </div>
+               <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">Edit College Details</h2>
+{Object.keys(college).map((key) =>
+  key === "about" ? (
+    <textarea
+      key={key}
+      name={key}
+      value={college[key]}
+      onChange={handleInputChange}
+      placeholder="About"
+      className="w-full p-2 mb-2 border rounded h-20 
+                 bg-white text-gray-800 border-gray-300
+                 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
+    />
+  ) : (
+    <input
+      key={key}
+      type="text"
+      name={key}
+      value={college[key]}
+      onChange={handleInputChange}
+      placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
+      className="w-full p-2 mb-2 border rounded
+                 bg-white text-gray-800 border-gray-300
+                 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
+    />
+  )
+)}
+<div className="mt-4 flex gap-2">
+  <button
+    onClick={saveCollegeDetails}
+    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600
+               dark:bg-green-600 dark:hover:bg-green-700"
+  >
+    Save
+  </button>
+  <button
+    onClick={() => setEditMode(false)}
+    className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500
+               dark:bg-gray-600 dark:hover:bg-gray-700"
+  >
+    Cancel
+  </button>
+</div>
+
               </>
             )}
           </div>

@@ -5,9 +5,9 @@ import {
   UsersIcon,
   BriefcaseIcon,
   CalendarIcon,
-  SettingsIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon
+  SettingsIcon
+  // ChevronLeftIcon,
+  // ChevronRightIcon
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
@@ -103,7 +103,7 @@ const Sidebar = ({ activeView, setActiveView, collapsed, toggleSidebar }) => {
       </div>
 
       {/* Collapse/Expand Button */}
-      <div className={`p-3 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+      {/* <div className={`p-3 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -117,7 +117,7 @@ const Sidebar = ({ activeView, setActiveView, collapsed, toggleSidebar }) => {
         >
           {collapsed ? <ChevronRightIcon size={18} /> : <ChevronLeftIcon size={18} />}
         </motion.button>
-      </div>
+      </div> */}
     </motion.aside>
   );
 };

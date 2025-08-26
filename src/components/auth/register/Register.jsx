@@ -1,160 +1,172 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import './Register.css';
-import registerImage from '../../../assests/TG-SIGN (2).png'; // Adjust the path as needed
+import { useNavigate } from 'react-router-dom';
+import logoImage from '../../../assests/TG-SIGN (2).png'; // Adjust the path as per your folder structure
 
+
+import './Register.css';
 
 const Register = () => {
-  const navigate = useNavigate(); // Initialize navigate
-
   const [activeRole, setActiveRole] = useState('student');
+  const [showStudentForm, setShowStudentForm] = useState(false);
+  const navigate = useNavigate(); 
 
   // College registration state
   const [collegeStep, setCollegeStep] = useState(1);
   const [collegeFormData, setCollegeFormData] = useState({
+    // Step 1
     collegeName: '',
     registrationNo: '',
     email: '',
     phone: '',
     address: '',
-    state: '',
-    pAssword: '',
-    confirmpassword: '',
+    state:'',
+    pAssword:'',
+    confirmpassword:'',
     logo: null,
-    institutionCertificate: '',
-    institutionSector: '',
-    yearOfEstablishment: '',
+    institutionCertificate:'',
+    institutionSector:'',
+    yearOfEstablishment:'',
+    
+    // Step 2
     stream: '',
     course: '',
-    directorName: '',
-    directorEmail: '',
-    directorContact: '',
+    directorName:'',
+    directorEmail:'',
+    directorContact:'',
+    pocName: '',
+    pocEmail: '',
+    pocMobile: '',
+    
+    // Step 3
     poCName: '',
+    designation:'',
     poCEmail: '',
     poCMobile: '',
-    designation: '',
+    
     password: '',
-    confirmPassword: '',
+    confirmPassword: ''
   });
 
   // Recruiter registration state
   const [recruiterStep, setRecruiterStep] = useState(1);
   const [recruiterFormData, setRecruiterFormData] = useState({
+    // Step 1
     companyName: '',
     website: '',
     email: '',
     phone: '',
     address: '',
+    
+    // Step 2
     recruiterName: '',
     designation: '',
     category: 'IT',
     logo: null,
+    
+    // Step 3
     password: '',
-    confirmPassword: '',
+    confirmPassword: ''
   });
 
   const handleRoleChange = (role) => {
     setActiveRole(role);
-  };
-
-  // College input change
-  const handleCollegeInputChange = (e) => {
-    const { name, value } = e.target;
-    setCollegeFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  // Recruiter input change
-  const handleRecruiterInputChange = (e) => {
-    const { name, value } = e.target;
-    setRecruiterFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  // File handler (logo, certificate)
-  const handleFileChange = (e, setFormData) => {
-    const file = e.target.files[0];
-    const { name } = e.target; // name attr of input eg 'logo'
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({
-          ...prev,
-          [name]: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
+    if (role === 'student') {
+      setShowStudentForm(false);
     }
   };
+
+  const handleCollegeInputChange = (e) => {
+    const { name, value } = e.target;
+    setCollegeFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleRecruiterInputChange = (e) => {
+    const { name, value } = e.target;
+    setRecruiterFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleFileChange = (e, setFormData) => {
+  const file = e.target.files[0];
+  const { name } = e.target; // gets 'logo' or 'institutionCertificate'
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData(prev => ({
+        ...prev,
+        [name]: reader.result  // dynamically update correct field
+      }));
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
   const nextCollegeStep = () => {
     if (collegeStep < 3) setCollegeStep(collegeStep + 1);
   };
+
   const prevCollegeStep = () => {
     if (collegeStep > 1) setCollegeStep(collegeStep - 1);
   };
+
   const nextRecruiterStep = () => {
     if (recruiterStep < 3) setRecruiterStep(recruiterStep + 1);
   };
+
   const prevRecruiterStep = () => {
     if (recruiterStep > 1) setRecruiterStep(recruiterStep - 1);
   };
 
-  // Submit handlers with navigation
   const handleCollegeSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  console.log('College form submitted:', collegeFormData);
+  alert('College registration successful!');
+  navigate('/login'); // 👈 Redirect to login
+};
 
-    // Add your validation logic here if you want
+const handleRecruiterSubmit = (e) => {
+  e.preventDefault();
+  console.log('Recruiter form submitted:', recruiterFormData);
+  alert('Recruiter registration successful!');
+  navigate('/login'); // 👈 Redirect to login
+};
 
-    console.log('College form submitted:', collegeFormData);
-    alert('College registration successful! Redirecting to Dashboard...');
+const handleStartRegistration = () => {
+  navigate("/Profile-form")
+};
 
-    // Navigate to college dashboard after registration
-    navigate('/new-dashboard');
-  };
-
-  const handleRecruiterSubmit = (e) => {
-    e.preventDefault();
-
-    // Add your validation logic here if needed
-
-    console.log('Recruiter form submitted:', recruiterFormData);
-    alert('Recruiter registration successful! Redirecting to Dashboard...');
-
-    // Navigate to recruiter dashboard after registration
-    navigate('/recruiter');
-  };
 
   return (
-    <div className="register-container">
-<div className="register-header">
-  <img src={registerImage} alt="Telangana Logo" className="register-logo" />
-  <h2 className="register-title">Unlock your journey – start by registering!</h2>
+    <div className="register-container"><div className="header-with-logo">
+  <img src={logoImage} alt="Logo" className="header-logo" />
+  <h2>Unlock your journey – start by registering!</h2><hr className="custom-hr" />
 </div>
+      {/* <h2>Unlock your journey – start by registering!</h2><hr className="custom-hr" /> */}
+      
 
-      <hr className="custom-hr" />
       <div className="role-selection">
         <div className="role-options">
-          <div
+          <div 
             className={`role-card ${activeRole === 'student' ? 'active' : ''}`}
             onClick={() => handleRoleChange('student')}
           >
             <h3>Student</h3>
             <p>Register as a student</p>
           </div>
-          <div
+          <div 
             className={`role-card ${activeRole === 'college' ? 'active' : ''}`}
             onClick={() => handleRoleChange('college')}
           >
             <h3>College</h3>
             <p>Register your institution</p>
           </div>
-          <div
+          <div 
             className={`role-card ${activeRole === 'recruiter' ? 'active' : ''}`}
             onClick={() => handleRoleChange('recruiter')}
           >
@@ -165,32 +177,41 @@ const Register = () => {
       </div>
 
       <div className="form-section">
-        {activeRole === 'student' && <StudentForm />}
+        {activeRole === 'student' && !showStudentForm && (
+          <div className="start-registration">
+            <h2>Let's Get Started!</h2>
+            {/* <div classname="para-1"> */}
+             {/* <p>Begin your journey by registering as a student</p> */}
+              <button className="start-btn" onClick={handleStartRegistration}>
+              Start Registration
+              </button>
+            {/* </div> */}
+          </div>
+        )}
+
+        {activeRole === 'student' && showStudentForm && (
+          <StudentForm />
+        )}
 
         {activeRole === 'college' && (
           <div className="multi-step-form">
             <div className="step-indicator">
               <div className={`step ${collegeStep === 1 ? 'active' : ''}`}>
-                <div className="step-number">1</div>
+                <div className="step-number"></div>
                 <div className="step-title">College Info</div>
               </div>
               <div className={`step ${collegeStep === 2 ? 'active' : ''}`}>
-                <div className="step-number">2</div>
+                <div className="step-number"></div>
                 <div className="step-title">Streams & POC</div>
               </div>
               <div className={`step ${collegeStep === 3 ? 'active' : ''}`}>
-                <div className="step-number">3</div>
+                <div className="step-number"></div>
                 <div className="step-title">Complete</div>
               </div>
             </div>
 
             {collegeStep === 1 && (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  nextCollegeStep();
-                }}
-              >
+              <form onSubmit={(e) => { e.preventDefault(); nextCollegeStep(); }}>
                 <h2>College Information</h2>
                 <div className="form-row">
                   <div className="form-group">
@@ -258,30 +279,33 @@ const Register = () => {
                     required
                   />
                 </div>
+                
 
+                
                 <div className="form-row">
-                  <div className="form-group half-width">
-                    <label>Create Password*</label>
-                    <input
-                      type="password"
-                      name="pAssword"
-                      value={collegeFormData.pAssword}
-                      onChange={handleCollegeInputChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group half-width">
-                    <label>Confirm Password*</label>
-                    <input
-                      type="password"
-                      name="confirmpassword"
-                      value={collegeFormData.confirmpassword}
-                      onChange={handleCollegeInputChange}
-                      required
-                    />
-                  </div>
+                <div className="form-group half-width">
+                  <label>Create Password*</label>
+                  <input
+                    type="password"
+                    name="pAssword"
+                    value={collegeFormData.pAssword}
+                    onChange={handleCollegeInputChange}
+                    required
+                  />
                 </div>
+
+                <div className="form-group half-width">
+                  <label>Confirm Password*</label>
+                  <input
+                    type="password"
+                    name="confirmpassword"
+                    value={collegeFormData.confirmpassword}
+                    onChange={handleCollegeInputChange}
+                    required
+                  />
+                </div>
+                </div>
+
 
                 <div className="form-row">
                   <div className="form-group">
@@ -290,7 +314,7 @@ const Register = () => {
                       <input
                         type="file"
                         id="college-logo"
-                        name="logo"
+                        name="logo"  // ← important
                         onChange={(e) => handleFileChange(e, setCollegeFormData)}
                         accept="image/*"
                       />
@@ -309,7 +333,7 @@ const Register = () => {
                       <input
                         type="file"
                         id="college-certificate"
-                        name="institutionCertificate"
+                        name="institutionCertificate"  // ← important
                         onChange={(e) => handleFileChange(e, setCollegeFormData)}
                         accept="image/*"
                       />
@@ -317,40 +341,37 @@ const Register = () => {
                     </div>
                     {collegeFormData.institutionCertificate && (
                       <div className="certificate-preview">
-                        <img
-                          src={collegeFormData.institutionCertificate}
-                          alt="College certificate preview"
-                        />
+                        <img src={collegeFormData.institutionCertificate} alt="College certificate preview" />
                       </div>
                     )}
                   </div>
                 </div>
 
                 <div className="form-group">
-                  <label>Institution Sector*</label>
-                  <select
-                    name="institutionSector"
-                    value={collegeFormData.institutionSector}
-                    onChange={handleCollegeInputChange}
-                    required
-                  >
-                    <option value="">Select</option>
-                    <option value="private">Private</option>
-                    <option value="autonomous">Autonomous</option>
-                    <option value="deemend">Deemed University</option>
-                  </select>
-                </div>
+                    <label>Institution Sector*</label>
+                    <select
+                      name="institutionSector"
+                      value={collegeFormData.institutionSector}
+                      onChange={handleCollegeInputChange}
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="private">Private</option>
+                      <option value="autonomous">Autonomous</option>
+                      <option value="deemend">Deemed University</option>
+                    </select>
+                  </div>
 
-                <div className="form-group">
-                  <label>Established Year*</label>
-                  <input
-                    type="month"
-                    name="yearOfEstablishment"
-                    value={collegeFormData.yearOfEstablishment}
-                    onChange={handleCollegeInputChange}
-                    required
-                  />
-                </div>
+                  <div className="form-group">
+                    <label>Established Year*</label>
+                    <input
+                      type="month"
+                      name="yearOfEstablishment"
+                      value={collegeFormData.yearOfEstablishment}
+                      onChange={handleCollegeInputChange}
+                      required
+                    />
+                  </div>
 
                 <div className="form-buttons">
                   <button type="submit" className="next-btn">

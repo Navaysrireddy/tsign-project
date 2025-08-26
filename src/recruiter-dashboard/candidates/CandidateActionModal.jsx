@@ -4,7 +4,7 @@ import Modal  from '../ui/Modal';
 import { useTheme } from '../context/ThemeContext';
 import { useData } from '../context/DataContext';
 import { MailIcon, CheckIcon, XIcon, UserIcon, GraduationCapIcon, PhoneIcon, HomeIcon, ClockIcon } from 'lucide-react';
- 
+
 const CandidateActionModal = ({
   isOpen,
   onClose,
@@ -14,12 +14,12 @@ const CandidateActionModal = ({
   const { theme } = useTheme();
   const { data, updateCandidateStatus } = useData();
   const isDarkMode = theme === 'dark';
- 
+
   if (!candidateId || !action) return null;
- 
+  
   const candidate = data.candidates.find(c => c.id === candidateId);
   if (!candidate) return null;
- 
+
   const getTitle = () => {
     switch (action) {
       case 'email':
@@ -32,7 +32,7 @@ const CandidateActionModal = ({
         return 'Candidate Action';
     }
   };
- 
+
   const getIcon = () => {
     switch (action) {
       case 'email':
@@ -45,7 +45,7 @@ const CandidateActionModal = ({
         return null;
     }
   };
- 
+
   const handleAction = () => {
     if (action === 'shortlist') {
       updateCandidateStatus(candidateId, 'Selected');
@@ -54,7 +54,7 @@ const CandidateActionModal = ({
     }
     onClose();
   };
- 
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={getTitle()} size="md">
       <div className="space-y-6">
@@ -90,7 +90,7 @@ const CandidateActionModal = ({
             </div>
           </div>
         </div>
- 
+
         {/* Action Content */}
         {action === 'email' && (
           <div className="space-y-4">
@@ -98,25 +98,25 @@ const CandidateActionModal = ({
               <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`} htmlFor="subject">
                 Subject
               </label>
-              <input
-                type="text"
-                id="subject"
-                placeholder="Interview Invitation for Software Engineer Position"
+              <input 
+                type="text" 
+                id="subject" 
+                placeholder="Interview Invitation for Software Engineer Position" 
                 className={`
                   w-full px-4 py-2 rounded-lg
                   ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
                   border focus:outline-none focus:ring-2 focus:ring-teal-500
-                `}
+                `} 
               />
             </div>
             <div>
               <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`} htmlFor="message">
                 Message
               </label>
-              <textarea
-                id="message"
-                rows={6}
-                placeholder={`Dear ${candidate.name},\n\nWe are pleased to invite you for an interview for the Software Engineer position at TechCorp.\n\nPlease let us know your availability for the coming week.\n\nBest regards,\nRecruiting Team`}
+              <textarea 
+                id="message" 
+                rows={6} 
+                placeholder={`Dear ${candidate.name},\n\nWe are pleased to invite you for an interview for the Software Engineer position at TechCorp.\n\nPlease let us know your availability for the coming week.\n\nBest regards,\nRecruiting Team`} 
                 className={`
                   w-full px-4 py-2 rounded-lg
                   ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
@@ -126,7 +126,7 @@ const CandidateActionModal = ({
             </div>
           </div>
         )}
- 
+
         {action === 'shortlist' && (
           <div className="space-y-4">
             <div className="flex items-center gap-3 p-3 rounded-lg bg-green-100 text-green-800">
@@ -139,8 +139,8 @@ const CandidateActionModal = ({
               <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`} htmlFor="position">
                 Position
               </label>
-              <select
-                id="position"
+              <select 
+                id="position" 
                 className={`
                   w-full px-4 py-2 rounded-lg
                   ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
@@ -159,10 +159,10 @@ const CandidateActionModal = ({
               <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`} htmlFor="notes">
                 Notes (Optional)
               </label>
-              <textarea
-                id="notes"
-                rows={3}
-                placeholder="Add any notes about why this candidate is being shortlisted..."
+              <textarea 
+                id="notes" 
+                rows={3} 
+                placeholder="Add any notes about why this candidate is being shortlisted..." 
                 className={`
                   w-full px-4 py-2 rounded-lg
                   ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
@@ -178,7 +178,7 @@ const CandidateActionModal = ({
             </div>
           </div>
         )}
- 
+
         {action === 'reject' && (
           <div className="space-y-4">
             <div className="flex items-center gap-3 p-3 rounded-lg bg-red-100 text-red-800">
@@ -189,8 +189,8 @@ const CandidateActionModal = ({
               <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`} htmlFor="reason">
                 Reason for Rejection
               </label>
-              <select
-                id="reason"
+              <select 
+                id="reason" 
                 className={`
                   w-full px-4 py-2 rounded-lg
                   ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
@@ -209,10 +209,10 @@ const CandidateActionModal = ({
               <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`} htmlFor="feedback">
                 Feedback (Optional)
               </label>
-              <textarea
-                id="feedback"
-                rows={3}
-                placeholder="Add any specific feedback about why this candidate is being rejected..."
+              <textarea 
+                id="feedback" 
+                rows={3} 
+                placeholder="Add any specific feedback about why this candidate is being rejected..." 
                 className={`
                   w-full px-4 py-2 rounded-lg
                   ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}
@@ -228,7 +228,7 @@ const CandidateActionModal = ({
             </div>
           </div>
         )}
- 
+
         {/* Timeline */}
         <div>
           <h4 className={`text-sm font-medium mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -284,14 +284,14 @@ const CandidateActionModal = ({
             </div>
           </div>
         </div>
- 
+
         {/* Action Buttons */}
         <div className="flex justify-end space-x-3">
-          <motion.button
+          <motion.button 
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            type="button"
-            onClick={onClose}
+            type="button" 
+            onClick={onClose} 
             className={`
               px-4 py-2 rounded-lg
               ${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}
@@ -300,22 +300,22 @@ const CandidateActionModal = ({
           >
             Cancel
           </motion.button>
-          <motion.button
+          <motion.button 
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            type="button"
-            onClick={handleAction}
+            type="button" 
+            onClick={handleAction} 
             className={`
               px-4 py-2 rounded-lg flex items-center gap-2 text-white shadow-md
-              ${action === 'email' ? 'bg-gradient-to-r from-blue-500 to-indigo-500' :
-                action === 'shortlist' ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
+              ${action === 'email' ? 'bg-gradient-to-r from-blue-500 to-indigo-500' : 
+                action === 'shortlist' ? 'bg-gradient-to-r from-green-500 to-emerald-500' : 
                 'bg-gradient-to-r from-red-500 to-rose-500'}
             `}
           >
             {getIcon()}
             <span>
-              {action === 'email' ? 'Send Email' :
-               action === 'shortlist' ? 'Confirm Shortlist' :
+              {action === 'email' ? 'Send Email' : 
+               action === 'shortlist' ? 'Confirm Shortlist' : 
                'Confirm Rejection'}
             </span>
           </motion.button>
@@ -324,6 +324,5 @@ const CandidateActionModal = ({
     </Modal>
   );
 };
- 
+
 export default CandidateActionModal;
- 

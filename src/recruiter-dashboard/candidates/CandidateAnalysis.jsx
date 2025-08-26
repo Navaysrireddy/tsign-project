@@ -1,469 +1,376 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useParams, Link } from 'react-router-dom';
-import { UserIcon, ChevronLeftIcon, FileTextIcon, BarChart2Icon, PieChartIcon, TrendingUpIcon, GraduationCapIcon, CheckIcon, XIcon, ClockIcon } from 'lucide-react';
-import BarChart  from '../dashboard/chart/BarChart';
-import  PieChart  from '../dashboard/chart/PieChart';
-import LineChart  from '../dashboard/chart/LineChart';
-import { useData } from '../context/DataContext';
-import { useTheme } from '../context/ThemeContext';
- 
-const CandidateAnalysis = () => {
-  const { id } = useParams();
-  const { data } = useData();
-  const { theme } = useTheme();
-  const isDarkMode = theme === 'dark';
- 
-  const candidate = data.candidates.find(c => c.id === id);
- 
-  if (!candidate) {
-    return (
-      <div className="text-center py-12">
-        <h2 className="text-xl font-semibold mb-2">Candidate Not Found</h2>
-        <p className="mb-4">
-          The candidate you're looking for doesn't exist or has been removed.
-        </p>
-        <Link
-          to="/candidates"
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors`}
-        >
-          <ChevronLeftIcon size={16} />
-          Back to Candidates
-        </Link>
-      </div>
-    );
-  }
- 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Selected':
-        return isDarkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-600';
-      case 'Rejected':
-        return isDarkMode ? 'bg-red-900/30 text-red-400' : 'bg-red-100 text-red-600';
-      case 'Interviewed':
-        return isDarkMode ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600';
-      case 'In Review':
-        return isDarkMode ? 'bg-teal-900/30 text-teal-400' : 'bg-teal-100 text-teal-600';
-      default:
-        return isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+const steps = [
+  { title: "Basic Details", subtitle: "Let's get you started!" },
+  { title: "Location and Others", subtitle: "Provide the Details!" },
+  { title: "Contact Details", subtitle: "Fill in your Contact Details" },
+  { title: "Education Details", subtitle: "Provide your Academic Background" },
+  { title: "Summary & Experience", subtitle: "Tell us about your journey" },
+  { title: "Certificates / Images", subtitle: "Upload Certificates and Image" },
+  { title: "All Done!", subtitle: "You're all set!" },
+];
+
+const StudentProfileForm = () => {
+  const navigate = useNavigate();
+  const fileInputRef1 = useRef(null);
+  const fileInputRef2 = useRef(null);
+
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState({
+    studentName: "",
+    studentId: "",
+    email: "",
+    gender: "",
+    dob: "",
+    state: "",
+    city: "",
+    pinCode: "",
+    address: "",
+    contactNumber: "",
+    alternateEmail: "",
+    tenthSchool: "",
+    tenthYear: "",
+    tenthPercentage: "",
+    interCollege: "",
+    interYear: "",
+    interPercentage: "",
+    degreeCollege: "",
+    degreeYear: "",
+    degreePercentage: "",
+    isFresher: "Yes",
+    experience: "",
+    summary: "",
+    technicalSkills: "",
+    softSkills: "",
+    certifications: "",
+    certificateImage: null,
+    profileImage: null,
+    projects: [{ title: "", keyPoints: "" }],
+  });
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("StudentProfileData");
+    if (savedData) {
+      try {
+        setFormData(JSON.parse(savedData));
+      } catch (e) {
+        console.error("Failed to parse saved student data:", e);
+      }
+    }
+  }, []);
+
+  const goToNextStep = () => {
+    let isValid = true;
+    const fieldsToValidate = {
+      0: ["studentName", "studentId", "email", "gender", "dob"],
+      1: ["state", "city", "pinCode", "address"],
+      2: ["contactNumber", "alternateEmail"],
+      3: [
+        "tenthSchool", "tenthYear", "tenthPercentage",
+        "interCollege", "interYear", "interPercentage",
+        "degreeCollege", "degreeYear", "degreePercentage"
+      ],
+      4: ["summary", "technicalSkills", "softSkills", "certifications"],
+      5: ["certificateImage", "profileImage"],
+    };
+
+    const fields = fieldsToValidate[currentStep] || [];
+    for (let field of fields) {
+      if (!formData[field] || formData[field].toString().trim() === "") {
+        isValid = false;
+        alert(`Please fill in the required field: ${field}`);
+        break;
+      }
+    }
+
+    if (formData.isFresher === "No" && currentStep === 4 && !formData.experience.trim()) {
+      alert("Please provide your experience details.");
+      return;
+    }
+
+    if (isValid && currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
     }
   };
- 
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'Selected':
-        return <CheckIcon size={14} />;
-      case 'Rejected':
-        return <XIcon size={14} />;
-      case 'Interviewed':
-        return <UserIcon size={14} />;
-      case 'In Review':
-        return <ClockIcon size={14} />;
+
+  const goToPreviousStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleProjectChange = (index, field, value) => {
+    const updatedProjects = [...formData.projects];
+    updatedProjects[index][field] = value;
+    setFormData((prev) => ({ ...prev, projects: updatedProjects }));
+  };
+
+  const addNewProject = () => {
+    setFormData((prev) => ({
+      ...prev,
+      projects: [...prev.projects, { title: "", keyPoints: "" }],
+    }));
+  };
+
+  const handleFileChange = (e, field) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, [field]: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const renderInput = (label, name, type = "text", props = {}) => (
+    <div className="mb-3 flex flex-col">
+      <label className="font-medium">{label}</label>
+      <input
+        type={type}
+        name={name}
+        value={formData[name]}
+        onChange={handleChange}
+        className="border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400"
+        {...props}
+      />
+    </div>
+  );
+
+  const renderTextarea = (label, name, placeholder = "") => (
+    <div className="mb-3 flex flex-col">
+      <label className="font-medium">{label}</label>
+      <textarea
+        name={name}
+        value={formData[name]}
+        onChange={handleChange}
+        placeholder={placeholder}
+        className="border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400"
+      />
+    </div>
+  );
+
+  const renderStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          <>
+            <h2 className="text-xl font-bold mb-4">Basic Details</h2>
+            {renderInput("Student Name*", "studentName")}
+            {renderInput("Student ID*", "studentId")}
+            {renderInput("Email*", "email", "email")}
+            <div className="mb-3 flex flex-col">
+              <label className="font-medium">Gender*</label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="border px-3 py-2 rounded"
+              >
+                <option value="">-- Select Gender --</option>
+                <option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
+              </select>
+            </div>
+            {renderInput("Date of Birth*", "dob", "date")}
+          </>
+        );
+
+      case 1:
+        return (
+          <>
+            <h2 className="text-xl font-bold mb-4">Location</h2>
+            {renderInput("State*", "state")}
+            {renderInput("City*", "city")}
+            {renderInput("Pin Code*", "pinCode")}
+            {renderTextarea("Address*", "address")}
+          </>
+        );
+
+      case 2:
+        return (
+          <>
+            <h2 className="text-xl font-bold mb-4">Contact Details</h2>
+            {renderInput("Phone Number*", "contactNumber")}
+            {renderInput("Alternate Email*", "alternateEmail", "email")}
+          </>
+        );
+
+      case 3:
+        return (
+          <>
+            <h2 className="text-xl font-bold mb-4">Education Details</h2>
+            <h3 className="text-lg font-semibold mt-2">10th Standard</h3>
+            {renderInput("School Name*", "tenthSchool")}
+            {renderInput("Year of Passing*", "tenthYear")}
+            {renderInput("Percentage*", "tenthPercentage")}
+
+            <h3 className="text-lg font-semibold mt-4">Intermediate</h3>
+            {renderInput("College Name*", "interCollege")}
+            {renderInput("Year of Passing*", "interYear")}
+            {renderInput("Percentage*", "interPercentage")}
+
+            <h3 className="text-lg font-semibold mt-4">Degree / B.Tech</h3>
+            {renderInput("College Name*", "degreeCollege")}
+            {renderInput("Year of Passing*", "degreeYear")}
+            {renderInput("Percentage*", "degreePercentage")}
+          </>
+        );
+
+      case 4:
+        return (
+          <>
+            <h2 className="text-xl font-bold mb-4">Summary & Experience</h2>
+            {renderTextarea("Short Summary about You*", "summary")}
+            {renderTextarea("Technical Skills*", "technicalSkills", "e.g., Python, React, SQL")}
+            {renderTextarea("Soft Skills*", "softSkills", "e.g., Communication, Teamwork")}
+            {renderTextarea("Certifications*", "certifications", "e.g., AWS Certificate, Python Basics")}
+
+            <h3 className="text-lg font-semibold mt-4">Projects*</h3>
+            {formData.projects.map((project, index) => (
+              <div key={index} className="border rounded p-3 mb-3 bg-gray-50">
+                {renderInput("Project Title", `projects[${index}].title`, "text", {
+                  value: project.title,
+                  onChange: (e) => handleProjectChange(index, "title", e.target.value),
+                })}
+                {renderTextarea("Key Points", `projects[${index}].keyPoints`, "")}
+              </div>
+            ))}
+            <button type="button" className="px-3 py-2 bg-green-500 text-white rounded" onClick={addNewProject}>
+              + Add Another Project
+            </button>
+
+            <div className="mt-4">
+              <label className="font-medium">Are you a fresher?*</label>
+              <select
+                name="isFresher"
+                value={formData.isFresher}
+                onChange={handleChange}
+                className="border rounded px-3 py-2 ml-2"
+              >
+                <option value="Yes">Yes</option><option value="No">No</option>
+              </select>
+            </div>
+
+            {formData.isFresher === "No" &&
+              renderTextarea("Experience*", "experience")}
+          </>
+        );
+
+      case 5:
+        return (
+          <>
+            <h2 className="text-xl font-bold mb-4">Certificates / Images</h2>
+            <div className="mb-4">
+              <label className="font-medium">Upload Certificate*</label>
+              <div className="mt-2">
+                {formData.certificateImage ? (
+                  <img src={formData.certificateImage} alt="Certificate" className="w-40 h-40 object-cover border rounded" />
+                ) : (
+                  <button
+                    className="px-4 py-2 bg-indigo-500 text-white rounded"
+                    type="button"
+                    onClick={() => fileInputRef1.current.click()}
+                  >
+                    Upload Certificate
+                  </button>
+                )}
+                <input type="file" ref={fileInputRef1} style={{ display: "none" }} onChange={(e) => handleFileChange(e, "certificateImage")} />
+              </div>
+            </div>
+            <div>
+              <label className="font-medium">Upload Profile Photo*</label>
+              <div className="mt-2">
+                {formData.profileImage ? (
+                  <img src={formData.profileImage} alt="Profile" className="w-40 h-40 object-cover border rounded-full" />
+                ) : (
+                  <button
+                    className="px-4 py-2 bg-indigo-500 text-white rounded"
+                    type="button"
+                    onClick={() => fileInputRef2.current.click()}
+                  >
+                    Upload Photo
+                  </button>
+                )}
+                <input type="file" ref={fileInputRef2} style={{ display: "none" }} onChange={(e) => handleFileChange(e, "profileImage")} />
+              </div>
+            </div>
+          </>
+        );
+
+      case 6:
+        return (
+          <>
+            <h2 className="text-xl font-bold mb-4">All Done!</h2>
+            <p className="mb-4">Your profile is complete. Go to your dashboard.</p>
+            <button
+              type="button"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              onClick={() => {
+                localStorage.setItem("StudentProfile", JSON.stringify(formData));
+                alert("Profile completed successfully!");
+                navigate("/student-dashboard");
+              }}
+            >
+              Go to Dashboard
+            </button>
+          </>
+        );
       default:
         return null;
     }
   };
- 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
-    }
-  };
- 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5 }
-    }
-  };
- 
-  // Skill assessment data (simulated)
-  const skillAssessmentData = {
-    labels: ['Technical', 'Problem Solving', 'Communication', 'Teamwork', 'Leadership'],
-    datasets: [{
-      label: 'Candidate Score',
-      data: [85, 90, 75, 80, 65],
-      backgroundColor: isDarkMode ? 'rgba(20, 184, 166, 0.7)' : 'rgba(8, 145, 178, 0.7)'
-    }, {
-      label: 'Average Score',
-      data: [70, 65, 72, 68, 60],
-      backgroundColor: isDarkMode ? 'rgba(168, 85, 247, 0.4)' : 'rgba(79, 70, 229, 0.4)'
-    }]
-  };
- 
-  // Performance trend data (simulated)
-  const performanceTrendData = {
-    labels: ['Round 1', 'Round 2', 'Round 3', 'Final'],
-    datasets: [{
-      label: 'Performance Score',
-      data: [75, 82, 88, 92],
-      borderColor: isDarkMode ? '#14b8a6' : '#0891b2',
-      backgroundColor: isDarkMode ? 'rgba(20, 184, 166, 0.1)' : 'rgba(8, 145, 178, 0.1)'
-    }]
-  };
- 
-  // Evaluation breakdown data (simulated)
-  const evaluationBreakdownData = {
-    labels: ['Technical Skills', 'Cultural Fit', 'Experience', 'Education'],
-    datasets: [{
-      data: [40, 25, 20, 15],
-      backgroundColor: [
-        isDarkMode ? 'rgba(59, 130, 246, 0.8)' : 'rgba(37, 99, 235, 0.8)',
-        isDarkMode ? 'rgba(168, 85, 247, 0.8)' : 'rgba(139, 92, 246, 0.8)',
-        isDarkMode ? 'rgba(34, 197, 94, 0.8)' : 'rgba(22, 163, 74, 0.8)',
-        isDarkMode ? 'rgba(234, 179, 8, 0.8)' : 'rgba(202, 138, 4, 0.8)'
-      ]
-    }]
-  };
- 
+
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="space-y-6"
-    >
-      {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Link
-            to="/candidates"
-            className={`p-2 rounded-lg ${isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-200'} transition-colors`}
-          >
-            <ChevronLeftIcon size={20} />
-          </Link>
-          <motion.h2 variants={itemVariants} className="text-2xl font-bold">
-            Candidate Analysis
-          </motion.h2>
-        </div>
-        <div className="flex gap-2">
-          <Link
-            to={`/candidates/${id}/details`}
-            className={`px-4 py-2 rounded-lg ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors flex items-center gap-2`}
-          >
-            <UserIcon size={16} />
-            Details
-          </Link>
-        </div>
-      </div>
- 
-      {/* Profile Header */}
-      <motion.div
-        variants={itemVariants}
-        className={`
-          rounded-xl overflow-hidden
-          ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
-          p-5
-        `}
-      >
-        <div className="flex items-center gap-4">
-          <div className={`h-16 w-16 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} flex items-center justify-center`}>
-            <UserIcon size={32} className={isDarkMode ? 'text-gray-500' : 'text-gray-400'} />
-          </div>
-          <div>
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-2xl font-bold">{candidate.name}</h1>
-              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm ${getStatusColor(candidate.status)}`}>
-                {getStatusIcon(candidate.status)}
-                {candidate.status}
-              </span>
-            </div>
-            <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              {candidate.dept} {candidate.course && `(${candidate.course})`} • CGPA: {candidate.cgpa}/10
-            </p>
-          </div>
-        </div>
-      </motion.div>
- 
-      {/* Skill Assessment */}
-      <motion.div
-        variants={itemVariants}
-        className={`
-          rounded-xl overflow-hidden
-          ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
-          p-5
-        `}
-      >
-        <div className="flex items-center gap-2 mb-4">
-          <BarChart2Icon size={20} className={isDarkMode ? 'text-teal-400' : 'text-teal-600'} />
-          <h3 className="text-lg font-semibold">Skill Assessment</h3>
-        </div>
-        <div className="h-80">
-          <BarChart labels={skillAssessmentData.labels} datasets={skillAssessmentData.datasets} />
-        </div>
-      </motion.div>
- 
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Performance Trend */}
-        <motion.div
-          variants={itemVariants}
-          className={`
-            rounded-xl overflow-hidden
-            ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
-            p-5
-          `}
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <TrendingUpIcon size={20} className={isDarkMode ? 'text-blue-400' : 'text-blue-600'} />
-            <h3 className="text-lg font-semibold">Performance Trend</h3>
-          </div>
-          <div className="h-72">
-            <LineChart labels={performanceTrendData.labels} datasets={performanceTrendData.datasets} />
-          </div>
-        </motion.div>
- 
-        {/* Evaluation Breakdown */}
-        <motion.div
-          variants={itemVariants}
-          className={`
-            rounded-xl overflow-hidden
-            ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
-            p-5
-          `}
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <PieChartIcon size={20} className={isDarkMode ? 'text-purple-400' : 'text-purple-600'} />
-            <h3 className="text-lg font-semibold">Evaluation Breakdown</h3>
-          </div>
-          <div className="h-72">
-            <PieChart labels={evaluationBreakdownData.labels} datasets={evaluationBreakdownData.datasets} />
-          </div>
-        </motion.div>
-      </div>
- 
-      {/* Education Comparison */}
-      <motion.div
-        variants={itemVariants}
-        className={`
-          rounded-xl overflow-hidden
-          ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
-          p-5
-        `}
-      >
-        <div className="flex items-center gap-2 mb-4">
-          <GraduationCapIcon size={20} className={isDarkMode ? 'text-amber-400' : 'text-amber-600'} />
-          <h3 className="text-lg font-semibold">CGPA Comparison</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Left Column */}
-          <div className="flex flex-col">
-            <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
-              <div className="flex justify-between items-center mb-2">
-                <h4 className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Candidate CGPA
-                </h4>
-                <span className="text-lg font-bold">{candidate.cgpa}/10</span>
-              </div>
-              <div className="h-4 w-full bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-teal-500 to-blue-500 rounded-full"
-                  style={{ width: `${candidate.cgpa * 10}%` }}
-                ></div>
-              </div>
-              <div className="mt-4 flex justify-between text-xs">
-                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>0</span>
-                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>5</span>
-                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>10</span>
-              </div>
-            </div>
- 
-            <div className={`mt-4 p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
-              <div className="flex justify-between items-center mb-2">
-                <h4 className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Department Average
-                </h4>
-                <span className="text-lg font-bold">8.2/10</span>
-              </div>
-              <div className="h-4 w-full bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
-                  style={{ width: '82%' }}
-                ></div>
-              </div>
-              <div className="mt-4 flex justify-between text-xs">
-                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>0</span>
-                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>5</span>
-                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>10</span>
-              </div>
-            </div>
-          </div>
- 
-          {/* Right Column */}
-          <div>
-            <div className={`h-full p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
-              <h4 className={`text-sm font-medium mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                Performance Analysis
-              </h4>
-              <div className="space-y-4">
-                {/* Technical Skills */}
-                <div>
-                  <div className="flex justify-between items-center mb-1">
-                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      Technical Skills
-                    </p>
-                    <span className={`text-sm font-medium ${candidate.cgpa > 8.5 ? 'text-green-500' : candidate.cgpa > 7.5 ? 'text-yellow-500' : 'text-red-500'}`}>
-                      {candidate.cgpa > 8.5 ? 'Excellent' : candidate.cgpa > 7.5 ? 'Good' : 'Average'}
-                    </span>
-                  </div>
-                  <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${candidate.cgpa > 8.5 ? 'bg-green-500' : candidate.cgpa > 7.5 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                      style={{ width: `${Math.min(candidate.cgpa * 10, 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
- 
-                {/* Problem Solving */}
-                <div>
-                  <div className="flex justify-between items-center mb-1">
-                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      Problem Solving
-                    </p>
-                    <span className={`text-sm font-medium ${candidate.cgpa > 8.0 ? 'text-green-500' : candidate.cgpa > 7.0 ? 'text-yellow-500' : 'text-red-500'}`}>
-                      {candidate.cgpa > 8.0 ? 'Excellent' : candidate.cgpa > 7.0 ? 'Good' : 'Average'}
-                    </span>
-                  </div>
-                  <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${candidate.cgpa > 8.0 ? 'bg-green-500' : candidate.cgpa > 7.0 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                      style={{ width: `${Math.min((candidate.cgpa - 0.5) * 10, 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
- 
-                {/* Communication */}
-                <div>
-                  <div className="flex justify-between items-center mb-1">
-                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      Communication
-                    </p>
-                    <span className={`text-sm font-medium ${candidate.cgpa > 7.5 ? 'text-green-500' : candidate.cgpa > 6.5 ? 'text-yellow-500' : 'text-red-500'}`}>
-                      {candidate.cgpa > 7.5 ? 'Excellent' : candidate.cgpa > 6.5 ? 'Good' : 'Average'}
-                    </span>
-                  </div>
-                  <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${candidate.cgpa > 7.5 ? 'bg-green-500' : candidate.cgpa > 6.5 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                      style={{ width: `${Math.min((candidate.cgpa - 1.0) * 10, 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
- 
-                {/* Overall Fit */}
-                <div>
-                  <div className="flex justify-between items-center mb-1">
-                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      Overall Fit
-                    </p>
-                    <span className={`text-sm font-medium ${candidate.cgpa > 8.0 ? 'text-green-500' : candidate.cgpa > 7.0 ? 'text-yellow-500' : 'text-red-500'}`}>
-                      {candidate.cgpa > 8.0 ? 'Excellent' : candidate.cgpa > 7.0 ? 'Good' : 'Average'}
-                    </span>
-                  </div>
-                  <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${candidate.cgpa > 8.0 ? 'bg-green-500' : candidate.cgpa > 7.0 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                      style={{ width: `${Math.min(candidate.cgpa * 9.5, 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
- 
-      {/* Recommendation */}
-      <motion.div
-        variants={itemVariants}
-        className={`
-          rounded-xl overflow-hidden
-          ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
-          p-5
-        `}
-      >
-        <h3 className="text-lg font-semibold mb-4">AI Recommendation</h3>
-        <div className={`p-4 rounded-lg ${candidate.cgpa > 8.5 ?
-          isDarkMode ? 'bg-green-900/20 border border-green-800/30' : 'bg-green-50 border border-green-200' :
-          candidate.cgpa > 7.5 ?
-          isDarkMode ? 'bg-yellow-900/20 border border-yellow-800/30' : 'bg-yellow-50 border border-yellow-200' :
-          isDarkMode ? 'bg-red-900/20 border border-red-800/30' : 'bg-red-50 border border-red-200'}`}
-        >
-          <div className="flex items-start gap-3">
-            <div className={`p-2 rounded-full ${candidate.cgpa > 8.5 ?
-              isDarkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-600' :
-              candidate.cgpa > 7.5 ?
-              isDarkMode ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600' :
-              isDarkMode ? 'bg-red-900/30 text-red-400' : 'bg-red-100 text-red-600'}`}
+    <div className="min-h-screen flex bg-gray-50">
+      {/* Sidebar */}
+      <div className="w-1/4 bg-white p-6 shadow-md">
+        <ul className="space-y-3">
+          {steps.map((step, index) => (
+            <li
+              key={index}
+              className={`p-3 rounded cursor-pointer transition ${
+                index === currentStep ? "bg-blue-500 text-white font-semibold" : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+              }`}
             >
-              {candidate.cgpa > 8.5 ? <CheckIcon size={20} /> :
-               candidate.cgpa > 7.5 ? <ClockIcon size={20} /> :
-               <XIcon size={20} />}
-            </div>
-            <div>
-              <h4 className={`font-medium ${candidate.cgpa > 8.5 ?
-                isDarkMode ? 'text-green-400' : 'text-green-800' :
-                candidate.cgpa > 7.5 ?
-                isDarkMode ? 'text-yellow-400' : 'text-yellow-800' :
-                isDarkMode ? 'text-red-400' : 'text-red-800'}`}
-              >
-                {candidate.cgpa > 8.5 ? 'Highly Recommended' :
-                 candidate.cgpa > 7.5 ? 'Consider for Next Round' :
-                 'Not Recommended'}
-              </h4>
-              <p className={`mt-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                {candidate.cgpa > 8.5 ?
-                  `${candidate.name} shows excellent potential with strong academic performance and technical skills. Recommend proceeding to the next interview round immediately.` :
-                  candidate.cgpa > 7.5 ?
-                  `${candidate.name} demonstrates good potential but would benefit from additional technical assessment. Consider for next round with supplementary evaluation.` :
-                  `${candidate.name}'s profile does not align well with the current requirements. Consider for future opportunities or different roles.`}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {candidate.cgpa > 8.5 ? (
-                  <>
-                    <span className={`px-2 py-0.5 rounded-full text-xs ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-800'}`}>
-                      Technical Interview
-                    </span>
-                    <span className={`px-2 py-0.5 rounded-full text-xs ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-800'}`}>
-                      HR Round
-                    </span>
-                    <span className={`px-2 py-0.5 rounded-full text-xs ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-800'}`}>
-                      Team Meeting
-                    </span>
-                  </>
-                ) : candidate.cgpa > 7.5 ? (
-                  <>
-                    <span className={`px-2 py-0.5 rounded-full text-xs ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-800'}`}>
-                      Technical Assessment
-                    </span>
-                    <span className={`px-2 py-0.5 rounded-full text-xs ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-800'}`}>
-                      Follow-up Interview
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className={`px-2 py-0.5 rounded-full text-xs ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-800'}`}>
-                      Consider Alternative Role
-                    </span>
-                    <span className={`px-2 py-0.5 rounded-full text-xs ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-800'}`}>
-                      Future Pool
-                    </span>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+              {step.title}
+              <br />
+              <span className="text-sm font-light">{step.subtitle}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 p-8 bg-white shadow-lg">
+        {renderStepContent(currentStep)}
+
+        <div className="mt-6 flex justify-between">
+          {currentStep > 0 && (
+            <button
+              className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+              onClick={goToPreviousStep}
+            >
+              Go Back
+            </button>
+          )}
+          {currentStep < steps.length - 1 && (
+            <button
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              onClick={goToNextStep}
+            >
+              Save and Proceed
+            </button>
+          )}
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
-export default CandidateAnalysis;
- 
+
+export default StudentProfileForm;

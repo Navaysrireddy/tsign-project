@@ -10,18 +10,34 @@ export const mockData = {
   monthlyApplications: {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: {
-      "Engineering (CSE)": [200, 220, 240, 260, 280, 300],
-      "Engineering (ECE)": [180, 190, 200, 210, 220, 230],
-      "Engineering (IT)": [150, 160, 170, 180, 190, 200],
-      "Mechanical": [100, 110, 120, 130, 140, 150],
-      "Electrical": [120, 130, 140, 150, 160, 170],
-      "Computer Science (Business)": [80, 90, 100, 110, 120, 130]
+      "Engineering (CSE)": [200, 320, 240, 260, 230, 300],
+      "Engineering (ECE)": [180, 170, 200, 280, 210, 230],
+      "Engineering (IT)": [150, 190, 100, 280, 260, 280],
+      "Mechanical": [300, 210, 170, 190, 140, 250],
+      "Electrical": [320, 250, 240, 250, 260, 270],
+      "Computer Science (Business)": [180, 190, 190, 210, 200, 230]
     }
   },
-  departmentSelections: {
-    labels: ["Engineering", "Mechanical", "Electrical", "Computer Science"],
-    data: [370, 80, 90, 70]
+
+  departmentData: {
+    Engineering: {
+      labels: ["CSE", "ECE", "EEE", "MECH"],
+      data: [200, 100, 40, 30],
+    },
+    Mechanical: {
+      labels: ["Thermal", "Design", "Production"],
+      data: [40, 25, 15],
+    },
+    Electrical: {
+      labels: ["Power Systems", "Electronics", "Control"],
+      data: [30, 40, 20],
+    },
+    "Computer Science": {
+      labels: ["AI", "ML", "Networks", "Databases"],
+      data: [50, 30, 20, 10],
+    },
   },
+
   applicationStatus: {
     labels: ["Selected", "Rejected", "Interviewed", "In Review"],
     datasets: {
@@ -134,7 +150,7 @@ export const mockData = {
     status: "Open"
   }, {
     id: "3",
-    position: "Hardware Engineer",
+    position: "Hardware ",
     dept: "Engineering",
     course: "ECE",
     openings: 8,
@@ -158,7 +174,7 @@ export const mockData = {
     status: "Closed"
   }, {
     id: "6",
-    position: "Power Systems Intern",
+    position: "Power Systems ",
     dept: "Electrical",
     course: "",
     openings: 7,
@@ -176,21 +192,21 @@ export const mockData = {
   positionApplications: {
     "Software Intern": 80,
     "ML Engineer": 50,
-    "Hardware Engineer": 60,
+    "Hardware ": 60,
     "Network Intern": 45,
     "R&D Engineer": 45,
-    "Power Systems Intern": 55,
+    "Power Systems ": 55,
     "Analytics Intern": 40
   },
   fillRateOverTime: {
     labels: ["2020", "2021", "2022", "2023", "2024", "2025"],
     datasets: {
-      "Engineering (CSE)": [10, 20, 30, 40, 50, 60],
-      "Engineering (ECE)": [8, 15, 25, 35, 45, 55],
-      "Engineering (IT)": [6, 12, 18, 24, 30, 36],
-      "Mechanical": [5, 10, 15, 20, 25, 30],
-      "Electrical": [7, 14, 21, 28, 35, 42],
-      "Computer Science (Business)": [4, 8, 12, 16, 20, 24]
+      "Engineering (CSE)": [40, 20, 30, 40, 10, 60],
+      "Engineering (ECE)": [8, 15, 35, 25, 45, 55],
+      "Engineering (IT)": [6, 22, 18, 34, 30, 36],
+      "Mechanical": [5, 20, 15, 20, 25, 30],
+      "Electrical": [7, 24, 21, 38, 45, 40],
+      "Computer Science (Business)": [4, 18, 12, 36, 20, 24]
     }
   },
   interviews: [{
@@ -214,7 +230,7 @@ export const mockData = {
   }, {
     id: "3",
     candidate: "Raj P",
-    position: "Hardware Engineer",
+    position: "Hardware ",
     date: "7 Aug 2025",
     time: "11:00 AM",
     status: "Completed",
@@ -241,7 +257,7 @@ export const mockData = {
   }, {
     id: "6",
     candidate: "Meena S",
-    position: "Power Systems Intern",
+    position: "Power Systems ",
     date: "10 Aug 2025",
     time: "1:00 PM",
     status: "Pending",
@@ -251,7 +267,7 @@ export const mockData = {
     id: "7",
     candidate: "Kiran T",
     position: "Analytics Intern",
-    date: "11 Aug 2025",
+    date: "11 Oct 2025",
     time: "10:00 AM",
     status: "Completed",
     dept: "Computer Science",

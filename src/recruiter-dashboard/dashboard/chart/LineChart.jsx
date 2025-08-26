@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto';
 import { useTheme } from '../../context/ThemeContext';
 import { getLineChartOptions } from '../../utils/chartOptions';
 
-const AreaChart = ({ labels, datasets }) => {
+const LineChart = ({ labels, datasets }) => {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
   const { theme } = useTheme();
@@ -11,64 +11,40 @@ const AreaChart = ({ labels, datasets }) => {
 
   useEffect(() => {
     if (!chartRef.current) return;
-
+    // Destroy existing chart
     if (chartInstance.current) {
       chartInstance.current.destroy();
     }
-
+    // Create new chart
     const ctx = chartRef.current.getContext('2d');
-
     if (ctx) {
-      const updatedDatasets = datasets.map(dataset => {
-        // Create gradient fill
-        const gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
-        gradient.addColorStop(0, `${dataset.borderColor}33`); // 20% opacity at top
-        gradient.addColorStop(1, `${dataset.borderColor}00`); // transparent at bottom
-
-        return {
-          ...dataset,
-          tension: 0.4, // smooth curve
-          fill: true,
-          backgroundColor: gradient,
-          borderWidth: 2,
-          pointRadius: 3,
-          pointHoverRadius: 5,
-          pointBackgroundColor: dataset.borderColor,
-          pointBorderColor: isDarkMode ? '#1f2937' : '#ffffff'
-        };
-      });
-
       chartInstance.current = new Chart(ctx, {
         type: 'line',
         data: {
           labels,
-          datasets: updatedDatasets
+          datasets: datasets.map(dataset => ({
+            ...dataset,
+            tension: 0.3,
+            fill: true,
+            pointBackgroundColor: dataset.borderColor,
+            pointBorderColor: isDarkMode ? '#1f2937' : '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }))
         },
-        options: {
-          ...getLineChartOptions(isDarkMode),
-          elements: {
-            line: {
-              tension: 0.4
-            }
-          }
-        }
+        options: getLineChartOptions(isDarkMode)
       });
     }
-
+    // Cleanup
     return () => {
       if (chartInstance.current) {
         chartInstance.current.destroy();
       }
     };
-    // eslint-disable-next-line
   }, [labels, datasets, theme]);
 
-  return (
-    <canvas
-      ref={chartRef}
-      style={{ width: '100%', height: '350px' }}
-    />
-  );
+  return <canvas ref={chartRef} />;
 };
 
-export default AreaChart;
+export default LineChart;

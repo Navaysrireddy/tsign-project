@@ -625,7 +625,6 @@ import {
   BriefcaseIcon,
   FileTextIcon,
   ClockIcon,
-  InfoIcon,
   TrendingUpIcon,
   BarChart2Icon,
   PieChartIcon,
@@ -719,17 +718,14 @@ export const Dashboard = () => {
           },
         })
       }
-    }
+    }// eslint-disable-next-line
   }, [selectedMonth])
-  const handleManageStudents = () => {
-    navigate('/manage-students')
-  }
-  const handleManageColleges = () => {
-    navigate('/manage-colleges')
-  }
-  const handleManageRecruiters = () => {
-    navigate('/manage-recruiters')
-  }
+   const handleManageStudents = () =>
+    navigate("/new-admindashboard/manage-students");
+  const handleManageColleges = () =>
+    navigate("/new-admindashboard/manage-colleges");
+  const handleManageRecruiters = () =>
+    navigate("/new-admindashboard/manage-recruiters");
   const handleTotalUsersClick = () => {
     setModalData({
       title: 'Total Users Details',
@@ -1207,28 +1203,7 @@ export const Dashboard = () => {
         />
       </div>
       {/* Insights Section */}
-      <div
-        className={`p-4 rounded-xl border ${theme === 'dark' ? 'bg-blue-900/20 border-blue-800' : 'bg-blue-50 border-blue-100'}`}
-      >
-        <div className="flex items-start">
-          <div
-            className={`p-2 rounded-full mr-3 ${theme === 'dark' ? 'bg-blue-800' : 'bg-blue-100'}`}
-          >
-            <InfoIcon
-              size={20}
-              className={theme === 'dark' ? 'text-blue-300' : 'text-blue-600'}
-            />
-          </div>
-          <div>
-            <h3 className="font-medium text-lg">AI Insight</h3>
-            <p className={theme === 'dark' ? 'text-blue-300' : 'text-blue-700'}>
-              {selectedMonth === 'All 2023'
-                ? 'User registrations have increased by 20% this month compared to last month, primarily driven by student sign-ups. Consider focusing recruitment efforts on colleges with high engagement rates.'
-                : `For ${selectedMonth}, we're seeing a ${filteredKPIs.monthlyChange.totalUsers > 0 ? 'positive' : 'negative'} trend in user registrations with a ${Math.abs(filteredKPIs.monthlyChange.totalUsers)}% ${filteredKPIs.monthlyChange.totalUsers > 0 ? 'increase' : 'decrease'} compared to previous month.`}
-            </p>
-          </div>
-        </div>
-      </div>
+    
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <LineChart

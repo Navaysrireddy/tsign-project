@@ -73,6 +73,10 @@ const CompanyWisePlacementsChart = ({
       duration: 1000
     }
   };
-  return <Bar data={data} options={options} />;
+   return (
+  <div style={{ height: '300px' }}> {/* Reduced from default (usually 400–500px) */}
+    <Bar data={data} options={options} />
+  </div>
+);
 };
 export default CompanyWisePlacementsChart;

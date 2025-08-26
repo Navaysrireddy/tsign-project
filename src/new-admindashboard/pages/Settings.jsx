@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import { UserIcon, PaletteIcon, BellIcon, SlackIcon, EyeIcon, SaveIcon, CheckIcon } from 'lucide-react';
+import { UserIcon, SaveIcon, CheckIcon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
+
 const Settings = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
+
 
   const handleSave = () => {
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
 
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Settings</h1>
+
 
       {/* Settings Tabs */}
       <div className="flex flex-wrap gap-2">
@@ -35,75 +39,8 @@ const Settings = () => {
             <span>Profile</span>
           </div>
         </button>
-        <button
-          onClick={() => setActiveTab('appearance')}
-          className={`px-4 py-2 rounded-lg transition-colors ${
-            activeTab === 'appearance'
-              ? theme === 'dark'
-                ? 'bg-blue-600 text-white'
-                : 'bg-blue-500 text-white'
-              : theme === 'dark'
-              ? 'bg-gray-800 hover:bg-gray-700'
-              : 'bg-gray-100 hover:bg-gray-200'
-          }`}
-        >
-          <div className="flex items-center">
-            <PaletteIcon size={16} className="mr-2" />
-            <span>Appearance</span>
-          </div>
-        </button>
-        <button
-          onClick={() => setActiveTab('notifications')}
-          className={`px-4 py-2 rounded-lg transition-colors ${
-            activeTab === 'notifications'
-              ? theme === 'dark'
-                ? 'bg-blue-600 text-white'
-                : 'bg-blue-500 text-white'
-              : theme === 'dark'
-              ? 'bg-gray-800 hover:bg-gray-700'
-              : 'bg-gray-100 hover:bg-gray-200'
-          }`}
-        >
-          <div className="flex items-center">
-            <BellIcon size={16} className="mr-2" />
-            <span>Notifications</span>
-          </div>
-        </button>
-        <button
-          onClick={() => setActiveTab('integrations')}
-          className={`px-4 py-2 rounded-lg transition-colors ${
-            activeTab === 'integrations'
-              ? theme === 'dark'
-                ? 'bg-blue-600 text-white'
-                : 'bg-blue-500 text-white'
-              : theme === 'dark'
-              ? 'bg-gray-800 hover:bg-gray-700'
-              : 'bg-gray-100 hover:bg-gray-200'
-          }`}
-        >
-          <div className="flex items-center">
-            <SlackIcon size={16} className="mr-2" />
-            <span>Integrations</span>
-          </div>
-        </button>
-        <button
-          onClick={() => setActiveTab('accessibility')}
-          className={`px-4 py-2 rounded-lg transition-colors ${
-            activeTab === 'accessibility'
-              ? theme === 'dark'
-                ? 'bg-blue-600 text-white'
-                : 'bg-blue-500 text-white'
-              : theme === 'dark'
-              ? 'bg-gray-800 hover:bg-gray-700'
-              : 'bg-gray-100 hover:bg-gray-200'
-          }`}
-        >
-          <div className="flex items-center">
-            <EyeIcon size={16} className="mr-2" />
-            <span>Accessibility</span>
-          </div>
-        </button>
       </div>
+
 
       {/* Settings Content */}
       <div
@@ -182,7 +119,9 @@ const Settings = () => {
           </div>
         )}
 
+
         {/* ... similarly for other tabs, omitted here for brevity ... */}
+
 
         {/* Save Button */}
         <div className="mt-8 flex justify-end">
@@ -211,5 +150,6 @@ const Settings = () => {
     </div>
   );
 };
+
 
 export default Settings;

@@ -22,10 +22,10 @@ const SettingsView = () => {
     frequency: mockData.recruiterSettings.notifications.frequency
   });
  
-  const [resumeParsing, setResumeParsing] = useState({
-    enabled: mockData.recruiterSettings.resumeParsing.enabled,
-    preferredFormats: [...mockData.recruiterSettings.resumeParsing.preferredFormats]
-  });
+  // const [resumeParsing, setResumeParsing] = useState({
+  //   enabled: mockData.recruiterSettings.resumeParsing.enabled,
+  //   preferredFormats: [...mockData.recruiterSettings.resumeParsing.preferredFormats]
+  // });
    // eslint-disable-next-line
   const [integrations, setIntegrations] = useState({
     ats: mockData.recruiterSettings.integrations.ats,
@@ -54,28 +54,28 @@ const SettingsView = () => {
     }));
   };
  
-  const handleResumeParsingToggle = () => {
-    setResumeParsing(prev => ({
-      ...prev,
-      enabled: !prev.enabled
-    }));
-  };
+  // const handleResumeParsingToggle = () => {
+  //   setResumeParsing(prev => ({
+  //     ...prev,
+  //     enabled: !prev.enabled
+  //   }));
+  // };
  
-  const handleFormatToggle = (format) => {
-    setResumeParsing(prev => {
-      if (prev.preferredFormats.includes(format)) {
-        return {
-          ...prev,
-          preferredFormats: prev.preferredFormats.filter(f => f !== format)
-        };
-      } else {
-        return {
-          ...prev,
-          preferredFormats: [...prev.preferredFormats, format]
-        };
-      }
-    });
-  };
+  // const handleFormatToggle = (format) => {
+  //   setResumeParsing(prev => {
+  //     if (prev.preferredFormats.includes(format)) {
+  //       return {
+  //         ...prev,
+  //         preferredFormats: prev.preferredFormats.filter(f => f !== format)
+  //       };
+  //     } else {
+  //       return {
+  //         ...prev,
+  //         preferredFormats: [...prev.preferredFormats, format]
+  //       };
+  //     }
+  //   });
+  // };
  
   const containerVariants = {
     hidden: {
@@ -312,7 +312,7 @@ const SettingsView = () => {
       </motion.div> */}
  
       {/* Resume Parsing Settings */}
-      <motion.div variants={itemVariants} className={`
+      {/* <motion.div variants={itemVariants} className={`
           rounded-xl overflow-hidden
           ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
           p-5
@@ -366,7 +366,7 @@ const SettingsView = () => {
             Save Settings
           </motion.button>
         </div>
-      </motion.div>
+      </motion.div> */}
  
       {/* Integration Options */}
       <motion.div variants={itemVariants} className={`

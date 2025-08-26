@@ -1,19 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  ClipboardListIcon,
-  CheckCircleIcon,
-  XCircleIcon,
-  ClockIcon,
-  AlertTriangleIcon,
-  FilterIcon,
-  XIcon,
-  SearchIcon,
-  ChevronLeft,
-  ChevronRight,
-  UploadCloud
+import {ClipboardListIcon,CheckCircleIcon,XCircleIcon,ClockIcon,AlertTriangleIcon,FilterIcon,XIcon,SearchIcon,UploadCloud
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
+import { motion, AnimatePresence } from 'framer-motion';
 function formatDateTime(iso) {
   if (!iso) return 'N/A';
   const d = new Date(iso);
@@ -26,7 +15,6 @@ function formatDateTime(iso) {
   });
 }
 
-
 function daysBetween(iso) {
   const a = new Date();
   const b = new Date(iso);
@@ -35,10 +23,9 @@ function daysBetween(iso) {
   return Math.round(diff / (1000 * 60 * 60 * 24));
 }
 
-
-function clamp(v, a, b) {
-  return Math.max(a, Math.min(b, v));
-}
+// function clamp(v, a, b) {
+//   return Math.max(a, Math.min(b, v));
+// }
 
 const STATUS_META = {
   completed: {
@@ -71,7 +58,7 @@ const STATUS_META = {
 const MOCK_ASSIGNMENTS = [
   {
     id: 'a1',
-    title: 'Programming Assignment 1',
+    title: 'C  ',
     course: 'CS101: Introduction to Programming',
     dueDate: '2025-01-20T23:59:00',
     status: 'completed',
@@ -93,7 +80,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a2',
-    title: 'Data Structures Project',
+    title: 'DS',
     course: 'CS201: Data Structures',
     dueDate: '2025-01-25T23:59:00',
     status: 'pending',
@@ -108,7 +95,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a3',
-    title: 'Database Design',
+    title: 'DBS',
     course: 'CS301: Database Systems',
     dueDate: '2025-02-01T23:59:00',
     status: 'submitted',
@@ -130,7 +117,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a4',
-    title: 'Web Development Mini Project',
+    title: 'WDP',
     course: 'CS401: Web Technologies',
     dueDate: '2025-02-05T23:59:00',
     status: 'pending',
@@ -146,7 +133,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a5',
-    title: 'Machine Learning Assignment',
+    title: 'ML',
     course: 'CS501: Introduction to Machine Learning',
     dueDate: '2025-02-10T23:59:00',
     status: 'completed',
@@ -168,7 +155,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a6',
-    title: 'Cybersecurity Report',
+    title: 'CS',
     course: 'CS601: Cybersecurity Fundamentals',
     dueDate: '2025-02-15T23:59:00',
     status: 'pending',
@@ -184,7 +171,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a7',
-    title: 'Operating Systems Lab',
+    title: 'OS',
     course: 'CS302: Operating Systems',
     dueDate: '2025-02-18T23:59:00',
     status: 'submitted',
@@ -205,7 +192,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a8',
-    title: 'Cloud Computing Practical',
+    title: 'CC',
     course: 'CS702: Cloud Computing',
     dueDate: '2025-02-20T23:59:00',
     status: 'pending',
@@ -220,7 +207,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a9',
-    title: 'Software Engineering Case Study',
+    title: 'SE',
     course: 'CS402: Software Engineering',
     dueDate: '2025-02-22T23:59:00',
     status: 'completed',
@@ -242,7 +229,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a10',
-    title: 'Computer Networks Simulation',
+    title: 'CNS',
     course: 'CS502: Computer Networks',
     dueDate: '2025-02-25T23:59:00',
     status: 'pending',
@@ -258,7 +245,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a11',
-    title: 'AI Chatbot Project',
+    title: 'AI ',
     course: 'CS602: Artificial Intelligence',
     dueDate: '2025-03-01T23:59:00',
     status: 'submitted',
@@ -280,7 +267,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a12',
-    title: 'Final Year Capstone Proposal',
+    title: 'Project',
     course: 'CS999: Capstone Project',
     dueDate: '2025-03-10T23:59:00',
     status: 'pending',
@@ -297,7 +284,7 @@ const MOCK_ASSIGNMENTS = [
   // Additional items to increase list length and variation
   {
     id: 'a13',
-    title: 'Discrete Math Proofs',
+    title: 'DM',
     course: 'CS110: Discrete Mathematics',
     dueDate: '2025-03-15T23:59:00',
     status: 'pending',
@@ -308,7 +295,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a14',
-    title: 'Graphics Mini-Project',
+    title: 'GS',
     course: 'CS450: Computer Graphics',
     dueDate: '2025-03-20T23:59:00',
     status: 'pending',
@@ -319,7 +306,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a15',
-    title: 'Parallel Computing Report',
+    title: 'PC',
     course: 'CS640: Parallel Computing',
     dueDate: '2025-03-25T23:59:00',
     status: 'pending',
@@ -330,7 +317,7 @@ const MOCK_ASSIGNMENTS = [
   },
   {
     id: 'a16',
-    title: 'Human-Computer Interaction Study',
+    title: 'HCI',
     course: 'CS330: HCI',
     dueDate: '2025-04-01T23:59:00',
     status: 'pending',
@@ -340,6 +327,7 @@ const MOCK_ASSIGNMENTS = [
     submission: null
   }
 ];
+
 const Assignments = () => {
 
   // master list (starts with mock data)
@@ -353,8 +341,6 @@ const Assignments = () => {
   const [sortBy, setSortBy] = useState('dueDate'); // dueDate or course or title
   const [sortOrder, setSortOrder] = useState('asc'); // asc / desc
   const [query, setQuery] = useState(''); // search query
-  const [page, setPage] = useState(1); // pagination current page
-  const [perPage, setPerPage] = useState(6); // items per page
   const [showOnlyDueSoon, setShowOnlyDueSoon] = useState(false); // toggle to show due soon (7 days)
   const [editingSubmission, setEditingSubmission] = useState(null); // { assignmentId, text, file }
 
@@ -364,9 +350,6 @@ const Assignments = () => {
 
   // refs for closing modal on outside click
   const modalOverlayRef = useRef(null);
-
-  // derive total pages from filtered list later
-  const totalFiltered = useRef(0);
 
   // apply search + filter + due-soon in a useMemo to avoid recomputing unnecessarily
   const filteredSorted = useMemo(() => {
@@ -427,22 +410,8 @@ const Assignments = () => {
         : (b.title || '').localeCompare(a.title || '');
     });
 
-    totalFiltered.current = list.length;
     return list;
   }, [assignments, query, filter, sortBy, sortOrder, showOnlyDueSoon]);
-
-  // pagination: compute data for current page
-  const paginated = useMemo(() => {
-    const start = (page - 1) * perPage;
-    const end = start + perPage;
-    return filteredSorted.slice(start, end);
-  }, [filteredSorted, page, perPage]);
-
-  // ensure page is in range
-  useEffect(() => {
-    const pages = Math.max(1, Math.ceil(totalFiltered.current / perPage || 1));
-    if (page > pages) setPage(1);
-  }, [perPage, filteredSorted, page]);
 
   // open modal for assignment id
   function openModalFor(id) {
@@ -482,8 +451,7 @@ const Assignments = () => {
       }
     }
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-    // eslint-disable-next-line 
+    return () => window.removeEventListener('keydown', onKey);// eslint-disable-next-line
   }, [editingSubmission]);
 
   // handle submission save (in-memory)
@@ -537,7 +505,6 @@ const Assignments = () => {
       setSortBy(field);
       setSortOrder('asc');
     }
-    setPage(1);
   }
 
   const StatusBadge = ({ status }) => {
@@ -714,7 +681,6 @@ const Assignments = () => {
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
-                setPage(1);
               }}
               className="bg-transparent px-2 py-2 outline-none text-sm w-80 dark:text-gray-200"
             />
@@ -722,7 +688,6 @@ const Assignments = () => {
               <button
                 onClick={() => {
                   setQuery('');
-                  setPage(1);
                 }}
                 className="text-gray-400 px-2"
                 aria-label="Clear search"
@@ -741,7 +706,6 @@ const Assignments = () => {
               checked={showOnlyDueSoon}
               onChange={() => {
                 setShowOnlyDueSoon((s) => !s);
-                setPage(1);
               }}
               className="form-checkbox"
             />
@@ -756,21 +720,6 @@ const Assignments = () => {
             <FilterIcon className="w-4 h-4" />
             <span>Sort: {sortBy === 'dueDate' ? 'Due Date' : sortBy === 'course' ? 'Course' : 'Title'}</span>
           </button>
-
-          {/* per page */}
-          <select
-            value={perPage}
-            onChange={(e) => {
-              setPerPage(Number(e.target.value));
-              setPage(1);
-            }}
-            className="px-3 py-1.5 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm"
-          >
-            <option value={4}>4 / page</option>
-            <option value={6}>6 / page</option>
-            <option value={9}>9 / page</option>
-            <option value={12}>12 / page</option>
-          </select>
         </div>
       </div>
 
@@ -784,7 +733,6 @@ const Assignments = () => {
               key={f}
               onClick={() => {
                 setFilter(f);
-                setPage(1);
               }}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
                 isActive
@@ -809,7 +757,7 @@ const Assignments = () => {
       {/* grid of cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence>
-          {paginated.map((assignment) => (
+          {filteredSorted.map((assignment) => (
             <motion.div key={assignment.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <AssignmentCard assignment={assignment} />
             </motion.div>
@@ -833,40 +781,6 @@ const Assignments = () => {
           </button>
         </div>
       )}
-
-      {/* pagination controls */}
-      <div className="mt-8 flex items-center justify-between">
-        <div className="text-sm text-gray-600">
-          Showing {filteredSorted.length === 0 ? 0 : (page - 1) * perPage + 1} -
-          {Math.min(page * perPage, filteredSorted.length)} of {filteredSorted.length} assignments
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setPage((p) => clamp(p - 1, 1, Math.ceil(filteredSorted.length / perPage) || 1))}
-            className="px-3 py-1.5 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
-            disabled={page === 1}
-            aria-label="Previous page"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <div className="px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-sm">
-            Page {page} / {Math.max(1, Math.ceil(filteredSorted.length / perPage) || 1)}
-          </div>
-          <button
-            onClick={() =>
-              setPage((p) =>
-                clamp(p + 1, 1, Math.max(1, Math.ceil(filteredSorted.length / perPage) || 1))
-              )
-            }
-            className="px-3 py-1.5 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
-            disabled={page === Math.max(1, Math.ceil(filteredSorted.length / perPage) || 1)}
-            aria-label="Next page"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
 
       {/* ------------------------------ Modal ------------------------------ */}
       <AnimatePresence>
@@ -901,9 +815,7 @@ const Assignments = () => {
               {/* modal header */}
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
-                    {modalAssignment.title}
-                  </h2>
+                  <h2 className="text-lg font-semibold text-gray-800 dark:text-white">{modalAssignment.title}</h2>
                   <p className="text-sm text-gray-500 dark:text-gray-400">{modalAssignment.course}</p>
                 </div>
 
@@ -934,9 +846,7 @@ const Assignments = () => {
                     {modalAssignment.submission.feedback && (
                       <div>
                         <h4 className="font-medium text-gray-800 dark:text-white">Feedback</h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
-                          {modalAssignment.submission.feedback}
-                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{modalAssignment.submission.feedback}</p>
                       </div>
                     )}
 
@@ -956,9 +866,7 @@ const Assignments = () => {
                           <UploadCloud className="w-4 h-4" />
                           <span>
                             Download{' '}
-                            {modalAssignment.submission.file.name
-                              ? `(${modalAssignment.submission.file.name})`
-                              : ''}
+                            {modalAssignment.submission.file.name ? `(${modalAssignment.submission.file.name})` : ''}
                           </span>
                         </a>
                       </div>
@@ -966,13 +874,6 @@ const Assignments = () => {
 
                     {/* edit submission button: let user re-submit / update */}
                     <div className="flex justify-end">
-                      <button
-                        onClick={() => openModalFor(modalAssignment.id) || setModalAssignmentId(modalAssignment.id)}
-                        className="px-3 py-1.5 rounded-md bg-gray-100 dark:bg-gray-700"
-                        style={{ display: 'none' }}
-                      >
-                        {/* placeholder (hidden) so UX doesn't confuse — we will instead show an "Update submission" below */}
-                      </button>
                       <button
                         onClick={() => {
                           // open upload/edit UI: set editingSubmission to existing content
@@ -984,9 +885,8 @@ const Assignments = () => {
                             fileName: modalAssignment.submission.file?.name || null
                           });
                         }}
-                        // className="px-3 py-1.5 rounded-md bg-gradient-to-r from-yellow-400 to-orange-500 text-white"
                       >
-                      
+                        Update Submission
                       </button>
                     </div>
                   </div>
@@ -996,8 +896,7 @@ const Assignments = () => {
                     <div>
                       <h4 className="font-medium text-gray-800 dark:text-white">Start / Submit Assignment</h4>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        You can start working on this assignment here. When ready upload any supporting file
-                        and submit.
+                        You can start working on this assignment here. When ready upload any supporting file and submit.
                       </p>
                     </div>
 
@@ -1005,9 +904,7 @@ const Assignments = () => {
                       <label className="block text-sm text-gray-700 dark:text-gray-300 mb-1">Your Work</label>
                       <textarea
                         value={editingSubmission?.text || ''}
-                        onChange={(e) =>
-                          setEditingSubmission((prev) => ({ ...prev, text: e.target.value }))
-                        }
+                        onChange={(e) => setEditingSubmission((prev) => ({ ...prev, text: e.target.value }))}
                         placeholder="Enter your work or notes here..."
                         className="w-full min-h-[120px] p-3 border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-sm text-gray-700 dark:text-gray-200"
                       />
@@ -1016,18 +913,11 @@ const Assignments = () => {
                     <div>
                       <label className="block text-sm text-gray-700 dark:text-gray-300 mb-1">Attach File</label>
                       <div className="flex items-center gap-3">
-                        <input
-                          type="file"
-                          onChange={handleFileSelect}
-                          className="text-sm text-gray-600 dark:text-gray-300"
-                        />
+                        <input type="file" onChange={handleFileSelect} className="text-sm text-gray-600 dark:text-gray-300" />
                         {editingSubmission?.fileObject && (
                           <div className="text-sm text-gray-600 dark:text-gray-300">
                             Selected: {editingSubmission.fileName}
-                            <button
-                              onClick={removeUploadedFile}
-                              className="ml-3 px-2 py-1 text-xs bg-gray-200 rounded-md"
-                            >
+                            <button onClick={removeUploadedFile} className="ml-3 px-2 py-1 text-xs bg-gray-200 rounded-md">
                               Remove
                             </button>
                           </div>
@@ -1036,22 +926,16 @@ const Assignments = () => {
                     </div>
 
                     <div className="flex justify-end space-x-2">
-                      <button
-                        onClick={() => {
-                          closeModal();
-                        }}
-                        className="px-3 py-1.5 rounded-md bg-gray-200"
-                      >
+                      <button onClick={closeModal} className="px-3 py-1.5 rounded-md bg-gray-200">
                         Cancel
                       </button>
 
                       <button
                         onClick={() => {
-                          // validate then save
                           if (!editingSubmission) return;
                           const { assignmentId, text, fileObject } = editingSubmission;
-                          // If fileObject is present, pass that url; else if fileName exists but no object (means previously saved file URL) handle accordingly
-                          const fileUrl = fileObject || (editingSubmission.file && editingSubmission.file.url) || null;
+                          const fileUrl =
+                            fileObject || (editingSubmission.file && editingSubmission.file.url) || null;
                           saveSubmission({
                             assignmentId,
                             text,

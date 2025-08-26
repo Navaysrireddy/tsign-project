@@ -200,17 +200,22 @@ const Placements = () => {
   };
 
   const doughnutOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'right',
-        labels: {
-          color: document.documentElement.classList.contains('dark') ? 'white' : 'black',
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'right', // ✅ Move legend to the right
+      labels: {
+        boxWidth: 20,
+        padding: 15,
+        font: {
+          size: 12,
         },
       },
     },
-    cutout: '70%',
-  };
+  },
+};
+
 
   const companyData = {
     labels: ['Google', 'Microsoft', 'Amazon', 'Facebook', 'Apple', 'Netflix'],
@@ -276,17 +281,23 @@ const Placements = () => {
     ],
   };
 
-  const pieOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'right',
-        labels: {
-          color: document.documentElement.classList.contains('dark') ? 'white' : 'black',
+ const pieOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'right', // ✅ Legend on the right
+      labels: {
+        boxWidth: 20,
+        padding: 15,
+        font: {
+          size: 12,
         },
       },
     },
-  };
+  },
+};
+
 
   return (
     <div className="space-y-6">
@@ -297,7 +308,7 @@ const Placements = () => {
         </button>
       </div>
 
-      {/* Student Selection */}
+      {/* Student Selection - Fixed layout for equal width sections */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-[0_10px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_10px_20px_rgba(0,0,0,0.2)] border border-gray-100 dark:border-gray-700">
         <div className="flex items-center mb-4">
           <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-lg mr-4">
@@ -309,15 +320,17 @@ const Placements = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Changed from grid-cols-3 to grid-cols-2 for equal width */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Application Status</h3>
-            <div className="h-48 w-48">
-              <Doughnut data={applicationStatusData} options={doughnutOptions} />
-            </div>
+            <div className="h-48 w-64">
+  <Doughnut data={applicationStatusData} options={doughnutOptions} />
+</div>
+
           </div>
 
-          <div className="md:col-span-2 bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Companies Applied</h3>
             <div className="h-48">
               <Bar data={companyData} options={barOptions} />
@@ -325,18 +338,20 @@ const Placements = () => {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Changed from grid-cols-3 to grid-cols-2 for equal width */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Salary Range</h3>
             {/* Flex container to safely add padding on left */}
-            <div className="h-48 flex justify-center pl-6">
-              <div className="w-48">
-                <Pie data={salaryData} options={pieOptions} />
-              </div>
-            </div>
+            <div className="h-48 w-full flex justify-center">
+  <div className="w-96 h-48"> {/* instead of w-80 */}
+    <Pie data={salaryData} options={pieOptions} />
+  </div>
+</div>
+
           </div>
 
-          <div className="md:col-span-2 bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Application Timeline</h3>
             <div className="space-y-4 mt-4">
               <div className="flex">

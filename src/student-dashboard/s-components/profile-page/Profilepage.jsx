@@ -1,9 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Logo from '../../../assests/TG-SIGN (2).png';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const StudentProfilePage = () => {
-  const [studentData, setStudentData] = useState(null);
+  const navigate = useNavigate();
+  const fileInputRef1 = useRef(null);
+  const fileInputRef2 = useRef(null);
+
+  const [studentData, setStudentData] = useState({
+    studentName: "",
+    studentId: "",
+    email: "",
+    gender: "",
+    dob: "",
+    state: "",
+    city: "",
+    pinCode: "",
+    address: "",
+    contactNumber: "",
+    alternateEmail: "",
+    tenthSchool: "",
+    tenthYear: "",
+    tenthPercentage: "",
+    interCollege: "",
+    interYear: "",
+    interPercentage: "",
+    degreeCollege: "",
+    degreeYear: "",
+    degreePercentage: "",
+    isFresher: "Yes",
+    experience: "",
+    summary: "",
+    technicalSkills: "",
+    softSkills: "",
+    certifications: "",
+    certificateImage: null,
+    profileImage: null,
+    projects: [{ title: "", keyPoints: "" }],
+  });
+
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     const savedData = localStorage.getItem("StudentProfile");
@@ -16,181 +52,224 @@ const StudentProfilePage = () => {
     }
   }, []);
 
-  if (!studentData) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <h2 className="text-xl font-semibold">No Profile Data Found!</h2>
-      </div>
-    );
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setStudentData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // const handleProjectChange = (index, field, value) => {
+  //   const updatedProjects = [...studentData.projects];
+  //   updatedProjects[index][field] = value;
+  //   setStudentData((prev) => ({ ...prev, projects: updatedProjects }));
+  // };
+
+  // const addNewProject = () => {
+  //   setStudentData((prev) => ({
+  //     ...prev,
+  //     projects: [...prev.projects, { title: "", keyPoints: "" }],
+  //   }));
+  // };
+
+  const handleFileChange = (e, field) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setStudentData((prev) => ({ ...prev, [field]: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const saveProfile = () => {
+    localStorage.setItem("StudentProfile", JSON.stringify(studentData));
+    alert("Profile saved successfully!");
+    setEditing(false);
+  };
+
+  const cancelEdit = () => {
+    const savedData = localStorage.getItem("StudentProfile");
+    if (savedData) {
+      setStudentData(JSON.parse(savedData));
+    }
+    setEditing(false);
+  };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen flex bg-gray-50 relative">
+      {/* Close Button */}
+      <button
+        onClick={() => navigate("/student-dashboard")}
+        aria-label="Close Profile"
+        className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 text-2xl font-bold"
+        title="Close Profile and go to Dashboard"
+      >
+        &times;
+      </button>
+
       {/* Sidebar */}
-      <div className="w-60 bg-white border-r border-gray-200 px-4 py-6 flex flex-col">
-        <Link to="/" className="flex items-center justify-center mb-10">
-          <img src={Logo} alt="" className="h-11" />
-        </Link>
-        <ul className="space-y-4 text-gray-700 font-medium">
-          <li>
-            <Link
-              to="/studentprofilepage"
-              className="block px-4 py-2 rounded bg-blue-50 text-blue-700"
-            >
-              Student Profile
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/studentprofileform"
-              className="block px-4 py-2 rounded hover:bg-blue-50 hover:text-blue-700 transition"
-            >
-              Update Profile
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/resume"
-              className="block px-4 py-2 rounded hover:bg-blue-50 hover:text-blue-700 transition"
-            >
-              Resume
-            </Link>
-          </li>
+      <div className="w-1/4 bg-white p-6 shadow-md">
+        <ul>
+          <Link to="/">
+            <div className='profile-t-div mb-8 flex justify-center'>
+              <img src={Logo} alt="Logo" className='profile-t-logo w-32 object-contain' />
+            </div>
+          </Link>
+          <Link to="/Profile" className="block mb-2 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700">Student Profile</Link>
+          <Link to="/Profile-form" className="block mb-2 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700">Update Profile</Link>
+          <Link to="/resume" className="block mb-2 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700">Resume</Link>
         </ul>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 p-8">
-        <h2 className="text-2xl font-bold mb-8 text-gray-800 border-b pb-2">
-          Student Profile
-        </h2>
+      {/* Main Content */}
+      <div className="flex-1 p-8 bg-white shadow-lg overflow-y-auto">
+        <h2 className="text-2xl font-bold mb-6">Student Profile</h2>
 
-        <section className="mb-8">
-          <h3 className="text-lg font-semibold text-blue-700 mb-4">Basic Details</h3>
-          <div className="space-y-2">
-            <div><strong>Full Name:</strong> {studentData.studentName}</div>
-            <div><strong>Student ID:</strong> {studentData.studentId}</div>
-            <div><strong>Email:</strong> {studentData.email}</div>
-            <div><strong>Gender:</strong> {studentData.gender}</div>
-            <div><strong>Date of Birth:</strong> {studentData.dob}</div>
-          </div>
-        </section>
+        {!editing ? (
+          <>
+            <section className="mb-8">
+              <h3 className="text-xl font-semibold mb-4 border-b pb-1">Basic Details</h3>
+              <div className="space-y-2 text-gray-700">
+                <div><strong>Full Name:</strong> {studentData.studentName}</div>
+                <div><strong>Student ID:</strong> {studentData.studentId}</div>
+                <div><strong>Email:</strong> {studentData.email}</div>
+                <div><strong>Gender:</strong> {studentData.gender}</div>
+                <div><strong>Date of Birth:</strong> {studentData.dob}</div>
+              </div>
+            </section>
 
-        <section className="mb-8">
-          <h3 className="text-lg font-semibold text-blue-700 mb-4">Location & Others</h3>
-          <div className="space-y-2">
-            <div><strong>State:</strong> {studentData.state}</div>
-            <div><strong>City:</strong> {studentData.city}</div>
-            <div><strong>Pin Code:</strong> {studentData.pinCode}</div>
-            <div><strong>Address:</strong> {studentData.address}</div>
-          </div>
-        </section>
+            {/* Add other display sections here (Location, Contact, Education, Summary, Skills, Projects, etc.) */}
 
-        <section className="mb-8">
-          <h3 className="text-lg font-semibold text-blue-700 mb-4">Contact Details</h3>
-          <div className="space-y-2">
-            <div><strong>Contact Number:</strong> {studentData.contactNumber}</div>
-            <div><strong>Alternate Email:</strong> {studentData.alternateEmail}</div>
-          </div>
-        </section>
-
-        <section className="mb-8">
-          <h3 className="text-lg font-semibold text-blue-700 mb-4">Education Details</h3>
-          <div className="space-y-2">
-            <div><strong>10th Class - School Name:</strong> {studentData.tenthSchool}</div>
-            <div><strong>10th Class - Year of Passing:</strong> {studentData.tenthYear}</div>
-            <div><strong>10th Class - Percentage:</strong> {studentData.tenthPercentage}</div>
-            <div><strong>Intermediate - College Name:</strong> {studentData.interCollege}</div>
-            <div><strong>Intermediate - Year of Passing:</strong> {studentData.interYear}</div>
-            <div><strong>Intermediate - Percentage:</strong> {studentData.interPercentage}</div>
-            <div><strong>Degree/B.Tech - College Name:</strong> {studentData.degreeCollege}</div>
-            <div><strong>Degree/B.Tech - Year of Passing:</strong> {studentData.degreeYear}</div>
-            <div><strong>Degree/B.Tech - Percentage:</strong> {studentData.degreePercentage}</div>
-          </div>
-        </section>
-
-        <section className="mb-8">
-          <h3 className="text-lg font-semibold text-blue-700 mb-4">Summary & Experience</h3>
-          <div className="space-y-2">
-            <div><strong>Summary:</strong> {studentData.summary}</div>
-            <div><strong>Fresher:</strong> {studentData.isFresher}</div>
-            {studentData.isFresher === "No" && (
-              <div><strong>Experience:</strong> {studentData.experience}</div>
-            )}
-          </div>
-        </section>
-
-        {studentData.projects && studentData.projects.length > 0 && (
-          <section className="mb-8">
-            <h3 className="text-lg font-semibold text-blue-700 mb-4">Projects</h3>
-            <div className="space-y-4">
-              {studentData.projects.map((project, index) => (
-                <div key={index} className="p-4 bg-white rounded shadow-sm border border-blue-100">
-                  <div><strong>Project Title:</strong> {project.title}</div>
-                  {project.keyPoints && (
-                    <ul className="list-disc ml-6 mt-2">
-                      {(Array.isArray(project.keyPoints)
-                        ? project.keyPoints
-                        : project.keyPoints.split(",")
-                      ).map((point, idx) => (
-                        <li key={idx}>{point.trim()}</li>
-                      ))}
-                    </ul>
+            <section className="mb-8">
+              <h3 className="text-xl font-semibold mb-4 border-b pb-1">Certificates / Images</h3>
+              <div className="text-gray-700">
+                <div className="mb-4">
+                  <strong>Certificate Image:</strong><br />
+                  {studentData.certificateImage ? (
+                    <img src={studentData.certificateImage} alt="Certificate" className="w-40 h-40 object-cover rounded border" />
+                  ) : (
+                    "No certificate uploaded"
                   )}
                 </div>
-              ))}
-            </div>
-          </section>
+                <div>
+                  <strong>Profile Picture:</strong><br />
+                  {studentData.profileImage ? (
+                    <img src={studentData.profileImage} alt="Profile" className="w-40 h-40 object-cover rounded-full border" />
+                  ) : (
+                    "No profile picture uploaded"
+                  )}
+                </div>
+              </div>
+            </section>
+
+            <button
+              onClick={() => setEditing(true)}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Edit Profile
+            </button>
+          </>
+        ) : (
+          <>
+            {/* Edit Mode */}
+            <section className="mb-8">
+              <h3 className="text-xl font-semibold mb-4 border-b pb-1">Basic Details</h3>
+              <input
+                className="border rounded px-3 py-2 w-full mb-2"
+                type="text"
+                name="studentName"
+                placeholder="Full Name"
+                value={studentData.studentName}
+                onChange={handleChange}
+              />
+              <input
+                className="border rounded px-3 py-2 w-full mb-2"
+                type="text"
+                name="studentId"
+                placeholder="Student ID"
+                value={studentData.studentId}
+                onChange={handleChange}
+              />
+              <input
+                className="border rounded px-3 py-2 w-full mb-2"
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={studentData.email}
+                onChange={handleChange}
+              />
+              <select
+                className="border rounded px-3 py-2 w-full mb-2"
+                name="gender"
+                value={studentData.gender}
+                onChange={handleChange}
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <input
+                className="border rounded px-3 py-2 w-full mb-2"
+                type="date"
+                name="dob"
+                value={studentData.dob}
+                onChange={handleChange}
+              />
+            </section>
+
+            {/* Add other editable sections here (Location, Contact, Education, Summary, Skills, Projects, etc.) */}
+
+            <section className="mb-8">
+              <h3 className="text-xl font-semibold mb-4 border-b pb-1">Certificates / Images</h3>
+              <div>
+                <label className="block mb-2 font-medium">Upload Certificate</label>
+                {studentData.certificateImage && (
+                  <img
+                    src={studentData.certificateImage}
+                    alt="Certificate"
+                    className="w-40 h-40 object-cover rounded border mb-2"
+                  />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef1}
+                  onChange={(e) => handleFileChange(e, "certificateImage")}
+                />
+              </div>
+              <div className="mt-4">
+                <label className="block mb-2 font-medium">Upload Profile Photo</label>
+                {studentData.profileImage && (
+                  <img
+                    src={studentData.profileImage}
+                    alt="Profile"
+                    className="w-40 h-40 object-cover rounded-full border mb-2"
+                  />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef2}
+                  onChange={(e) => handleFileChange(e, "profileImage")}
+                />
+              </div>
+            </section>
+
+            <button
+              onClick={saveProfile}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mr-3"
+            >
+              Save Profile
+            </button>
+            <button
+              onClick={cancelEdit}
+              className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+            >
+              Cancel
+            </button>
+          </>
         )}
-
-        <section className="mb-8">
-          <h3 className="text-lg font-semibold text-blue-700 mb-4">Technical Skills</h3>
-          <ul className="list-disc ml-6">
-            {studentData.technicalSkills?.split(",").map((skill, index) => (
-              <li key={index}>{skill.trim()}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h3 className="text-lg font-semibold text-blue-700 mb-4">Soft Skills</h3>
-          <ul className="list-disc ml-6">
-            {studentData.softSkills?.split(",").map((skill, index) => (
-              <li key={index}>{skill.trim()}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h3 className="text-lg font-semibold text-blue-700 mb-4">Certificates</h3>
-          <ul className="list-disc ml-6">
-            {studentData.certifications?.split(",").map((cert, index) => (
-              <li key={index}>{cert.trim()}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h3 className="text-lg font-semibold text-blue-700 mb-4">Certificates/ Images</h3>
-          <div>
-            <div className="mb-4">
-              <strong>Certificate Image:</strong><br />
-              {studentData.certificateImage ? (
-                <img src={studentData.certificateImage} alt="Certificate" className="rounded border mt-2 w-48 h-36 object-cover" />
-              ) : (
-                "No certificate uploaded"
-              )}
-            </div>
-            <div>
-              <strong>Profile Picture:</strong><br />
-              {studentData.profileImage ? (
-                <img src={studentData.profileImage} alt="Profile" className="rounded-full border mt-2 w-32 h-32 object-cover" />
-              ) : (
-                "No profile picture uploaded"
-              )}
-            </div>
-          </div>
-        </section>
       </div>
     </div>
   );

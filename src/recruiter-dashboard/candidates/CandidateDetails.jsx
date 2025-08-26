@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   UserIcon,
   MailIcon,
@@ -13,7 +13,7 @@ import {
   ClockIcon,
   CheckIcon,
   XIcon,
-  ChevronLeftIcon
+  ChevronLeftIcon,
 } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import { useTheme } from '../context/ThemeContext';
@@ -23,21 +23,19 @@ const CandidateDetails = () => {
   const { data } = useData();
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
-  const candidate = data.candidates.find(c => c.id === id);
+  const [profileImage, setProfileImage] = useState(null);
+  const navigate = useNavigate();
 
+  const candidate = data.candidates.find((c) => c.id === id);
   if (!candidate) {
     return (
       <div className="text-center py-12">
         <h2 className="text-xl font-semibold mb-2">Candidate Not Found</h2>
-        <p className="mb-4">
-          The candidate you're looking for doesn't exist or has been removed.
-        </p>
+        <p className="mb-4">The candidate you're looking for doesn't exist or has been removed.</p>
         <Link
-          to="/candidates"
+          to="/recruiter/candidates"
           className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${
-            isDarkMode
-              ? 'bg-gray-700 hover:bg-gray-600'
-              : 'bg-gray-200 hover:bg-gray-300'
+            isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'
           } transition-colors`}
         >
           <ChevronLeftIcon size={16} />
@@ -46,32 +44,20 @@ const CandidateDetails = () => {
       </div>
     );
   }
-
   const getStatusColor = (status) => {
     switch (status) {
       case 'Selected':
-        return isDarkMode
-          ? 'bg-green-900/30 text-green-400'
-          : 'bg-green-100 text-green-600';
+        return isDarkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-600';
       case 'Rejected':
-        return isDarkMode
-          ? 'bg-red-900/30 text-red-400'
-          : 'bg-red-100 text-red-600';
+        return isDarkMode ? 'bg-red-900/30 text-red-400' : 'bg-red-100 text-red-600';
       case 'Interviewed':
-        return isDarkMode
-          ? 'bg-yellow-900/30 text-yellow-400'
-          : 'bg-yellow-100 text-yellow-600';
+        return isDarkMode ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600';
       case 'In Review':
-        return isDarkMode
-          ? 'bg-teal-900/30 text-teal-400'
-          : 'bg-teal-100 text-teal-600';
+        return isDarkMode ? 'bg-teal-900/30 text-teal-400' : 'bg-teal-100 text-teal-600';
       default:
-        return isDarkMode
-          ? 'bg-gray-700 text-gray-300'
-          : 'bg-gray-100 text-gray-600';
+        return isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600';
     }
   };
-
   const getStatusIcon = (status) => {
     switch (status) {
       case 'Selected':
@@ -86,43 +72,38 @@ const CandidateDetails = () => {
         return null;
     }
   };
-
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: {
+      opacity: 0,
+    },
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   };
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: {
+      y: 20,
+      opacity: 0,
+    },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.5 }
-    }
+      transition: {
+        duration: 0.5,
+      },
+    },
   };
-
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="space-y-6"
-    >
-      {/* Header & Analysis Button */}
+    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
           <Link
-            to="/candidates"
-            className={`p-2 rounded-lg ${
-              isDarkMode
-                ? 'hover:bg-gray-800'
-                : 'hover:bg-gray-200'
-            } transition-colors`}
+            to="/recruiter/candidates"
+            className={`p-2 rounded-lg ${isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-200'} transition-colors`}
           >
             <ChevronLeftIcon size={20} />
           </Link>
@@ -132,11 +113,9 @@ const CandidateDetails = () => {
         </div>
         <div className="flex gap-2">
           <Link
-            to={`/candidates/${id}/analysis`}
+            to={`/recruiter/candidates/${id}/analysis`}
             className={`px-4 py-2 rounded-lg ${
-              isDarkMode
-                ? 'bg-gray-700 hover:bg-gray-600'
-                : 'bg-gray-200 hover:bg-gray-300'
+              isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'
             } transition-colors flex items-center gap-2`}
           >
             <FileTextIcon size={16} />
@@ -144,29 +123,59 @@ const CandidateDetails = () => {
           </Link>
         </div>
       </div>
+
+      {/* Back Button */}
+      <button
+        className={`p-2 rounded-lg ${isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-200'} transition-colors`}
+        onClick={() => navigate('/recruiter/candidates')}
+      >
+        {/* <ChevronLeftIcon size={20} /> */}
+      </button>
       {/* Profile Header */}
       <motion.div
         variants={itemVariants}
-        className={`rounded-xl overflow-hidden ${
-          isDarkMode
-            ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]'
-            : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'
-        } p-6`}
+        className={`
+          rounded-xl overflow-hidden
+          ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
+          p-6
+        `}
       >
         <div className="flex flex-col md:flex-row gap-6">
-          <div className="flex-shrink-0">
-            <div
-              className={`h-32 w-32 rounded-xl ${
-                isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-              } flex items-center justify-center`}
-            >
-              <UserIcon size={64} className={isDarkMode ? 'text-gray-500' : 'text-gray-400'} />
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-shrink-0">
+              <div
+                className={`h-32 w-32 rounded-xl ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} flex items-center justify-center overflow-hidden`}
+              >
+                {profileImage ? (
+                  <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
+                ) : (
+                  <label className="cursor-pointer flex flex-col items-center justify-center h-full w-full">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          setProfileImage(URL.createObjectURL(file));
+                        }
+                      }}
+                    />
+                    <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Upload Photo</span>
+                  </label>
+                )}
+              </div>
             </div>
           </div>
+
           <div className="flex-1">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
               <h1 className="text-2xl font-bold">{candidate.name}</h1>
-              <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm ${getStatusColor(candidate.status)}`}>
+              <span
+                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm ${getStatusColor(
+                  candidate.status
+                )}`}
+              >
                 {getStatusIcon(candidate.status)}
                 {candidate.status}
               </span>
@@ -212,15 +221,27 @@ const CandidateDetails = () => {
               </div>
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
-              <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md flex items-center gap-2">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md flex items-center gap-2"
+              >
                 <MailIcon size={16} />
                 Send Email
               </motion.button>
-              <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md flex items-center gap-2">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md flex items-center gap-2"
+              >
                 <CheckIcon size={16} />
                 Shortlist
               </motion.button>
-              <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="px-4 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md flex items-center gap-2">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md flex items-center gap-2"
+              >
                 <CalendarIcon size={16} />
                 Schedule Interview
               </motion.button>
@@ -228,10 +249,16 @@ const CandidateDetails = () => {
           </div>
         </div>
       </motion.div>
-      {/* Education & Skills | Application Timeline */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Education & Skills */}
-        <motion.div variants={itemVariants} className={`lg:col-span-2 rounded-xl overflow-hidden ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'} p-5`}>
+        <motion.div
+          variants={itemVariants}
+          className={`
+            lg:col-span-2 rounded-xl overflow-hidden
+            ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
+            p-5
+          `}
+        >
           <h3 className="text-lg font-semibold mb-4">Education & Skills</h3>
           <div className="space-y-5">
             <div>
@@ -254,7 +281,6 @@ const CandidateDetails = () => {
             <div>
               <h4 className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Skills</h4>
               <div className="flex flex-wrap gap-2">
-                {/* Conditionally rendered skills */}
                 {candidate.dept === 'Engineering' && (
                   <>
                     <span className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-blue-900/30 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>Java</span>
@@ -321,31 +347,49 @@ const CandidateDetails = () => {
             </div>
           </div>
         </motion.div>
+
         {/* Application Timeline */}
-        <motion.div variants={itemVariants} className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'} p-5`}>
+        <motion.div
+          variants={itemVariants}
+          className={`
+            rounded-xl overflow-hidden
+            ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
+            p-5
+          `}
+        >
           <h3 className="text-lg font-semibold mb-4">Application Timeline</h3>
           <div className="space-y-6">
             <div className="flex gap-4">
               <div className="flex flex-col items-center">
-                <div className={`h-8 w-8 rounded-full ${isDarkMode ? 'bg-teal-900/50 text-teal-400' : 'bg-teal-100 text-teal-600'} flex items-center justify-center`}>
+                <div
+                  className={`h-8 w-8 rounded-full ${
+                    isDarkMode ? 'bg-teal-900/50 text-teal-400' : 'bg-teal-100 text-teal-600'
+                  } flex items-center justify-center`}
+                >
                   <FileTextIcon size={16} />
                 </div>
-                <div className={`w-0.5 h-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+                <div className={`w-0.5 h-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h4 className={`font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Application Submitted</h4>
                   <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>15 Jul 2025</span>
                 </div>
-                <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Applied for Software Engineer position</p>
+                <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Applied for Software Engineer position
+                </p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="flex flex-col items-center">
-                <div className={`h-8 w-8 rounded-full ${isDarkMode ? 'bg-teal-900/50 text-teal-400' : 'bg-teal-100 text-teal-600'} flex items-center justify-center`}>
+                <div
+                  className={`h-8 w-8 rounded-full ${
+                    isDarkMode ? 'bg-teal-900/50 text-teal-400' : 'bg-teal-100 text-teal-600'
+                  } flex items-center justify-center`}
+                >
                   <CheckIcon size={16} />
                 </div>
-                <div className={`w-0.5 h-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+                <div className={`w-0.5 h-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -357,10 +401,14 @@ const CandidateDetails = () => {
             </div>
             <div className="flex gap-4">
               <div className="flex flex-col items-center">
-                <div className={`h-8 w-8 rounded-full ${isDarkMode ? 'bg-teal-900/50 text-teal-400' : 'bg-teal-100 text-teal-600'} flex items-center justify-center`}>
+                <div
+                  className={`h-8 w-8 rounded-full ${
+                    isDarkMode ? 'bg-teal-900/50 text-teal-400' : 'bg-teal-100 text-teal-600'
+                  } flex items-center justify-center`}
+                >
                   <MailIcon size={16} />
                 </div>
-                <div className={`w-0.5 h-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+                <div className={`w-0.5 h-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -372,7 +420,11 @@ const CandidateDetails = () => {
             </div>
             <div className="flex gap-4">
               <div className="flex flex-col items-center">
-                <div className={`h-8 w-8 rounded-full ${isDarkMode ? 'bg-yellow-900/50 text-yellow-400' : 'bg-yellow-100 text-yellow-600'} flex items-center justify-center`}>
+                <div
+                  className={`h-8 w-8 rounded-full ${
+                    isDarkMode ? 'bg-yellow-900/50 text-yellow-400' : 'bg-yellow-100 text-yellow-600'
+                  } flex items-center justify-center`}
+                >
                   <ClockIcon size={16} />
                 </div>
               </div>
@@ -385,16 +437,23 @@ const CandidateDetails = () => {
               </div>
             </div>
           </div>
-          {/* Applied Positions */}
           <div className="mt-6">
             <h3 className="text-lg font-semibold mb-4">Applied Positions</h3>
             <div className="space-y-4">
               <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium">Software Engineer</h4>
-                  <span className={`px-2 py-0.5 rounded-full text-xs ${isDarkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-600'}`}>Open</span>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-xs ${
+                      isDarkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-600'
+                    }`}
+                  >
+                    Open
+                  </span>
                 </div>
-                <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Engineering Department</p>
+                <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Engineering Department
+                </p>
                 <div className="flex items-center gap-4 mt-3">
                   <div className="flex items-center gap-1">
                     <BriefcaseIcon size={14} className={isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
@@ -411,33 +470,28 @@ const CandidateDetails = () => {
         </motion.div>
       </div>
       {/* Resume Preview */}
-      <motion.div variants={itemVariants} className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'} p-5`}>
+      {/* <motion.div variants={itemVariants} className={`
+          rounded-xl overflow-hidden
+          ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
+          p-5
+        `}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Resume</h3>
-          <a
-            href={candidate.resume}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`px-3 py-1 rounded-lg ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors text-sm flex items-center gap-2`}
-          >
+          <a href={candidate.resume} target="_blank" rel="noopener noreferrer" className={`px-3 py-1 rounded-lg ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors text-sm flex items-center gap-2`}>
             <FileTextIcon size={14} />
             Download
           </a>
         </div>
         <div className={`h-96 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} flex items-center justify-center`}>
           <p className={`text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            Resume preview not available.<br />
-            <a
-              href={candidate.resume}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-teal-500 hover:underline"
-            >
+            Resume preview not available.
+            <br />
+            <a href={candidate.resume} target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:underline">
               Click here to view the resume
             </a>
           </p>
         </div>
-      </motion.div>
+      </motion.div> */}
     </motion.div>
   );
 };
