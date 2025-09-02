@@ -53,6 +53,14 @@ function Header() {
               About
             </NavLink>
           </div>
+            <div className="px-2 py-1 rounded-md transition hover:[&>a]:text-[#F04D3E] text-center max-md:py-3 max-md:w-full">
+            <NavLink
+              to="/services"
+              className="no-underline text-[#004aad] font-bold text-lg transition-colors"
+            >
+              Services
+            </NavLink>
+          </div>
           <div className="px-2 py-1 rounded-md transition hover:[&>a]:text-[#F04D3E] text-center max-md:py-3 max-md:w-full">
             <NavLink
               to="/contact"
@@ -61,14 +69,7 @@ function Header() {
               Contact
             </NavLink>
           </div>
-          <div className="px-2 py-1 rounded-md transition hover:[&>a]:text-[#F04D3E] text-center max-md:py-3 max-md:w-full">
-            <NavLink
-              to="/services"
-              className="no-underline text-[#004aad] font-bold text-lg transition-colors"
-            >
-              Services
-            </NavLink>
-          </div>
+        
           <div className="px-2 py-1 rounded-md transition hover:[&>a]:text-[#F04D3E] text-center max-md:py-3 max-md:w-full">
             <NavLink
               to="/login"
