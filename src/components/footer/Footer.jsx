@@ -27,7 +27,7 @@ const Footer = () => {
                 className="h-16 w-auto bg-white rounded-xl p-2"
               />
             </div>
-            <p className=" leading-relaxed mb-5 text-justify">
+            <p className=" leading-relaxed mb-4 text-justify-center">
               T-Sign is a blockchain-based credentialing platform by T-Sign & Govt. of Telangana,
               streamlining student, college, and recruiter interactions through secure digital verification.
             </p>
