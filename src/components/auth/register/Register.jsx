@@ -216,28 +216,29 @@ const Register = () => {
     e.preventDefault();
     console.log('College form submitted:', collegeFormData);
     alert('College registration successful!');
-    navigate('/login');
+    navigate('/new-dashboard');
   };
 // eslint-disable-next-line
   const handleRecruiterSubmit = (e) => {
     e.preventDefault();
     console.log('Recruiter form submitted:', recruiterFormData);
     alert('Recruiter registration successful!');
-    navigate('/login');
+    navigate('/recruiter');
   };
 
   const handleStartRegistration = () => {
-    navigate("/studentprofileform");
+    navigate("/profile-form");
   };
 
   return (
     <div className="max-w-4xl mx-auto my-8 p-10 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-xl border border-white/30 backdrop-blur-sm animate-fade-in">
-      <div className="flex items-center gap-4 mb-6">
-        <img src={TSignLogo} alt="Logo" className="h-12" />
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-transparent text-center relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-24 after:h-1 after:bg-gradient-to-r after:from-blue-600 after:to-blue-900 after:rounded">
-          Unlock your journey – start by registering!
-        </h2>
-      </div>
+      <div className="flex flex-col items-center mb-6">
+  <img src={TSignLogo} alt="Logo" className="h-12 mb-4" />
+  <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-transparent text-center relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2  after:rounded">
+    Unlock your journey – start by registering!
+  </h2>
+</div>
+
       
       <hr className="border-0 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent my-6 w-4/5 mx-auto" />
       
@@ -272,7 +273,7 @@ const Register = () => {
             onClick={() => handleRoleChange('recruiter')}
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-blue-900 transition-all duration-300"></div>
-            <h3 className="text-xl font-semibold mb-2">Organization</h3>
+            <h3 className="text-xl font-semibold mb-2">recruiter</h3>
             <p className="text-sm">Hire top talent</p>
           </div>
         </div>
@@ -282,9 +283,9 @@ const Register = () => {
         {activeRole === 'student' && !showStudentForm && (
           <div className="text-center">
             <h2 className="text-2xl font-bold text-blue-900 mb-4">Let's Get Started!</h2>
-            <p className="text-gray-600 mb-8 ml-44">Begin your journey by registering as a student</p>
+            <p className="text-gray-600 mb-8 ml-34">Begin your journey by registering as a student</p>
             <button 
-              className="bg-gradient-to-r from-blue-700 to-blue-900 text-white py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all ml-44"
+              className="bg-gradient-to-r from-blue-700 to-blue-900 text-white py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all ml-34"
               onClick={handleStartRegistration}
             >
               Start Registration
@@ -709,13 +710,270 @@ const Register = () => {
 
         {activeRole === 'recruiter' && (
           <div className="multi-step-form">
-            {/* Recruiter form remains unchanged */}
-            {/* ... */}
+            <div className="flex justify-between items-center mb-12 relative px-5">
+              <div className="absolute top-7 left-20 right-20 h-1 bg-blue-100 rounded z-0"></div>
+             
+              <div className={`flex flex-col items-center relative z-10 ${recruiterStep === 1 ? 'text-blue-900 font-semibold' : 'text-gray-400'}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-all duration-300
+                  ${recruiterStep === 1 ? 'bg-gradient-to-br from-blue-700 to-blue-900 text-white border-2 border-blue-700 scale-110' : 'bg-white border-2 border-blue-100 text-gray-400'}`}>
+                  1
+                </div>
+                <div className="text-sm">Company Info</div>
+              </div>
+             
+              <div className={`flex flex-col items-center relative z-10 ${recruiterStep === 2 ? 'text-blue-900 font-semibold' : 'text-gray-400'}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-all duration-300
+                  ${recruiterStep === 2 ? 'bg-gradient-to-br from-blue-700 to-blue-900 text-white border-2 border-blue-700 scale-110' : 'bg-white border-2 border-blue-100 text-gray-400'}`}>
+                  2
+                </div>
+                <div className="text-sm">Recruiter Details</div>
+              </div>
+             
+              <div className={`flex flex-col items-center relative z-10 ${recruiterStep === 3 ? 'text-blue-900 font-semibold' : 'text-gray-400'}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-all duration-300
+                  ${recruiterStep === 3 ? 'bg-gradient-to-br from-blue-700 to-blue-900 text-white border-2 border-blue-700 scale-110' : 'bg-white border-2 border-blue-100 text-gray-400'}`}>
+                  3
+                </div>
+                <div className="text-sm">Complete</div>
+              </div>
+            </div>
+ 
+            {recruiterStep === 1 && (
+              <form onSubmit={(e) => { e.preventDefault(); nextRecruiterStep(); }}>
+                <h2 className="text-2xl font-bold text-blue-900 mb-6">Company Information</h2>
+               
+                <div className="mb-7">
+                  <label className="block text-gray-700 font-medium mb-2">Company Name*</label>
+                  <input
+                    type="text"
+                    name="companyName"
+                    value={recruiterFormData.companyName}
+                    onChange={handleRecruiterInputChange}
+                    required
+                    className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                  />
+                </div>
+ 
+                <div className="flex gap-8 mb-7">
+                  <div className="flex-1">
+                    <label className="block text-gray-700 font-medium mb-2">Website</label>
+                    <input
+                      type="url"
+                      name="website"
+                      value={recruiterFormData.website}
+                      onChange={handleRecruiterInputChange}
+                      className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="block text-gray-700 font-medium mb-2">Email ID*</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={recruiterFormData.email}
+                      onChange={handleRecruiterInputChange}
+                      required
+                      className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+ 
+                <div className="flex gap-8 mb-7">
+                  <div className="flex-1">
+                    <label className="block text-gray-700 font-medium mb-2">Contact No*</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={recruiterFormData.phone}
+                      onChange={handleRecruiterInputChange}
+                      required
+                      className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="block text-gray-700 font-medium mb-2">Company Category*</label>
+                    <select
+                      name="category"
+                      value={recruiterFormData.category}
+                      onChange={handleRecruiterInputChange}
+                      required
+                      className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                    >
+                      <option value="IT">IT</option>
+                      <option value="NON IT">Non-IT</option>
+                      <option value="Finance">Finance</option>
+                      <option value="Healthcare">Healthcare</option>
+                    </select>
+                  </div>
+                </div>
+ 
+                <div className="mb-7">
+                  <label className="block text-gray-700 font-medium mb-2">Address*</label>
+                  <input
+                    type="text"
+                    name="address"
+                    value={recruiterFormData.address}
+                    onChange={handleRecruiterInputChange}
+                    required
+                    className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                  />
+                </div>
+ 
+                <div className="flex justify-end mt-12">
+                  <button type="submit" className="bg-gradient-to-r from-blue-700 to-blue-900 text-white py-3 px-8 rounded-lg font-semibold uppercase tracking-wide shadow-md hover:shadow-lg transition-all">
+                    Next
+                  </button>
+                </div>
+              </form>
+            )}
+ 
+            {recruiterStep === 2 && (
+              <form onSubmit={(e) => { e.preventDefault(); nextRecruiterStep(); }}>
+                <h2 className="text-2xl font-bold text-blue-900 mb-6">Recruiter Details</h2>
+               
+                <div className="mb-7">
+                  <label className="block text-gray-700 font-medium mb-2">Recruiter Name*</label>
+                  <input
+                    type="text"
+                    name="recruiterName"
+                    value={recruiterFormData.recruiterName}
+                    onChange={handleRecruiterInputChange}
+                    required
+                    className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                  />
+                </div>
+ 
+                <div className="flex gap-8 mb-7">
+                  <div className="flex-1">
+                    <label className="block text-gray-700 font-medium mb-2">Designation*</label>
+                    <input
+                      type="text"
+                      name="designation"
+                      value={recruiterFormData.designation}
+                      onChange={handleRecruiterInputChange}
+                      required
+                      className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="block text-gray-700 font-medium mb-2">Email*</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={recruiterFormData.email}
+                      onChange={handleRecruiterInputChange}
+                      required
+                      className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+ 
+                <div className="mb-7">
+                  <label className="block text-gray-700 font-medium mb-2">Mobile No*</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={recruiterFormData.phone}
+                    onChange={handleRecruiterInputChange}
+                    required
+                    className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                  />
+                </div>
+ 
+                <div className="mb-7">
+                  <label className="block text-gray-700 font-medium mb-2">Upload Company Logo</label>
+                  <div className="relative overflow-hidden">
+                    <input
+                      type="file"
+                      id="company-logo"
+                      onChange={(e) => handleFileChange(e, setRecruiterFormData, 'logo')}
+                      accept="image/*"
+                      className="absolute left-0 top-0 opacity-0 w-full h-full cursor-pointer"
+                    />
+                    <label htmlFor="company-logo" className="block p-4 bg-blue-50 border-2 border-dashed border-blue-200 rounded-lg text-center cursor-pointer hover:bg-blue-100 hover:border-blue-400 transition-colors">
+                      Choose File
+                    </label>
+                  </div>
+                  {recruiterFormData.logo && (
+                    <div className="mt-4 text-center p-4 bg-white rounded-lg border border-gray-200">
+                      <img src={recruiterFormData.logo} alt="Company logo preview" className="max-w-xs max-h-32 mx-auto object-contain rounded" />
+                    </div>
+                  )}
+                </div>
+ 
+                <div className="flex justify-between mt-12">
+                  <button type="button" onClick={prevRecruiterStep} className="bg-gray-600 text-white py-3 px-8 rounded-lg font-semibold uppercase tracking-wide shadow-md hover:bg-gray-700 hover:shadow-lg transition-all">
+                    Back
+                  </button>
+                  <button type="submit" className="bg-gradient-to-r from-blue-700 to-blue-900 text-white py-3 px-8 rounded-lg font-semibold uppercase tracking-wide shadow-md hover:shadow-lg transition-all">
+                    Next
+                  </button>
+                </div>
+              </form>
+            )}
+ 
+            {recruiterStep === 3 && (
+              <form onSubmit={handleRecruiterSubmit}>
+                <h2 className="text-2xl font-bold text-blue-900 mb-6">Complete Registration</h2>
+               
+                <div className="mb-7">
+                  <label className="block text-gray-700 font-medium mb-2">Create Password*</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={recruiterFormData.password}
+                    onChange={handleRecruiterInputChange}
+                    required
+                    className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                  />
+                </div>
+ 
+                <div className="mb-7">
+                  <label className="block text-gray-700 font-medium mb-2">Confirm Password*</label>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={recruiterFormData.confirmPassword}
+                    onChange={handleRecruiterInputChange}
+                    required
+                    className="w-full p-3 border border-blue-100 rounded-lg bg-blue-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-colors"
+                  />
+                </div>
+ 
+                <div className="bg-blue-50 p-8 rounded-lg border-l-4 border-blue-600 mb-8">
+                  <h3 className="text-xl font-semibold text-blue-900 mb-6 pb-3 border-b border-blue-200 flex items-center">
+                    <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm mr-3">✓</span>
+                    Review Your Information
+                  </h3>
+                 
+                  <div className="space-y-3">
+                    <p className="flex"><span className="font-semibold text-blue-900 min-w-48">Company Name:</span> {recruiterFormData.companyName}</p>
+                    <p className="flex"><span className="font-semibold text-blue-900 min-w-48">Website:</span> {recruiterFormData.website}</p>
+                    <p className="flex"><span className="font-semibold text-blue-900 min-w-48">Email:</span> {recruiterFormData.email}</p>
+                    <p className="flex"><span className="font-semibold text-blue-900 min-w-48">Phone:</span> {recruiterFormData.phone}</p>
+                    <p className="flex"><span className="font-semibold text-blue-900 min-w-48">Category:</span> {recruiterFormData.category}</p>
+                    <p className="flex"><span className="font-semibold text-blue-900 min-w-48">Address:</span> {recruiterFormData.address}</p>
+                    <p className="flex"><span className="font-semibold text-blue-900 min-w-48">Recruiter Name:</span> {recruiterFormData.recruiterName}</p>
+                    <p className="flex"><span className="font-semibold text-blue-900 min-w-48">Designation:</span> {recruiterFormData.designation}</p>
+                  </div>
+                </div>
+ 
+                <div className="flex justify-between mt-8">
+                  <button type="button" onClick={prevRecruiterStep} className="bg-gray-600 text-white py-3 px-8 rounded-lg font-semibold uppercase tracking-wide shadow-md hover:bg-gray-700 hover:shadow-lg transition-all">
+                    Back
+                  </button>
+                  <button type="submit" className="bg-gradient-to-r from-blue-700 to-blue-900 text-white py-3 px-8 rounded-lg font-semibold uppercase tracking-wide shadow-md hover:shadow-lg transition-all animate-pulse">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         )}
       </div>
     </div>
   );
 };
-
+ 
 export default Register;
+ 
