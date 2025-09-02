@@ -135,9 +135,12 @@ const InterviewsView = () => {
   }, [data.interviews, selectedYear, selectedMonth, isDarkMode]);
 
   return (
-    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <motion.h2 variants={itemVariants} className="text-2xl font-bold">
+        <motion.h2
+          variants={itemVariants}
+          className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}
+        >
           Interviews
         </motion.h2>
         <motion.button

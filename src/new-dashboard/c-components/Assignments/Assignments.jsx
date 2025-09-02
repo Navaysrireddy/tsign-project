@@ -256,7 +256,7 @@ const Assignments = ({ darkMode }) => {
         <motion.button onClick={() => setIsAdding(true)}
           className="mt-4 md:mt-0 flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-teal-500 to-blue-600 text-white shadow-md"
           whileHover={{ scale: 1.05 }}>
-          <PlusIcon className="w-4 h-4 mr-2" /> Add Assignment
+          <PlusIcon className="w-4 h-4 mr-2 " /> Add Assignment
         </motion.button>
       </div>
 
@@ -268,8 +268,12 @@ const Assignments = ({ darkMode }) => {
           </div>
           <div className="flex flex-wrap gap-2">
             <div className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'} border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-              <select value={department} onChange={e => setDepartment(e.target.value)} className="appearance-none bg-transparent py-2 pl-3 pr-10 outline-none text-sm">
-                {departments.map(dept => <option key={dept} value={dept}>{dept}</option>)}
+              <select value={department} onChange={e => setDepartment(e.target.value)} className={`
+    appearance-none bg-transparent py-2 pl-3 pr-10 outline-none
+    ${darkMode ? 'text-white bg-gray-700' : 'text-gray-900 bg-white'}
+  `}>
+                {departments.map(dept => <option key={dept} value={dept}
+               className={darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'} >{dept}</option>)}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
                 <svg className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -280,7 +284,7 @@ const Assignments = ({ darkMode }) => {
 
             <div className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'} border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
               <select value={status} onChange={e => setStatus(e.target.value)} className="appearance-none bg-transparent py-2 pl-3 pr-10 outline-none text-sm">
-                {statuses.map(stat => <option key={stat} value={stat}>{stat}</option>)}
+                {statuses.map(stat => <option key={stat} value={stat} className={darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}>{stat}</option>)}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
                 <svg className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -302,7 +306,7 @@ const Assignments = ({ darkMode }) => {
             <ClipboardListIcon className="h-6 w-6 text-blue-500" />
           </div>
           <div className="ml-4">
-            <p className="text-sm text-gray-500">Total Assignments</p>
+            <p className="text-sm text-gray-400">Total Assignments</p>
             <h3 className="text-2xl font-bold pl-6">{totalAssignments}</h3>
           </div>
         </motion.div>
@@ -311,7 +315,7 @@ const Assignments = ({ darkMode }) => {
             <CheckCircleIcon className="h-6 w-6 text-green-500" />
           </div>
           <div className="ml-4">
-            <p className="text-sm text-gray-500">Submitted</p>
+            <p className="text-sm text-gray-400">Submitted</p>
             <h3 className="text-2xl font-bold pl-6">{submittedAssignments}</h3>
           </div>
         </motion.div>
@@ -320,7 +324,7 @@ const Assignments = ({ darkMode }) => {
             <ClockIcon className="h-6 w-6 text-yellow-500" />
           </div>
           <div className="ml-4">
-            <p className="text-sm text-gray-500">Pending</p>
+            <p className="text-sm text-gray-400">Pending</p>
             <h3 className="text-2xl font-bold pl-6">{pendingAssignments}</h3>
           </div>
         </motion.div>
@@ -329,7 +333,7 @@ const Assignments = ({ darkMode }) => {
             <XCircleIcon className="h-6 w-6 text-red-500" />
           </div>
           <div className="ml-4">
-            <p className="text-sm text-gray-500">Late/Missed</p>
+            <p className="text-sm text-gray-400">Late/Missed</p>
             <h3 className="text-2xl font-bold pl-6">{lateAssignments + missedAssignments}</h3>
           </div>
         </motion.div>
@@ -339,7 +343,8 @@ const Assignments = ({ darkMode }) => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="lg:col-span-2">
           <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold">Assignment List</h2>
+              <h2 className="text-xl font-semibold 
+text-gray-800 dark:text-white">Assignment List</h2>
               <div className={`px-3 py-1 rounded-full text-sm ${darkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800'}`}>{filteredAssignments.length} assignments</div>
             </div>
             {filteredAssignments.length === 0 ? (
@@ -357,7 +362,7 @@ const Assignments = ({ darkMode }) => {
                           <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(assignment.status)}`}>{assignment.status}</span>
                           <span className={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(assignment.difficulty)}`}>{assignment.difficulty}</span>
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">{assignment.course}</p>
+                        <p className="text-sm text-gray-400 mt-1">{assignment.course}</p>
                       </div>
                       <div className="flex gap-2 mt-2 md:mt-0">
                         <button onClick={() => deleteAssignment(assignment.id)} className="px-2 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200 flex items-center">
@@ -375,7 +380,7 @@ const Assignments = ({ darkMode }) => {
                         <span>{assignment.department}</span>
                       </div>
                     </div>
-                    <p className="mt-2 text-sm text-gray-500">{assignment.description}</p>
+                    <p className="mt-1 text-sm text-gray-400">{assignment.description}</p>
                     <div className="mt-4 flex justify-end">
                       <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className={`flex items-center text-sm font-medium ${darkMode ? 'bg-gradient-to-r from-teal-500 to-blue-600' : 'bg-gradient-to-r from-teal-400 to-blue-500'} text-white px-3 py-1.5 rounded-lg`} onClick={() => setExpandedAssignmentId(expandedAssignmentId === assignment.id ? null : assignment.id)}>
                         {expandedAssignmentId === assignment.id ? 'Hide Details' : 'View Details'} <ArrowRightIcon className="h-3.5 w-3.5 ml-1" />
@@ -399,13 +404,15 @@ const Assignments = ({ darkMode }) => {
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="space-y-6">
           <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-            <h2 className="text-xl font-semibold mb-4">Assignment Status</h2>
+            <h2 className="text-xl font-semibold mb-4 
+text-gray-800 dark:text-white">Assignment Status</h2>
             <div className="h-80">
               <AssignmentStatusPieChart darkMode={darkMode} submittedCount={submittedAssignments} pendingCount={pendingAssignments} lateCount={lateAssignments} missedCount={missedAssignments} />
             </div>
           </div>
           <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-            <h2 className="text-xl font-semibold mb-4">Difficulty Distribution</h2>
+            <h2 className="text-xl font-semibold mb-4 
+text-gray-800 dark:text-white">Difficulty Distribution</h2>
             <div className="h-72">
               <AssignmentDifficultyChart darkMode={darkMode} assignments={filteredAssignments} />
             </div>
@@ -414,7 +421,7 @@ const Assignments = ({ darkMode }) => {
       </div>
 
       <div className={`p-6 rounded-xl mt-6 ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`} style={{ width: '100%', maxWidth: '100%' }}>
-        <h2 className="text-xl font-semibold mb-1">Submission Progress</h2>
+        <h2 className="text-xl font-semibold mb-1 text-gray-800 dark:text-white">Submission Progress</h2>
         <div style={{ height: '300px', width: '100%' }}>
           <SubmissionProgressChart darkMode={darkMode} department={department} />
         </div>
@@ -424,7 +431,7 @@ const Assignments = ({ darkMode }) => {
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
           <div className={`p-6 rounded-xl w-full max-w-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Add Assignment</h2>
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Add Assignment</h2>
               <button onClick={() => setIsAdding(false)}>
                 <XCircleIcon className="w-5 h-5" />
               </button>

@@ -1,8 +1,8 @@
 // import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useRef } from 'react';
-
-
+ 
+ 
 const steps = [
   { title: "Basic Details", subtitle: "Let's get you started!" },
   { title: "Location and Others", subtitle: "Provide the Details!" },
@@ -12,12 +12,12 @@ const steps = [
   { title: "Certificates / Images", subtitle: "Upload Certificates and Image" },
   { title: "All Done!", subtitle: "You're all set!" },
 ];
-
+ 
 const StudentProfileForm = () => {
   const navigate = useNavigate();
   const fileInputRef1 = useRef(null);
   const fileInputRef2 = useRef(null);
-
+ 
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     studentName: "",
@@ -50,7 +50,7 @@ const StudentProfileForm = () => {
     profileImage: null,
     projects: [{ title: "", keyPoints: "" }],
   });
-
+ 
   useEffect(() => {
     const savedData = localStorage.getItem("StudentProfileData");
     if (savedData) {
@@ -61,7 +61,7 @@ const StudentProfileForm = () => {
       }
     }
   }, []);
-
+ 
   const goToNextStep = () => {
     let isValid = true;
     const fieldsToValidate = {
@@ -76,7 +76,7 @@ const StudentProfileForm = () => {
       4: ["summary", "technicalSkills", "softSkills", "certifications"],
       5: ["certificateImage", "profileImage"],
     };
-
+ 
     const fields = fieldsToValidate[currentStep] || [];
     for (let field of fields) {
       if (!formData[field] || formData[field].toString().trim() === "") {
@@ -85,41 +85,41 @@ const StudentProfileForm = () => {
         break;
       }
     }
-
+ 
     if (formData.isFresher === "No" && currentStep === 4 && !formData.experience.trim()) {
       alert("Please provide your experience details.");
       return;
     }
-
+ 
     if (isValid && currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
-
+ 
   const goToPreviousStep = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+ 
   const handleProjectChange = (index, field, value) => {
     const updatedProjects = [...formData.projects];
     updatedProjects[index][field] = value;
     setFormData((prev) => ({ ...prev, projects: updatedProjects }));
   };
-
+ 
   const addNewProject = () => {
     setFormData((prev) => ({
       ...prev,
       projects: [...prev.projects, { title: "", keyPoints: "" }],
     }));
   };
-
+ 
   // const handleFileChange = (e, field) => {
   //   const file = e.target.files[0];
   //   if (file) {
@@ -130,7 +130,7 @@ const StudentProfileForm = () => {
   //     reader.readAsDataURL(file);
   //   }
   // };
-
+ 
   const renderInput = (label, name, type = "text", props = {}) => (
     <div className="mb-3 flex flex-col">
       <label className="font-medium">{label}</label>
@@ -144,7 +144,7 @@ const StudentProfileForm = () => {
       />
     </div>
   );
-
+ 
   const renderTextarea = (label, name, placeholder = "") => (
     <div className="mb-3 flex flex-col">
       <label className="font-medium">{label}</label>
@@ -157,7 +157,7 @@ const StudentProfileForm = () => {
       />
     </div>
   );
-
+ 
   const renderStepContent = (step) => {
     switch (step) {
       case 0:
@@ -182,7 +182,7 @@ const StudentProfileForm = () => {
             {renderInput("Date of Birth*", "dob", "date")}
           </>
         );
-
+ 
       case 1:
         return (
           <>
@@ -193,7 +193,7 @@ const StudentProfileForm = () => {
             {renderTextarea("Address*", "address")}
           </>
         );
-
+ 
       case 2:
         return (
           <>
@@ -202,7 +202,7 @@ const StudentProfileForm = () => {
             {renderInput("Alternate Email*", "alternateEmail", "email")}
           </>
         );
-
+ 
       case 3:
         return (
           <>
@@ -211,19 +211,19 @@ const StudentProfileForm = () => {
             {renderInput("School Name*", "tenthSchool")}
             {renderInput("Year of Passing*", "tenthYear")}
             {renderInput("Percentage*", "tenthPercentage")}
-
+ 
             <h3 className="text-lg font-semibold mt-4">Intermediate</h3>
             {renderInput("College Name*", "interCollege")}
             {renderInput("Year of Passing*", "interYear")}
             {renderInput("Percentage*", "interPercentage")}
-
+ 
             <h3 className="text-lg font-semibold mt-4">Degree / B.Tech</h3>
             {renderInput("College Name*", "degreeCollege")}
             {renderInput("Year of Passing*", "degreeYear")}
             {renderInput("Percentage*", "degreePercentage")}
           </>
         );
-
+ 
       case 4:
         return (
           <>
@@ -232,7 +232,7 @@ const StudentProfileForm = () => {
             {renderTextarea("Technical Skills*", "technicalSkills", "e.g., Python, React, SQL")}
             {renderTextarea("Soft Skills*", "softSkills", "e.g., Communication, Teamwork")}
             {renderTextarea("Certifications*", "certifications", "e.g., AWS Certificate, Python Basics")}
-
+ 
             <h3 className="text-lg font-semibold mt-4">Projects*</h3>
             {formData.projects.map((project, index) => (
               <div key={index} className="border rounded p-3 mb-3 bg-gray-50">
@@ -246,7 +246,7 @@ const StudentProfileForm = () => {
             <button type="button" className="px-3 py-2 bg-green-500 text-white rounded" onClick={addNewProject}>
               + Add Another Project
             </button>
-
+ 
             <div className="mt-4">
               <label className="font-medium">Are you a fresher?*</label>
               <select
@@ -258,100 +258,125 @@ const StudentProfileForm = () => {
                 <option value="Yes">Yes</option><option value="No">No</option>
               </select>
             </div>
-
+ 
             {formData.isFresher === "No" &&
               renderTextarea("Experience*", "experience")}
           </>
         );
-
+ 
       case 5:
-        return (
-          <>
-            <div className="mb-8">
-  <label className="font-medium">Upload Certificate*</label>
-  <div className="mt-2 flex items-center gap-4">
-    {!formData.certificateImageInfo ? (
-      <>
-        <button
-          className="px-4 py-2 bg-indigo-500 text-white rounded"
-          type="button"
-          onClick={() => fileInputRef1.current.click()}
-        >
-          Upload Certificate
-        </button>
-        <input
-          type="file"
-          ref={fileInputRef1}
-          style={{ display: "none" }}
-          onChange={(e) => {
-            const file = e.target.files[0];
-            if (file) {
-              const ext = file.name.split('.').pop().toUpperCase();
-              setFormData((prev) => ({
-                ...prev,
-                certificateImageInfo: {
-                  name: file.name,
-                  format: ext,
-                },
-                certificateImage: file, // optionally still store the File for backend upload
-              }));
-            }
-          }}
-        />
-      </>
-    ) : (
-      <div className="flex flex-col">
-        <span className="font-medium">{formData.certificateImageInfo.name}</span>
-        <span className="text-xs text-gray-500">{formData.certificateImageInfo.format}</span>
+  return (
+    <>
+      {/* Upload Certificate */}
+      <div className="mb-8">
+        <label className="font-medium">Upload Certificate*</label>
+        <div className="mt-2 flex items-center gap-4">
+          {!formData.certificateImage ? (
+            <>
+              <button
+                className="px-4 py-2 bg-indigo-500 text-white rounded"
+                type="button"
+                onClick={() => fileInputRef1.current.click()}
+              >
+                Upload Certificate
+              </button>
+              <input
+                type="file"
+                ref={fileInputRef1}
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        certificateImage: reader.result, // Base64 string
+                      }));
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </>
+          ) : (
+            <div className="flex flex-col">
+              <img
+                src={formData.certificateImage}
+                alt="Certificate"
+                className="w-40 h-40 object-cover rounded border"
+              />
+              <button
+                type="button"
+                className="text-red-500 mt-2 text-sm"
+                onClick={() =>
+                  setFormData((prev) => ({ ...prev, certificateImage: null }))
+                }
+              >
+                Remove
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    )}
-  </div>
-</div>
-
-<div className="mb-8">
-  <label className="font-medium">Upload Profile Photo*</label>
-  <div className="mt-2 flex items-center gap-4">
-    {!formData.profileImageInfo ? (
-      <>
-        <button
-          className="px-4 py-2 bg-indigo-500 text-white rounded"
-          type="button"
-          onClick={() => fileInputRef2.current.click()}
-        >
-          Upload Photo
-        </button>
-        <input
-          type="file"
-          ref={fileInputRef2}
-          style={{ display: "none" }}
-          onChange={(e) => {
-            const file = e.target.files[0];
-            if (file) {
-              const ext = file.name.split('.').pop().toUpperCase();
-              setFormData((prev) => ({
-                ...prev,
-                profileImageInfo: {
-                  name: file.name,
-                  format: ext,
-                },
-                profileImage: file,
-              }));
-            }
-          }}
-        />
-      </>
-    ) : (
-      <div className="flex flex-col">
-        <span className="font-medium">{formData.profileImageInfo.name}</span>
-        <span className="text-xs text-gray-500">{formData.profileImageInfo.format}</span>
+ 
+      {/* Upload Profile Photo */}
+      <div className="mb-8">
+        <label className="font-medium">Upload Profile Photo*</label>
+        <div className="mt-2 flex items-center gap-4">
+          {!formData.profileImage ? (
+            <>
+              <button
+                className="px-4 py-2 bg-indigo-500 text-white rounded"
+                type="button"
+                onClick={() => fileInputRef2.current.click()}
+              >
+                Upload Photo
+              </button>
+              <input
+                type="file"
+                ref={fileInputRef2}
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        profileImage: reader.result, // Base64 string
+                      }));
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </>
+          ) : (
+            <div className="flex flex-col">
+              <img
+                src={formData.profileImage}
+                alt="Profile"
+                className="w-40 h-40 object-cover rounded-full border"
+              />
+              <button
+                type="button"
+                className="text-red-500 mt-2 text-sm"
+                onClick={() =>
+                  setFormData((prev) => ({ ...prev, profileImage: null }))
+                }
+              >
+                Remove
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    )}
-  </div>
-</div>
-
-          </>
-        );
-
+    </>
+  );
+ 
       case 6:
         return (
           <>
@@ -374,7 +399,7 @@ const StudentProfileForm = () => {
         return null;
     }
   };
-
+ 
   return (
     <div className="min-h-screen flex bg-gray-50">
       {/* Sidebar */}
@@ -394,11 +419,11 @@ const StudentProfileForm = () => {
           ))}
         </ul>
       </div>
-
+ 
       {/* Content */}
       <div className="flex-1 p-8 bg-white shadow-lg">
         {renderStepContent(currentStep)}
-
+ 
         <div className="mt-6 flex justify-between">
           {currentStep > 0 && (
             <button
@@ -421,5 +446,8 @@ const StudentProfileForm = () => {
     </div>
   );
 };
-
+ 
 export default StudentProfileForm;
+ 
+ 
+ 

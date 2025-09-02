@@ -114,7 +114,8 @@ const DepartmentPlacementKPI = ({
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Department-wise Placement Performance</h2>
+        <h2 className="text-xl font-semibold 
+text-gray-800 dark:text-white">Department-wise Placement Performance</h2>
         <div className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'} border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
           <div className="flex items-center px-3 py-2">
             <FilterIcon className="h-4 w-4 text-gray-500 mr-2" />

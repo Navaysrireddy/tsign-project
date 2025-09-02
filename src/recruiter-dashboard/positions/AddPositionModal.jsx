@@ -4,10 +4,10 @@ import  Modal  from '../ui/Modal';
 import  {useTheme } from '../context/ThemeContext';
 import { BriefcaseIcon, BuildingIcon, GraduationCapIcon, UsersIcon } from 'lucide-react';
  
-const AddPositionModal = ({ isOpen, onClose }) => {
+const AddPositionModal = ({ isOpen, onClose ,onAdd}) => {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
- 
+
   const [formData, setFormData] = useState({
     position: '',
     department: '',
@@ -17,7 +17,7 @@ const AddPositionModal = ({ isOpen, onClose }) => {
     requirements: '',
     deadline: ''
   });
- 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -25,28 +25,45 @@ const AddPositionModal = ({ isOpen, onClose }) => {
       [name]: value
     }));
   };
- 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Add position:', formData);
-    // Here you would typically save the position
-    onClose();
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  const newPosition = {
+    id: Date.now(), // unique ID
+    position: formData.position,   // job title
+    dept: formData.department,     // 🔹 map to dept (your PositionsView expects this)
+    course: formData.course,
+    openings: formData.openings,
+    description: formData.description,
+    requirements: formData.requirements,
+    deadline: formData.deadline,
+    status: 'Open', // default
   };
- 
+
+  console.log('Add position:', newPosition);
+
+  if (onAdd) {
+    onAdd(newPosition);
+  }
+
+  onClose();
+};
+
+
   const departments = [
     { value: 'Engineering', label: 'Engineering' },
     { value: 'Mechanical', label: 'Mechanical' },
     { value: 'Electrical', label: 'Electrical' },
     { value: 'Computer Science', label: 'Computer Science' }
   ];
- 
+
   const courses = {
     Engineering: ['CSE', 'ECE', 'IT'],
     'Computer Science': ['Business'],
     Mechanical: [],
     Electrical: []
   };
- 
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Add New Position" size="lg">
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -242,5 +259,5 @@ const AddPositionModal = ({ isOpen, onClose }) => {
     </Modal>
   );
 };
- 
+
 export default AddPositionModal;

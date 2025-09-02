@@ -1,1130 +1,755 @@
-// // import React, { useState, useEffect } from 'react';
-// // import { motion, AnimatePresence } from 'framer-motion';
-// // import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiSend, FiChevronRight } from 'react-icons/fi';
-// // // import { FaWhatsapp } from 'react-icons/fa';
-// // import './Contact.css';
-// // import Header from '../header/Header';
-// // import Footer from '../footer/Footer';
-// // // import contactImage from '../../assests/about-us-back.webp';
-// // import contactImage from '../../assests/healthy-hands.jpg';
-
-// // const Contact = () => {
-// //   const [formData, setFormData] = useState({
-// //     name: '',
-// //     email: '',
-// //     userType: '',
-// //     message: ''
-// //   });
-// //   const [errors, setErrors] = useState({});
-// //   const [isSubmitting, setIsSubmitting] = useState(false);
-// //   const [submitSuccess, setSubmitSuccess] = useState(false);
-// //   const [activeField, setActiveField] = useState(null);
-// //   const [showScrollTop, setShowScrollTop] = useState(false);
-
-// //   // Scroll to top visibility
-// //   useEffect(() => {
-// //     const handleScroll = () => {
-// //       if (window.pageYOffset > 300) {
-// //         setShowScrollTop(true);
-// //       } else {
-// //         setShowScrollTop(false);
-// //       }
-// //     };
-// //     window.addEventListener('scroll', handleScroll);
-// //     return () => window.removeEventListener('scroll', handleScroll);
-// //   }, []);
-
-// //   const handleChange = (e) => {
-// //     const { name, value } = e.target;
-// //     setFormData(prev => ({
-// //       ...prev,
-// //       [name]: value
-// //     }));
-// //     if (errors[name]) {
-// //       setErrors(prev => ({
-// //         ...prev,
-// //         [name]: null
-// //       }));
-// //     }
-// //   };
-
-// //   const validateForm = () => {
-// //     const newErrors = {};
-// //     if (!formData.name.trim()) newErrors.name = 'Name is required';
-// //     if (!formData.email.trim()) {
-// //       newErrors.email = 'Email is required';
-// //     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-// //       newErrors.email = 'Please enter a valid email';
-// //     }
-// //     if (!formData.userType) newErrors.userType = 'Please select user type';
-// //     if (!formData.message.trim()) newErrors.message = 'Message is required';
-
-// //     setErrors(newErrors);
-// //     return Object.keys(newErrors).length === 0;
-// //   };
-
-// //   const handleSubmit = (e) => {
-// //     e.preventDefault();
-// //     if (validateForm()) {
-// //       setIsSubmitting(true);
-// //       // Simulate API call
-// //       setTimeout(() => {
-// //         setIsSubmitting(false);
-// //         setSubmitSuccess(true);
-// //         setFormData({
-// //           name: '',
-// //           email: '',
-// //           userType: '',
-// //           message: ''
-// //         });
-// //         setTimeout(() => setSubmitSuccess(false), 5000);
-// //       }, 2000);
-// //     }
-// //   };
-
-// //   const scrollToTop = () => {
-// //     window.scrollTo({
-// //       top: 0,
-// //       behavior: 'smooth'
-// //     });
-// //   };
-
-// //   return (
-// //     <div className="contact-page">
-// //       {/* Hero Section */}
-// //       <Header/>
-// // <motion.section 
-// //   className="contact-hero"
-// //   initial={{ opacity: 0 }}
-// //   animate={{ opacity: 1 }}
-// //   transition={{ duration: 0.8 }}
-// //   style={{
-// //     background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${contactImage}) no-repeat center center`,
-// //     backgroundSize: 'cover'
-// //   }}
-// // >
-// //   <div className="hero-overlay"></div>
-// //   <div className="hero-content">
-// //     <motion.h1
-// //       initial={{ y: 30, opacity: 0 }}
-// //       animate={{ y: 0, opacity: 1 }}
-// //       transition={{ delay: 0.2, duration: 0.8 }}
-// //     >
-// //       Let's Build Your Future Amazing
-// //     </motion.h1>
-// //     <motion.p
-// //       initial={{ y: 30, opacity: 0 }}
-// //       animate={{ y: 0, opacity: 1 }}
-// //       transition={{ delay: 0.4, duration: 0.8 }}
-// //     >
-// //       We're excited to hear about your questions and we can help bring your vision to life.
-// //     </motion.p>
-// //   </div>
-// // </motion.section>
-
-// //       {/* Main Content */}
-// //       <div className="contact-container">
-// //         {/* Contact Form */}
-// //         <motion.div 
-// //           className="contact-form-section"
-// //           initial={{ opacity: 0, x: -50 }}
-// //           whileInView={{ opacity: 1, x: 0 }}
-// //           transition={{ duration: 0.8 }}
-// //           viewport={{ once: true }}
-// //         >
-// //           <div className="form-header">
-// //             <motion.h2
-// //               initial={{ opacity: 0 }}
-// //               whileInView={{ opacity: 1 }}
-// //               transition={{ delay: 0.2, duration: 0.6 }}
-// //               viewport={{ once: true }}
-// //             >
-// //               Get In Touch
-// //             </motion.h2>
-// //             <motion.p
-// //               initial={{ opacity: 0 }}
-// //               whileInView={{ opacity: 1 }}
-// //               transition={{ delay: 0.3, duration: 0.6 }}
-// //               viewport={{ once: true }}
-// //             >
-// //               Fill out the form below and our team will get back to you within 24 hours.
-// //             </motion.p>
-// //           </div>
-
-// //           <form onSubmit={handleSubmit} className="contact-form">
-// //             <div className={`form-group ${activeField === 'name' ? 'active' : ''} ${errors.name ? 'error' : ''}`}>
-// //               <label htmlFor="name">Your Name</label>
-// //               <input
-// //                 type="text"
-// //                 id="name"
-// //                 name="name"
-// //                 value={formData.name}
-// //                 onChange={handleChange}
-// //                 onFocus={() => setActiveField('name')}
-// //                 onBlur={() => setActiveField(null)}
-// //                 placeholder="Your Name"
-// //               />
-// //               {errors.name && <span className="error-message">{errors.name}</span>}
-// //             </div>
-
-// //             <div className={`form-group ${activeField === 'email' ? 'active' : ''} ${errors.email ? 'error' : ''}`}>
-// //               <label htmlFor="email">Email Address</label>
-// //               <input
-// //                 type="email"
-// //                 id="email"
-// //                 name="email"
-// //                 value={formData.email}
-// //                 onChange={handleChange}
-// //                 onFocus={() => setActiveField('email')}
-// //                 onBlur={() => setActiveField(null)}
-// //                 placeholder="Enter email"
-// //               />
-// //               {errors.email && <span className="error-message">{errors.email}</span>}
-// //             </div>
-
-// //             <div className={`form-group ${activeField === 'userType' ? 'active' : ''} ${errors.userType ? 'error' : ''}`}>
-// //               <label htmlFor="userType">I am a</label>
-// //               <select
-// //                 id="userType"
-// //                 name="userType"
-// //                 value={formData.userType}
-// //                 onChange={handleChange}
-// //                 onFocus={() => setActiveField('userType')}
-// //                 onBlur={() => setActiveField(null)}
-// //               >
-// //                 <option value="">Select an option</option>
-// //                 <option value="Student">Student</option>
-// //                 <option value="Professional">Professional</option>
-// //                 <option value="Business Owner">Business Owner</option>
-// //                 <option value="Other">Other</option>
-// //               </select>
-// //               {errors.userType && <span className="error-message">{errors.userType}</span>}
-// //             </div>
-
-// //             <div className={`form-group ${activeField === 'message' ? 'active' : ''} ${errors.message ? 'error' : ''}`}>
-// //               <label htmlFor="message">Your Message</label>
-// //               <textarea
-// //                 id="message"
-// //                 name="message"
-// //                 value={formData.message}
-// //                 onChange={handleChange}
-// //                 onFocus={() => setActiveField('message')}
-// //                 onBlur={() => setActiveField(null)}
-// //                 placeholder="Tell us about your project..."
-// //               ></textarea>
-// //               {errors.message && <span className="error-message">{errors.message}</span>}
-// //             </div>
-
-// //             <motion.button
-// //               type="submit"
-// //               className="submit-btn"
-// //               whileHover={{ scale: 1.02 }}
-// //               whileTap={{ scale: 0.98 }}
-// //               disabled={isSubmitting}
-// //             >
-// //               {isSubmitting ? (
-// //                 <span className="spinner"></span>
-// //               ) : (
-// //                 <>
-// //                   Send Message <FiSend className="send-icon" />
-// //                 </>
-// //               )}
-// //             </motion.button>
-
-// //             <AnimatePresence>
-// //               {submitSuccess && (
-// //                 <motion.div
-// //                   className="success-message"
-// //                   initial={{ opacity: 0, y: 20 }}
-// //                   animate={{ opacity: 1, y: 0 }}
-// //                   exit={{ opacity: 0, y: -20 }}
-// //                 >
-// //                   <svg viewBox="0 0 24 24">
-// //                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-// //                   </svg>
-// //                   Thank you! Your message has been sent successfully.
-// //                 </motion.div>
-// //               )}
-// //             </AnimatePresence>
-// //           </form>
-// //         </motion.div>
-
-// //         {/* Contact Info */}
-// //         <motion.div 
-// //           className="contact-info-section"
-// //           initial={{ opacity: 0, x: 50 }}
-// //           whileInView={{ opacity: 1, x: 0 }}
-// //           transition={{ duration: 0.8 }}
-// //           viewport={{ once: true }}
-// //         >
-// //           <div className="info-card">
-// //             <div className="info-icon">
-// //               <FiPhone />
-// //             </div>
-// //             <div className="info-content">
-// //               <h3>Phone</h3>
-// //               <p>+ 91 888 659 9438</p>
-// //               <a href="tel:+ 918886599438" className="contact-link">
-// //                 Call Now <FiChevronRight />
-// //               </a>
-// //             </div>
-// //           </div>
-
-// //           <div className="info-card">
-// //             <div className="info-icon">
-// //               <FiMail />
-// //             </div>
-// //             <div className="info-content">
-// //               <h3>Email</h3>
-// //               <p>hr@vidyardi.com</p>
-// //               <a href="mailto:contact@example.com" className="contact-link">
-// //                 Email Us <FiChevronRight />
-// //               </a>
-// //             </div>
-// //           </div>
-
-// //           <div className="info-card">
-// //             <div className="info-icon">
-// //               <FiMapPin />
-// //             </div>
-// //             <div className="info-content">
-// //               <h3>Location</h3>
-// //               <p>Ektha towers Ektha Towers,<br /> White Field Rd, Ashok Nagar <br />Golden Habitat Whitefields, <br />HITEC City, Hyderabad, Kondapur,<br /> Telangana 500084</p>
-// //               <a href="#map" className="contact-link">
-// //                 View Map <FiChevronRight />
-// //               </a>
-// //             </div>
-// //           </div>
-
-// //           <div className="info-card">
-// //             <div className="info-icon">
-// //               <FiLinkedin />
-// //             </div>
-// //             <div className="info-content">
-// //               <h3>LinkedIn</h3>
-// //               <p>Connect with our team</p>
-// //               <a href="https://linkedin.com/company" target="_blank" rel="noopener noreferrer" className="contact-link">
-// //                 Connect <FiChevronRight />
-// //               </a>
-// //             </div>
-// //           </div>
-// //         </motion.div>
-// //       </div>
-
-// //       {/* Map Section */}
-// //       {/* Map Section */}
-// // <motion.section 
-// //   id="map"
-// //   className="map-section"
-// //   initial={{ opacity: 0 }}
-// //   whileInView={{ opacity: 1 }}
-// //   transition={{ duration: 0.8 }}
-// //   viewport={{ once: true }}
-// // >
-// //   <div className="map-container">
-// //     <iframe
-// //       title="Vidyardi Pvt Ltd Location"
-// //       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3295.6609836803887!2d78.36169247440552!3d17.454125500880565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb966568bb921d%3A0x49af78aa4fc3b6e!2sVidyardi%20Pvt%20Ltd!5e1!3m2!1sen!2sin!4v1751543136483!5m2!1sen!2sin"
-// //       width="100%"
-// //       height="500"
-// //       style={{ border: 0 }}
-// //       allowFullScreen=""
-// //       loading="lazy"
-// //       referrerPolicy="no-referrer-when-downgrade"
-// //     ></iframe>
-// //   </div>
-// // </motion.section>
-
-// //       {/* Scroll to Top Button */}
-// //       <AnimatePresence>
-// //         {showScrollTop && (
-// //           <motion.button
-// //             className="scroll-top-btn"
-// //             onClick={scrollToTop}
-// //             initial={{ opacity: 0, y: 20 }}
-// //             animate={{ opacity: 1, y: 0 }}
-// //             exit={{ opacity: 0, y: 20 }}
-// //             whileHover={{ scale: 1.1 }}
-// //             whileTap={{ scale: 0.9 }}
-// //           >
-// //             <svg viewBox="0 0 24 24">
-// //               <path d="M7 15l5-5 5 5" />
-// //             </svg>
-// //           </motion.button>
-// //         )}
-// //       </AnimatePresence>
-// //       <Footer/>
-// //     </div>
-// //   );
-// // };
-
-// // export default Contact;
-
-
-
-
-// // import React from "react";
-// // import "./Contact.css";
-// // import Header from "../header/Header";
-// // import Footer from "../footer/Footer";
-// // import heroImage from "../../assets/image-4.jpg"; // Replace with your image
-
-// // const Contact = () => {
-// //   return (
-// //     <div className="contact-page">
-// //       <Header />
-
-// //      {/* Hero Section */}
-// // <section className="contact-hero">
-// //   <div className="hero-content">
-// //     <h1>
-// //       Welcome to <span>T-SIGN</span>
-// //     </h1>
-// //     <p>
-// //       Simplifying student identity, credential verification, and recruitment
-// //       for a future-ready digital ecosystem.
-// //     </p>
-// //     <div className="hero-buttons">
-// //       <button className="primary-btn">Get Started</button>
-// //       <button className="secondary-btn">Learn More</button>
-// //     </div>
-// //   </div>
-// //   <div className="hero-image">
-// //     <img
-// //       src={heroImage}
-// //       alt="Empower Education with T-SIGN"
-// //     />
-// //   </div>
-// // </section>
-
-
-// //      {/* Expertise Section */}
-// // <section className="expertise-section">
-// //   <h2>Our Expertise</h2>
-// //   <div className="expertise-cards">
-// //     <div className="expertise-card">
-// //       <div className="icon">🛡</div>
-// //       <h3>Secure Digital Identities</h3>
-// //       <p>
-// //         Empower students with verified digital IDs that simplify enrollment,
-// //         access to services, and career readiness.
-// //       </p>
-// //     </div>
-// //     <div className="expertise-card">
-// //       <div className="icon">🏫</div>
-// //       <h3>College Enablement</h3>
-// //       <p>
-// //         Provide institutions with tools to issue credentials, manage student
-// //         records, and ensure compliance effortlessly.
-// //       </p>
-// //     </div>
-// //     <div className="expertise-card">
-// //       <div className="icon">💼</div>
-// //       <h3>Recruitment Integration</h3>
-// //       <p>
-// //         Connect verified student profiles with recruiters for faster,
-// //         trusted hiring and onboarding processes.
-// //       </p>
-// //     </div>
-// //   </div>
-// // </section>
-
-
-// //     {/* Contact Form Section */}
-// // <section className="form-section">
-// //   <h2>Get in Touch with T-SIGN</h2>
-// //   <p>
-// //     Whether you’re a student, college, or recruiter, we’re here to help you make the most of digital credentials.
-// //   </p>
-// //   <form className="contact-form">
-// //     <div className="form-row">
-// //       <input type="text" placeholder="First Name" required />
-// //       <input type="text" placeholder="Last Name" required />
-// //     </div>
-// //     <div className="form-row">
-// //       <input type="email" placeholder="Email Address" required />
-// //       <input type="tel" placeholder="Phone Number" />
-// //     </div>
-// //     <div className="form-row">
-// //       <select required>
-// //         <option value="">I am a...</option>
-// //         <option value="student">Student</option>
-// //         <option value="college">College Representative</option>
-// //         <option value="recruiter">Recruiter / Employer</option>
-// //         <option value="other">Other</option>
-// //       </select>
-// //     </div>
-// //     <textarea
-// //       placeholder="Please describe your requirements or questions..."
-// //     ></textarea>
-// //     <div className="form-row">
-// //       <select>
-// //         <option value="">Area of Interest</option>
-// //         <option value="verification">Identity Verification & Credentials</option>
-// //         <option value="enrollment">College Enrollment Solutions</option>
-// //         <option value="recruitment">Recruitment & Placements</option>
-// //         <option value="partnership">Partnership Opportunities</option>
-// //         <option value="support">Technical Support</option>
-// //       </select>
-// //     </div>
-// //     <button type="submit" className="submit-btn">
-// //       Send Message
-// //     </button>
-// //   </form>
-// // </section>
-
-
-// //       {/* Embedded Map Section */}
-// //       <section className="map-section">
-// //         <iframe
-// //           title="T-SIGN Office Location"
-// //           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3794.698073036828!2d78.362!3d17.453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93c7b5299b7b%3A0xa6e7e79d255d7cdf!2sEktha%20Towers%2C%20Whitefields%2C%20Hyderabad!5e0!3m2!1sen!2sin!4v1749022319448!5m2!1sen!2sin"
-// //           width="100%"
-// //           height="400"
-// //           style={{ border: 0 }}
-// //           allowFullScreen=""
-// //           loading="lazy"
-// //           referrerPolicy="no-referrer-when-downgrade"
-// //         ></iframe>
-// //       </section>
-
-     
-// //       <Footer />
-// //     </div>
-// //   );
-// // };
-
-// // export default Contact;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useState } from "react";
-// import "./Contact.css";
-// import Header from "../header/Header";
-// import Footer from "../footer/Footer";
-
-// const Contact = () => {
-//   const [formData, setFormData] = useState({
-//     firstName: "",
-//     lastName: "",
-//     email: "",
-//     phone: "",
-//     role: "",
-//     interest: "",
-//     message: ""
-//   });
-  
-//   const [isSubmitting, setIsSubmitting] = useState(false);
-//   const [submitSuccess, setSubmitSuccess] = useState(false);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData(prev => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     setIsSubmitting(true);
-    
-//     // Simulate form submission
-//     setTimeout(() => {
-//       setIsSubmitting(false);
-//       setSubmitSuccess(true);
-//       setFormData({
-//         firstName: "",
-//         lastName: "",
-//         email: "",
-//         phone: "",
-//         role: "",
-//         interest: "",
-//         message: ""
-//       });
-      
-//       // Reset success message after 5 seconds
-//       setTimeout(() => setSubmitSuccess(false), 5000);
-//     }, 1500);
-//   };
-
-//   return (
-//     <div className="contact-page">
-//       <Header />
-      
-//       {/* Hero Section */}
-//       <section className="contact-hero">
-//         <div className="hero-content">
-//           <h1>
-//             Welcome to <br/>
-//             <span>T-SIGN</span>
-//           </h1>
-//           <p>
-//             Simplifying student identity, credential verification, and recruitment
-//             for a future-ready digital ecosystem.
-//           </p>
-//           <div className="hero-buttons">
-//             <button className="primary-btn">Get Started</button>
-//             <button className="secondary-btn">Learn More</button>
-//           </div>
-//         </div>
-//         <div className="hero-image">
-//           <div className="hero-graphic">
-//             <div className="graphic-circle"></div>
-//             <div className="graphic-element">🎓</div>
-//             <div className="graphic-element">📄</div>
-//             <div className="graphic-element">💼</div>
-//           </div>
-//         </div>
-//       </section>
-      
-//       {/* Expertise Section */}
-//       <section className="expertise-section">
-//         <div className="section-header">
-//           <h2>Our Expertise</h2>
-//           <p>Empowering education through secure digital solutions</p>
-//         </div>
-//         <div className="expertise-cards">
-//           <div className="expertise-card">
-//             <div className="card-icon">🛡</div>
-//             <h3>Secure Digital Identities</h3>
-//             <p>
-//               Empower students with verified digital IDs that simplify enrollment,
-//               access to services, and career readiness.
-//             </p>
-//           </div>
-//           <div className="expertise-card">
-//             <div className="card-icon">🏫</div>
-//             <h3>College Enablement</h3>
-//             <p>
-//               Provide institutions with tools to issue credentials, manage student
-//               records, and ensure compliance effortlessly.
-//             </p>
-//           </div>
-//           <div className="expertise-card">
-//             <div className="card-icon">💼</div>
-//             <h3>Recruitment Integration</h3>
-//             <p>
-//               Connect verified student profiles with recruiters for faster,
-//               trusted hiring and onboarding processes.
-//             </p>
-//           </div>
-//         </div>
-//       </section>
-      
-//       {/* Contact Form Section */}
-//       <section className="form-section">
-//         <div className="form-container">
-//           <div className="form-content">
-//             <div className="form-header">
-//               <h2>Get in Touch with T-SIGN</h2>
-//               <p>
-//                 Whether you're a student, college, or recruiter, we're here to help you make the most of digital credentials.
-//               </p>
-//             </div>
-            
-//             {submitSuccess && (
-//               <div className="success-message">
-//                 Thank you for your message! Our team will contact you shortly.
-//               </div>
-//             )}
-            
-//             <form className="contact-form" onSubmit={handleSubmit}>
-//               <div className="form-row">
-//                 <div className="form-group">
-//                   <label htmlFor="firstName">First Name</label>
-//                   <input 
-//                     type="text" 
-//                     id="firstName" 
-//                     name="firstName" 
-//                     value={formData.firstName} 
-//                     onChange={handleChange} 
-//                     required 
-//                     placeholder="John" 
-//                   />
-//                 </div>
-//                 <div className="form-group">
-//                   <label htmlFor="lastName">Last Name</label>
-//                   <input 
-//                     type="text" 
-//                     id="lastName" 
-//                     name="lastName" 
-//                     value={formData.lastName} 
-//                     onChange={handleChange} 
-//                     required 
-//                     placeholder="Smith" 
-//                   />
-//                 </div>
-//               </div>
-              
-//               <div className="form-row">
-//                 <div className="form-group">
-//                   <label htmlFor="email">Email Address</label>
-//                   <input 
-//                     type="email" 
-//                     id="email" 
-//                     name="email" 
-//                     value={formData.email} 
-//                     onChange={handleChange} 
-//                     required 
-//                     placeholder="john@institution.edu" 
-//                   />
-//                 </div>
-//                 <div className="form-group">
-//                   <label htmlFor="phone">Phone Number</label>
-//                   <input 
-//                     type="tel" 
-//                     id="phone" 
-//                     name="phone" 
-//                     value={formData.phone} 
-//                     onChange={handleChange} 
-//                     placeholder="(123) 456-7890" 
-//                   />
-//                 </div>
-//               </div>
-              
-//               <div className="form-row">
-//                 <div className="form-group">
-//                   <label htmlFor="role">I am a...</label>
-//                   <select 
-//                     id="role" 
-//                     name="role" 
-//                     value={formData.role} 
-//                     onChange={handleChange} 
-//                     required
-//                   >
-//                     <option value="">Select your role</option>
-//                     <option value="student">Student</option>
-//                     <option value="college">College Representative</option>
-//                     <option value="recruiter">Recruiter / Employer</option>
-//                     <option value="other">Other</option>
-//                   </select>
-//                 </div>
-//               </div>
-              
-//               <div className="form-group">
-//                 <label htmlFor="message">Your Message</label>
-//                 <textarea 
-//                   id="message" 
-//                   name="message" 
-//                   value={formData.message} 
-//                   onChange={handleChange} 
-//                   required 
-//                   rows="5" 
-//                   placeholder="Please describe your requirements or questions..."
-//                 ></textarea>
-//               </div>
-              
-//               <div className="form-row">
-//                 <div className="form-group">
-//                   <label htmlFor="interest">Area of Interest</label>
-//                   <select 
-//                     id="interest" 
-//                     name="interest" 
-//                     value={formData.interest} 
-//                     onChange={handleChange}
-//                   >
-//                     <option value="">Select area of interest</option>
-//                     <option value="verification">Identity Verification & Credentials</option>
-//                     <option value="enrollment">College Enrollment Solutions</option>
-//                     <option value="recruitment">Recruitment & Placements</option>
-//                     <option value="partnership">Partnership Opportunities</option>
-//                     <option value="support">Technical Support</option>
-//                   </select>
-//                 </div>
-//               </div>
-              
-//               <button 
-//                 type="submit" 
-//                 className="submit-btn"
-//                 disabled={isSubmitting}
-//               >
-//                 {isSubmitting ? 'Sending...' : 'Send Message'}
-//               </button>
-//             </form>
-//           </div>
-          
-//           <div className="contact-info">
-//             <div className="info-card">
-//               <h3>Contact Information</h3>
-//               <div className="info-item">
-//                 <div className="info-icon">📍</div>
-//                 <div className="info-detail">
-//                   5th Floor Ektha Towers,<br />
-//                   White Field Rd, Ashok Nagar,<br />
-//                   Golden Habitat Whitefields,<br />
-//                   HITEC City, Hyderabad,<br />
-//                   Kondapur, Telangana 500084
-//                 </div>
-//               </div>
-//               <div className="info-item">
-//                 <div className="info-icon">📧</div>
-//                 <div className="info-detail">
-//                   contact@vidyardi.com<br />
-//                   info@vidyardi.com
-//                 </div>
-//               </div>
-//               <div className="info-item">
-//                 <div className="info-icon">📞</div>
-//                 <div className="info-detail">
-//                   +1 (800) EDU-VERIFY<br />
-//                   +1 (800) T-SIGN-SALE
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </section>
-      
-//       {/* Map Section */}
-//       <section className="map-section">
-//         <h2>Our Location</h2>
-//         <div className="map-container">
-//           <iframe
-//             title="T-SIGN Office Location"
-//             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3794.698073036828!2d78.362!3d17.453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93c7b5299b7b%3A0xa6e7e79d255d7cdf!2sEktha%20Towers%2C%20Whitefields%2C%20Hyderabad!5e0!3m2!1sen!2sin!4v1749022319448!5m2!1sen!2sin"
-//             width="100%"
-//             height="400"
-//             style={{ border: 0 }}
-//             allowFullScreen=""
-//             loading="lazy"
-//             referrerPolicy="no-referrer-when-downgrade"
-//           ></iframe>
-//         </div>
-//       </section>
-      
-//       <Footer />
-//     </div>
-//   );
-// };
-
-// export default Contact;
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState } from "react";
-import "./Contact.css";
-import Header from "../header/Header";
-import Footer from "../footer/Footer";
-import service1 from "../../assests/image.png";
-import service2 from "../../assests/image copy.png";
-import service3 from "../../assests/image copy 2.png";
 
+import Header from "../header/Header";
+
+import Footer from "../footer/Footer";
+
+ 
 
 const Contact = () => {
+
   const [formData, setFormData] = useState({
+
     firstName: "",
+
     lastName: "",
+
     email: "",
+
     phone: "",
+
     role: "",
+
     interest: "",
+
     message: ""
+
   });
-  
+
+ 
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
+ 
+
   const handleChange = (e) => {
+
     const { name, value } = e.target;
+
     setFormData(prev => ({ ...prev, [name]: value }));
+
   };
+
+ 
 
   const handleSubmit = (e) => {
+
     e.preventDefault();
+
     setIsSubmitting(true);
-    
+
+   
+
     // Simulate form submission
+
     setTimeout(() => {
+
       setIsSubmitting(false);
+
       setSubmitSuccess(true);
+
       setFormData({
+
         firstName: "",
+
         lastName: "",
+
         email: "",
+
         phone: "",
+
         role: "",
+
         interest: "",
+
         message: ""
+
       });
-      
+
+     
+
       // Reset success message after 5 seconds
+
       setTimeout(() => setSubmitSuccess(false), 5000);
+
     }, 1500);
+
   };
 
+ 
+
   return (
-    <div className="contact-page">
+
+    <div className="min-h-screen bg-[#f9fbfd] text-[#1e293b] font-inter">
+
       <Header />
-      
+
+     
+
       {/* Hero Section */}
-      <section className="contact-hero">
-        <div className="hero-content">
-          <h1>
-            Welcome to <span>T-SIGN</span>
+
+      <section className="relative flex items-center px-[8%] py-24 bg-gradient-to-br from-[#f0f9ff] to-[#e0f2fe] overflow-hidden">
+
+        <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] rounded-full bg-radial-circle"></div>
+
+       
+
+        <div className="flex-1 max-w-[600px] z-10">
+
+          <h1 className="text-5xl font-extrabold leading-tight mb-6">
+
+            Welcome to <span className="bg-gradient-to-r from-[#4f46e5] to-[#4338ca] bg-clip-text text-transparent">T-SIGN</span>
+
           </h1>
-          <p>
+
+          <p className="text-xl text-[#64748b] mb-8 leading-relaxed">
+
             Simplifying student identity, credential verification, and recruitment
+
             for a future-ready digital ecosystem.
+
           </p>
-          <div className="hero-buttons">
-            <button className="primary-btn">Get Started</button>
-            <button className="secondary-btn">Learn More</button>
+
+          <div className="flex gap-4">
+
+            <button className="px-8 py-3.5 rounded-lg bg-gradient-to-br from-[#4f46e5] to-[#4338ca] text-white font-semibold shadow-lg shadow-[#4f46e54d] hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#4f46e566] transition-all duration-300">
+
+              Get Started
+
+            </button>
+
+            <button className="px-8 py-3.5 rounded-lg border-2 border-[#4f46e5] text-[#4f46e5] font-semibold hover:bg-[#4f46e50d] transition-colors duration-300">
+
+              Learn More
+
+            </button>
+
           </div>
+
         </div>
-        <div className="hero-image">
-          <div className="hero-graphic">
-            <div className="graphic-circle"></div>
-            <div className="graphic-element">🎓</div>
-            <div className="graphic-element">📄</div>
-            <div className="graphic-element">💼</div>
+
+       
+
+        <div className="flex-1 flex justify-center relative">
+
+          <div className="relative w-[500px] h-[400px]">
+
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-gradient-to-br from-[#4f46e51a] to-[#4f46e500] animate-pulse-slow"></div>
+
+            <div className="absolute top-[20%] left-[20%] w-[90px] h-[90px] rounded-full bg-white flex items-center justify-center text-5xl shadow-lg animate-float">
+
+              🎓
+
+            </div>
+
+            <div className="absolute top-[20%] right-[20%] w-[90px] h-[90px] rounded-full bg-white flex items-center justify-center text-5xl shadow-lg animate-float animation-delay-1000">
+
+              📄
+
+            </div>
+
+            <div className="absolute bottom-[20%] left-1/2 transform -translate-x-1/2 w-[90px] h-[90px] rounded-full bg-white flex items-center justify-center text-5xl shadow-lg animate-float animation-delay-2000">
+
+              💼
+
+            </div>
+
           </div>
+
         </div>
+
       </section>
-      
+
+     
+
       {/* Expertise Section */}
-      <section className="expertise-section">
-        <div className="section-header">
-          <h2>Our Expertise</h2>
-          <p>Empowering education through secure digital solutions</p>
+
+      <section className="px-[8%] py-24 bg-white">
+
+        <div className="max-w-[700px] mx-auto text-center mb-16">
+
+          <h2 className="text-4xl font-bold mb-4">Our Expertise</h2>
+
+          <p className="text-lg text-[#64748b] leading-relaxed">
+
+            Empowering education through secure digital solutions
+
+          </p>
+
         </div>
-        <div className="expertise-cards">
-          <div className="expertise-card">
-            <div className="card-icon"><img className="service-imgs" src={service1} alt="" /></div>
-            <h3>Secure Digital Identities for Students</h3>
-            <p>
-              Equip institutions with the vital tools necessary to effortlessly issue credentials,manage student records, and maintain compliance.
+
+       
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1200px] mx-auto">
+
+          <div className="bg-[#f9fbfd] rounded-2xl p-10 text-center shadow-lg shadow-[#0000000d] border border-[#e2e8f0] hover:-translate-y-2 hover:shadow-xl hover:shadow-[#4f46e51a] transition-all duration-300">
+
+            <div className="text-5xl mb-6">🛡</div>
+
+            <h3 className="text-2xl mb-4">Secure Digital Identities</h3>
+
+            <p className="text-[#64748b] leading-relaxed">
+
+              Empower students with verified digital IDs that simplify enrollment,
+
+              access to services, and career readiness.
+
             </p>
+
           </div>
-          <div className="expertise-card">
-            <div className="card-icon"><img className="service-imgs" src={service2} alt="" /> </div>
-            <h3>College Enablement</h3>
-            <p>
-                Empower students by providing verified digital IDs that streamline enrollment, facilitate access to services, and enhance career readiness.
+
+         
+
+          <div className="bg-[#f9fbfd] rounded-2xl p-10 text-center shadow-lg shadow-[#0000000d] border border-[#e2e8f0] hover:-translate-y-2 hover:shadow-xl hover:shadow-[#4f46e51a] transition-all duration-300">
+
+            <div className="text-5xl mb-6">🏫</div>
+
+            <h3 className="text-2xl mb-4">College Enablement</h3>
+
+            <p className="text-[#64748b] leading-relaxed">
+
+              Provide institutions with tools to issue credentials, manage student
+
+              records, and ensure compliance effortlessly.
+
             </p>
+
           </div>
-          <div className="expertise-card">
-            <div className="card-icon"><img className="service-imgs" src={service3} alt="" /> </div>
-            <h3>Recruitment Integration</h3>
-            <p>
-              Connect verified student profiles with recruiters to facilitate quicker and more reliable
-               hiring and onboarding processes.
+
+         
+
+          <div className="bg-[#f9fbfd] rounded-2xl p-10 text-center shadow-lg shadow-[#0000000d] border border-[#e2e8f0] hover:-translate-y-2 hover:shadow-xl hover:shadow-[#4f46e51a] transition-all duration-300">
+
+            <div className="text-5xl mb-6">💼</div>
+
+            <h3 className="text-2xl mb-4">Recruitment Integration</h3>
+
+            <p className="text-[#64748b] leading-relaxed">
+
+              Connect verified student profiles with recruiters for faster,
+
+              trusted hiring and onboarding processes.
+
             </p>
+
           </div>
+
         </div>
+
       </section>
-      
+
+     
+
       {/* Contact Form Section */}
-      <section className="form-section">
-        <div className="form-container">
-          <div className="form-content">
-            <div className="form-header">
-              <h2>Get in Touch with T-SIGN</h2>
-              <p>
+
+      <section className="px-[8%] py-24 bg-gradient-to-br from-[#f0f9ff] to-[#e0f2fe]">
+
+        <div className="flex flex-col lg:flex-row max-w-[1200px] mx-auto bg-white rounded-2xl overflow-hidden shadow-xl shadow-[#0000001a]">
+
+          <div className="flex-1 p-12">
+
+            <div className="mb-8">
+
+              <h2 className="text-3xl font-bold mb-4">Get in Touch with T-SIGN</h2>
+
+              <p className="text-[#64748b] leading-relaxed">
+
                 Whether you're a student, college, or recruiter, we're here to help you make the most of digital credentials.
+
               </p>
+
             </div>
-            
+
+           
+
             {submitSuccess && (
-              <div className="success-message">
+
+              <div className="bg-[#10b981] text-white p-4 rounded-lg mb-6 text-center font-medium">
+
                 Thank you for your message! Our team will contact you shortly.
+
               </div>
+
             )}
-            
-            <form className="contact-form" onSubmit={handleSubmit}>
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="firstName">First Name</label>
-                  <input 
-                    type="text" 
-                    id="firstName" 
-                    name="firstName" 
-                    value={formData.firstName} 
-                    onChange={handleChange} 
-                    required 
-                    placeholder="John" 
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="lastName">Last Name</label>
-                  <input 
-                    type="text" 
-                    id="lastName" 
-                    name="lastName" 
-                    value={formData.lastName} 
-                    onChange={handleChange} 
-                    required 
-                    placeholder="Smith" 
-                  />
-                </div>
-              </div>
-              
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="email">Email Address</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    value={formData.email} 
-                    onChange={handleChange} 
-                    required 
-                    placeholder="john@institution.edu" 
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="phone">Phone Number</label>
-                  <input 
-                    type="tel" 
-                    id="phone" 
-                    name="phone" 
-                    value={formData.phone} 
-                    onChange={handleChange} 
-                    placeholder="(123) 456-7890" 
-                  />
-                </div>
-              </div>
-              
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="role">I am a...</label>
-                  <select 
-                    id="role" 
-                    name="role" 
-                    value={formData.role} 
-                    onChange={handleChange} 
-                    required
-                  >
-                    <option value="">Select your role</option>
-                    <option value="student">Student</option>
-                    <option value="college">College Representative</option>
-                    <option value="recruiter">Recruiter / Employer</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="message">Your Message</label>
-                <textarea 
-                  id="message" 
-                  name="message" 
-                  value={formData.message} 
-                  onChange={handleChange} 
-                  required 
-                  rows="5" 
-                  placeholder="Please describe your requirements or questions..."
-                ></textarea>
-              </div>
-              
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="interest">Area of Interest</label>
-                  <select 
-                    id="interest" 
-                    name="interest" 
-                    value={formData.interest} 
+
+           
+
+            <form className="flex flex-col" onSubmit={handleSubmit}>
+
+              <div className="flex flex-col md:flex-row gap-6 mb-6">
+
+                <div className="flex-1 mb-4">
+
+                  <label htmlFor="firstName" className="block font-medium mb-2">First Name</label>
+
+                  <input
+
+                    type="text"
+
+                    id="firstName"
+
+                    name="firstName"
+
+                    value={formData.firstName}
+
                     onChange={handleChange}
+
+                    required
+
+                    placeholder="John"
+
+                    className="w-full p-4 border border-[#e2e8f0] rounded-lg focus:outline-none focus:border-[#4f46e5] focus:ring-3 focus:ring-[#4f46e51a] transition-all duration-300"
+
+                  />
+
+                </div>
+
+                <div className="flex-1 mb-4">
+
+                  <label htmlFor="lastName" className="block font-medium mb-2">Last Name</label>
+
+                  <input
+
+                    type="text"
+
+                    id="lastName"
+
+                    name="lastName"
+
+                    value={formData.lastName}
+
+                    onChange={handleChange}
+
+                    required
+
+                    placeholder="Smith"
+
+                    className="w-full p-4 border border-[#e2e8f0] rounded-lg focus:outline-none focus:border-[#4f46e5] focus:ring-3 focus:ring-[#4f46e51a] transition-all duration-300"
+
+                  />
+
+                </div>
+
+              </div>
+
+             
+
+              <div className="flex flex-col md:flex-row gap-6 mb-6">
+
+                <div className="flex-1 mb-4">
+
+                  <label htmlFor="email" className="block font-medium mb-2">Email Address</label>
+
+                  <input
+
+                    type="email"
+
+                    id="email"
+
+                    name="email"
+
+                    value={formData.email}
+
+                    onChange={handleChange}
+
+                    required
+
+                    placeholder="john@institution.edu"
+
+                    className="w-full p-4 border border-[#e2e8f0] rounded-lg focus:outline-none focus:border-[#4f46e5] focus:ring-3 focus:ring-[#4f46e51a] transition-all duration-300"
+
+                  />
+
+                </div>
+
+                <div className="flex-1 mb-4">
+
+                  <label htmlFor="phone" className="block font-medium mb-2">Phone Number</label>
+
+                  <input
+
+                    type="tel"
+
+                    id="phone"
+
+                    name="phone"
+
+                    value={formData.phone}
+
+                    onChange={handleChange}
+
+                    placeholder="(123) 456-7890"
+
+                    className="w-full p-4 border border-[#e2e8f0] rounded-lg focus:outline-none focus:border-[#4f46e5] focus:ring-3 focus:ring-[#4f46e51a] transition-all duration-300"
+
+                  />
+
+                </div>
+
+              </div>
+
+             
+
+              <div className="mb-6">
+
+                <div className="flex-1 mb-4">
+
+                  <label htmlFor="role" className="block font-medium mb-2">I am a...</label>
+
+                  <select
+
+                    id="role"
+
+                    name="role"
+
+                    value={formData.role}
+
+                    onChange={handleChange}
+
+                    required
+
+                    className="w-full p-4 border border-[#e2e8f0] rounded-lg focus:outline-none focus:border-[#4f46e5] focus:ring-3 focus:ring-[#4f46e51a] transition-all duration-300"
+
                   >
-                    <option value="">Select area of interest</option>
-                    <option value="verification">Identity Verification & Credentials</option>
-                    <option value="enrollment">College Enrollment Solutions</option>
-                    <option value="recruitment">Recruitment & Placements</option>
-                    <option value="partnership">Partnership Opportunities</option>
-                    <option value="support">Technical Support</option>
+
+                    <option value="">Select your role</option>
+
+                    <option value="student">Student</option>
+
+                    <option value="college">College Representative</option>
+
+                    <option value="recruiter">Recruiter / Employer</option>
+
+                    <option value="other">Other</option>
+
                   </select>
+
                 </div>
+
               </div>
-              
-              <button 
-                type="submit" 
-                className="submit-btn"
+
+             
+
+              <div className="mb-6">
+
+                <label htmlFor="message" className="block font-medium mb-2">Your Message</label>
+
+                <textarea
+
+                  id="message"
+
+                  name="message"
+
+                  value={formData.message}
+
+                  onChange={handleChange}
+
+                  required
+
+                  rows="5"
+
+                  placeholder="Please describe your requirements or questions..."
+
+                  className="w-full p-4 border border-[#e2e8f0] rounded-lg focus:outline-none focus:border-[#4f46e5] focus:ring-3 focus:ring-[#4f46e51a] transition-all duration-300 min-h-[120px]"
+
+                ></textarea>
+
+              </div>
+
+             
+
+              <div className="mb-6">
+
+                <div className="flex-1 mb-4">
+
+                  <label htmlFor="interest" className="block font-medium mb-2">Area of Interest</label>
+
+                  <select
+
+                    id="interest"
+
+                    name="interest"
+
+                    value={formData.interest}
+
+                    onChange={handleChange}
+
+                    className="w-full p-4 border border-[#e2e8f0] rounded-lg focus:outline-none focus:border-[#4f46e5] focus:ring-3 focus:ring-[#4f46e51a] transition-all duration-300"
+
+                  >
+
+                    <option value="">Select area of interest</option>
+
+                    <option value="verification">Identity Verification & Credentials</option>
+
+                    <option value="enrollment">College Enrollment Solutions</option>
+
+                    <option value="recruitment">Recruitment & Placements</option>
+
+                    <option value="partnership">Partnership Opportunities</option>
+
+                    <option value="support">Technical Support</option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
+             
+
+              <button
+
+                type="submit"
+
+                className="w-full p-4 rounded-lg bg-gradient-to-br from-[#4f46e5] to-[#4338ca] text-white font-semibold text-lg hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#4f46e566] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+
                 disabled={isSubmitting}
+
               >
+
                 {isSubmitting ? 'Sending...' : 'Send Message'}
+
               </button>
+
             </form>
+
           </div>
-          
-          <div className="contact-info">
-            <div className="info-card">
-              <h3>Contact Information</h3>
-              <div className="info-item">
-                <div className="info-icon">📍</div>
-                <div className="info-detail">
+
+         
+
+          <div className="flex-1 bg-gradient-to-br from-[#716afc] to-[#50259a] text-white p-12 flex items-center">
+
+            <div className="w-full">
+
+              <h3 className="text-2xl font-bold mb-8 relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-white after:rounded">Contact Information</h3>
+
+             
+
+              <div className="flex gap-4 items-start mb-6">
+
+                <div className="text-2xl mt-1">📍</div>
+
+                <div className="leading-relaxed">
+
                   5th Floor Ektha Towers,<br />
+
                   White Field Rd, Ashok Nagar,<br />
+
                   Golden Habitat Whitefields,<br />
+
                   HITEC City, Hyderabad,<br />
+
                   Kondapur, Telangana 500084
+
                 </div>
+
               </div>
-              <div className="info-item">
-                <div className="info-icon">📧</div>
-                <div className="info-detail">
+
+             
+
+              <div className="flex gap-4 items-start mb-6">
+
+                <div className="text-2xl mt-1">📧</div>
+
+                <div className="leading-relaxed">
+
                   contact@vidyardi.com<br />
+
                   info@vidyardi.com
+
                 </div>
+
               </div>
-              <div className="info-item">
-                <div className="info-icon">📞</div>
-                <div className="info-detail">
+
+             
+
+              <div className="flex gap-4 items-start">
+
+                <div className="text-2xl mt-1">📞</div>
+
+                <div className="leading-relaxed">
+
                   +1 (800) EDU-VERIFY<br />
+
                   +1 (800) T-SIGN-SALE
+
                 </div>
+
               </div>
+
             </div>
+
           </div>
+
         </div>
+
       </section>
-      
+
+     
+
       {/* Map Section */}
-      <section className="map-section">
-        <h2>Our Location</h2>
-        <div className="map-container">
+
+      <section className="px-[8%] py-24 bg-white text-center">
+
+        <h2 className="text-4xl font-bold mb-4">Our Location</h2>
+
+       
+
+        <div className="max-w-[1200px] mx-auto mt-8 rounded-2xl overflow-hidden shadow-xl shadow-[#0000001a]">
+
           <iframe
+
             title="T-SIGN Office Location"
+
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3794.698073036828!2d78.362!3d17.453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93c7b5299b7b%3A0xa6e7e79d255d7cdf!2sEktha%20Towers%2C%20Whitefields%2C%20Hyderabad!5e0!3m2!1sen!2sin!4v1749022319448!5m2!1sen!2sin"
+
             width="100%"
+
             height="400"
+
             style={{ border: 0 }}
+
             allowFullScreen=""
+
             loading="lazy"
+
             referrerPolicy="no-referrer-when-downgrade"
+
           ></iframe>
+
         </div>
+
       </section>
-      
+
+     
+
       <Footer />
+
+     
+
+      <style jsx>{`
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+       
+
+        .font-inter {
+
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+        }
+
+       
+
+        .bg-radial-circle {
+
+          background: radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, rgba(79, 70, 229, 0) 70%);
+
+        }
+
+       
+
+        @keyframes pulse-slow {
+
+          0% { transform: translate(-50%, -50%) scale(1); }
+
+          50% { transform: translate(-50%, -50%) scale(1.1); }
+
+          100% { transform: translate(-50%, -50%) scale(1); }
+
+        }
+
+       
+
+        .animate-pulse-slow {
+
+          animation: pulse-slow 8s infinite;
+
+        }
+
+       
+
+        @keyframes float {
+
+          0% { transform: translateY(0); }
+
+          50% { transform: translateY(-20px); }
+
+          100% { transform: translateY(0); }
+
+        }
+
+       
+
+        .animate-float {
+
+          animation: float 6s ease-in-out infinite;
+
+        }
+
+       
+
+        .animation-delay-1000 {
+
+          animation-delay: 1s;
+
+        }
+
+       
+
+        .animation-delay-2000 {
+
+          animation-delay: 2s;
+
+        }
+
+       
+
+        @media (max-width: 900px) {
+
+          .px-[8%] {
+
+            padding-left: 5%;
+
+            padding-right: 5%;
+
+          }
+
+        }
+
+       
+
+        @media (max-width: 600px) {
+
+          .text-5xl {
+
+            font-size: 2.5rem;
+
+          }
+
+        }
+
+      `}</style>
+
     </div>
+
   );
+
 };
+
+ 
 
 export default Contact;

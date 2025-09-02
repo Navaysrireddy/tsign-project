@@ -50,7 +50,7 @@ const ManageColleges: React.FC = () => {
             theme === 'dark' ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-gray-200'
           }`}
         >
-          <h3 className="text-sm font-medium text-gray-500">Active</h3>
+          <h3 className="text-sm font-medium text-gray-500">A</h3>
           <p className="text-2xl font-semibold mt-1">{collegeManagementSummary.active}</p>
         </div>
         <div

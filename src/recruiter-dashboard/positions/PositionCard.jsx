@@ -1,22 +1,49 @@
-import React, { useState, useMemo  } from 'react';
-import { motion } from 'framer-motion';
-import { EditIcon, XIcon, UsersIcon, SaveIcon } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
-import { mockData } from "../utils/mockdata";
-import ViewApplicantsModal from "./ViewApplicantsModal";
+import React, { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { UsersIcon, SaveIcon } from "lucide-react";
+import ReactDOM from "react-dom";
 
+import { useTheme } from "../context/ThemeContext";
+import ViewApplicantsModal from "./ViewApplicantsModal";
+import { mockData } from "../utils/mockdata";
+
+const JobDescriptionModal = ({ description, onClose }) => {
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl max-w-md w-full"
+      >
+        <h2 className="text-lg font-bold mb-2 text-gray-800 dark:text-gray-200">
+          Job Description
+        </h2>
+        <p className="text-gray-700 dark:text-gray-300 mb-4">
+          {description || "This is the job description for the position."}
+        </p>
+        <button
+          onClick={onClose}
+          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+        >
+          Close
+        </button>
+      </motion.div>
+    </div>,
+    document.body
+  );
+};
 
 const PositionCard = ({ position, onUpdate }) => {
   const { theme } = useTheme();
   const isDarkMode = theme === "dark";
-  const isOpen = position.status === "Open";
   const [showApplicants, setShowApplicants] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
 
-  // Edit state
   const [showEdit, setShowEdit] = useState(false);
   const [editData, setEditData] = useState({ ...position });
+  const [isDeleted] = useState(false);
 
-  // ✅ Applicants count based on ViewApplicantsModal logic
   const applicantCount = useMemo(() => {
     return mockData.candidates.filter(
       (c) =>
@@ -35,14 +62,7 @@ const PositionCard = ({ position, onUpdate }) => {
     setShowEdit(false);
   };
 
-  // Function to handle closing/reopening position
-  const handleToggleStatus = () => {
-    const updatedPosition = {
-      ...position,
-      status: isOpen ? "Closed" : "Open"
-    };
-    if (onUpdate) onUpdate(updatedPosition);
-  };
+  if (isDeleted) return null;
 
   return (
     <>
@@ -54,99 +74,82 @@ const PositionCard = ({ position, onUpdate }) => {
             : "bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]"
         }`}
       >
-        <div className="flex justify-between items-start">
+        {/* Header */}
+        <div className="flex justify-start items-start">
           <h3 className="font-bold text-lg">{position.position}</h3>
-          <span
-            className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${
-              isOpen
-                ? isDarkMode
-                  ? "bg-green-900/30 text-green-400"
-                  : "bg-green-100 text-green-600"
-                : isDarkMode
-                ? "bg-red-900/30 text-red-400"
-                : "bg-red-100 text-red-600"
-            }`}
-          >
-            {position.status}
-          </span>
         </div>
-        <p className={`mt-2 ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
+
+        {/* Department */}
+        <p
+          className={`gap-5 mt-2 flex items-center ${
+            isDarkMode ? "text-gray-400" : "text-gray-600"
+          }`}
+        >
           {position.dept}
           {position.course ? ` (${position.course})` : ""}
         </p>
 
+        {/* Metric Boxes */}
         <div className="grid grid-cols-2 gap-4 mt-4">
           <div
-            className={`text-center p-3 rounded-lg ${
+            className={`text-center p-3 rounded-lg h-20 ${
               isDarkMode ? "bg-gray-700/50" : "bg-gray-50"
             }`}
           >
-            <p
-              className={`text-sm ${
-                isDarkMode ? "text-gray-400" : "text-gray-500"
-              }`}
-            >
+            <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
               Openings
             </p>
             <p className="font-bold text-lg">{position.openings}</p>
           </div>
           <div
-            className={`text-center p-3 rounded-lg ${
+            className={`text-center p-3 rounded-lg h-20 ${
               isDarkMode ? "bg-gray-700/50" : "bg-gray-50"
             }`}
           >
-            <p
-              className={`text-sm ${
-                isDarkMode ? "text-gray-400" : "text-gray-500"
-              }`}
-            >
+            <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-500"}`}>
               Applicants
             </p>
-            {/* ✅ show applicants number */}
             <p className="font-bold text-lg">{applicantCount}</p>
           </div>
         </div>
 
+        {/* Buttons */}
         <div className="mt-4 flex gap-2">
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => setShowEdit(true)}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg ${
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-colors ${
               isDarkMode
                 ? "bg-gray-700 text-white hover:bg-gray-600"
                 : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-            } transition-colors`}
+            }`}
           >
-            <EditIcon size={16} />
-            <span>Edit</span>
+            Edit
           </motion.button>
+
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            onClick={handleToggleStatus}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg ${
-              isOpen
-                ? isDarkMode
-                  ? "bg-red-900/30 text-red-400 hover:bg-red-900/50"
-                  : "bg-red-100 text-red-600 hover:bg-red-200"
-                : isDarkMode
-                ? "bg-green-900/30 text-green-400 hover:bg-green-900/50"
-                : "bg-green-100 text-green-600 hover:bg-green-200"
-            } transition-colors`}
+            onClick={() => setShowDescription(true)}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-colors ${
+              isDarkMode
+                ? "bg-blue-700 text-white hover:bg-blue-600"
+                : "bg-blue-100 text-blue-800 hover:bg-blue-200"
+            }`}
           >
-            {isOpen ? (
-              <>
-                <XIcon size={16} />
-                <span>Close</span>
-              </>
-            ) : (
-              <span>Reopen</span>
-            )}
+            Details
           </motion.button>
         </div>
 
-        {/* View Applicants Button */}
+        {showDescription && (
+          <JobDescriptionModal
+            description={position.description}
+            onClose={() => setShowDescription(false)}
+          />
+        )}
+
+        {/* View Applicants */}
         <motion.button
           onClick={() => setShowApplicants(true)}
           whileHover={{ scale: 1.03 }}
@@ -158,7 +161,6 @@ const PositionCard = ({ position, onUpdate }) => {
         </motion.button>
       </motion.div>
 
-      {/* View Applicants Modal */}
       {showApplicants && (
         <ViewApplicantsModal
           position={position}
@@ -166,7 +168,6 @@ const PositionCard = ({ position, onUpdate }) => {
         />
       )}
 
-      {/* ✅ Edit Modal */}
       {showEdit && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div
@@ -224,8 +225,20 @@ const PositionCard = ({ position, onUpdate }) => {
                     : "bg-white border-gray-300 text-black placeholder-gray-500"
                 }`}
               />
+              <textarea
+                name="description"
+                value={editData.description}
+                onChange={handleEditChange}
+                placeholder="Job Description"
+                rows={4}
+                className={`w-full p-2 rounded border ${
+                  isDarkMode
+                    ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                    : "bg-white border-gray-300 text-black placeholder-gray-500"
+                }`}
+              ></textarea>
             </div>
-            <div className="mt-4 flex justify-end gap-2">
+            <div className="mt-4 flex justify-between gap-2">
               <button
                 onClick={() => setShowEdit(false)}
                 className={`px-4 py-2 rounded ${
@@ -236,6 +249,7 @@ const PositionCard = ({ position, onUpdate }) => {
               >
                 Cancel
               </button>
+
               <button
                 onClick={handleSave}
                 className="px-4 py-2 rounded bg-teal-500 hover:bg-teal-600 text-white flex items-center gap-2"

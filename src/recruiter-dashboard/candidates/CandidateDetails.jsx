@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   UserIcon,
   MailIcon,
@@ -24,7 +24,7 @@ const CandidateDetails = () => {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
   const [profileImage, setProfileImage] = useState(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const candidate = data.candidates.find((c) => c.id === id);
   if (!candidate) {
@@ -111,7 +111,7 @@ const CandidateDetails = () => {
             Candidate Details
           </motion.h2>
         </div>
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <Link
             to={`/recruiter/candidates/${id}/analysis`}
             className={`px-4 py-2 rounded-lg ${
@@ -121,13 +121,13 @@ const CandidateDetails = () => {
             <FileTextIcon size={16} />
             Analysis
           </Link>
-        </div>
+        </div> */}
       </div>
 
       {/* Back Button */}
       <button
         className={`p-2 rounded-lg ${isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-200'} transition-colors`}
-        onClick={() => navigate('/recruiter/candidates')}
+        // onClick={() => navigate('/recruiter/candidates')}
       >
         {/* <ChevronLeftIcon size={20} /> */}
       </button>

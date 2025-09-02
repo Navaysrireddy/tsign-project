@@ -159,9 +159,7 @@ const AttendanceCard = ({ course, date, status, time, duration }) => {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
               {course}
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-              {formatDate(date)}
-            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{formatDate(date)}</p>
           </div>
         </div>
         <span
@@ -199,17 +197,18 @@ const Attendance = () => {
 
   const courses = [
     { id: 'all', name: 'All Courses' },
-    { id: 'cs101', name: 'CS101: Introduction to Programming' },
-    { id: 'cs201', name: 'CS201: Data Structures' },
-    { id: 'cs301', name: 'CS301: Algorithms' },
-    { id: 'cs401', name: 'CS401: Machine Learning' },
-    { id: 'math201', name: 'MATH201: Discrete Mathematics' }
+    { id: 'cs101', name: 'C programming' },
+    { id: 'cs201', name: 'Data Structures' },
+    { id: 'cs301', name: 'Algorithms' },
+    { id: 'cs401', name: 'MachineLearning' },
+    { id: 'math201', name: 'DiscreteMath' }
   ];
 
   const attendanceRecords = [
     {
       id: 'a1',
-      course:'C programming',
+      courseId: 'cs101',
+      course: 'C programming',
       date: '2025-01-15',
       status: 'present',
       time: '10:00 AM - 12:00 PM',
@@ -217,7 +216,8 @@ const Attendance = () => {
     },
     {
       id: 'a2',
-      course: ' Data Structures',
+      courseId: 'cs201',
+      course: 'Data Structures',
       date: '2025-01-14',
       status: 'present',
       time: '1:00 PM - 3:00 PM',
@@ -225,7 +225,8 @@ const Attendance = () => {
     },
     {
       id: 'a3',
-      course: ' Algorithms',
+      courseId: 'cs301',
+      course: 'Algorithms',
       date: '2025-01-13',
       status: 'absent',
       time: '3:30 PM - 5:30 PM',
@@ -233,7 +234,8 @@ const Attendance = () => {
     },
     {
       id: 'a4',
-      course: ' MachineLearning',
+      courseId: 'cs401',
+      course: 'MachineLearning',
       date: '2025-01-12',
       status: 'late',
       time: '9:00 AM - 11:00 AM',
@@ -241,7 +243,8 @@ const Attendance = () => {
     },
     {
       id: 'a5',
-      course: ' DiscreteMath',
+      courseId: 'math201',
+      course: 'DiscreteMath',
       date: '2025-01-11',
       status: 'present',
       time: '2:00 PM - 4:00 PM',
@@ -249,7 +252,8 @@ const Attendance = () => {
     },
     {
       id: 'a6',
-      course: ' C++Programming',
+      courseId: 'cs101',
+      course: 'C programming',
       date: '2025-01-10',
       status: 'present',
       time: '10:00 AM - 12:00 PM',
@@ -257,7 +261,8 @@ const Attendance = () => {
     },
     {
       id: 'a7',
-      course: ' Data Structures',
+      courseId: 'cs201',
+      course: 'Data Structures',
       date: '2025-01-09',
       status: 'absent',
       time: '1:00 PM - 3:00 PM',
@@ -265,7 +270,8 @@ const Attendance = () => {
     },
     {
       id: 'a8',
-      course: ' Algorithms',
+      courseId: 'cs301',
+      course: 'Algorithms',
       date: '2025-01-08',
       status: 'present',
       time: '3:30 PM - 5:30 PM',
@@ -279,9 +285,7 @@ const Attendance = () => {
     filteredRecords = filteredRecords.filter((r) => r.status === filter);
   }
   if (selectedCourse !== 'all') {
-    filteredRecords = filteredRecords.filter((r) =>
-      r.course.toLowerCase().startsWith(selectedCourse.toLowerCase())
-    );
+    filteredRecords = filteredRecords.filter((r) => r.courseId === selectedCourse);
   }
 
   // Sort
@@ -305,7 +309,7 @@ const Attendance = () => {
   const attendancePercentage = Math.round((presentClasses / totalClasses) * 100);
 
   // Doughnut chart data and options
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const doughnutData = {
     labels: ['Present', 'Absent', 'Late'],
     datasets: [
@@ -325,7 +329,7 @@ const Attendance = () => {
       }
     ]
   };
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const doughnutOptions = {
     responsive: true,
     plugins: {
@@ -394,9 +398,7 @@ const Attendance = () => {
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       {/* Header and Controls */}
       <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-          Attendance
-        </h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Attendance</h1>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => {
@@ -475,9 +477,7 @@ const Attendance = () => {
 
       {/* Course Filter */}
       <section className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 md:space-x-4">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-          Attendance Records
-        </h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Attendance Records</h2>
         <div className="relative w-full md:w-64">
           <select
             className="block w-full p-2.5 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none"

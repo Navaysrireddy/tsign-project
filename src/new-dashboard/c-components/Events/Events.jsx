@@ -25,7 +25,8 @@ const Events = ({
     attendees: 0,
     maxCapacity: 0,
     status: 'Upcoming',
-    month: ''
+    month: '',
+     registrationUrl: ''
   });
 
   const months = ['All', 'January', 'February', 'March', 'April', 'May', 'June'];
@@ -44,7 +45,8 @@ const Events = ({
     attendees: 280,
     maxCapacity: 300,
     status: 'Upcoming',
-    month: 'January'
+    month: 'January',
+    registrationUrl: 'https://careers.google.com/jobs/results/'
   }, {
     id: 2,
     title: 'AI Workshop by Microsoft',
@@ -57,7 +59,8 @@ const Events = ({
     attendees: 120,
     maxCapacity: 150,
     status: 'Upcoming',
-    month: 'January'
+    month: 'January',
+     registrationUrl: 'https://www.amazon.jobs/en/'
   }, {
     id: 3,
     title: 'Resume Building Workshop',
@@ -70,8 +73,9 @@ const Events = ({
     attendees: 95,
     maxCapacity: 100,
     status: 'Upcoming',
-    month: 'February'
-  }, {
+    month: 'February',
+    registrationUrl: 'https://www.amazon.jobs/en/'
+    },{
     id: 4,
     title: 'Technical Symposium',
     date: 'Feb 15, 2025',
@@ -83,7 +87,8 @@ const Events = ({
     attendees: 450,
     maxCapacity: 500,
     status: 'Upcoming',
-    month: 'February'
+    month: 'February',
+     registrationUrl: 'https://www.amazon.jobs/en/'
   }, {
     id: 5,
     title: 'Mechanical Design Competition',
@@ -96,7 +101,8 @@ const Events = ({
     attendees: 85,
     maxCapacity: 100,
     status: 'Upcoming',
-    month: 'February'
+    month: 'February',
+     registrationUrl: 'https://www.amazon.jobs/en/'
   }, {
     id: 6,
     title: 'Electrical Systems Exhibition',
@@ -109,7 +115,8 @@ const Events = ({
     attendees: 110,
     maxCapacity: 150,
     status: 'Upcoming',
-    month: 'March'
+    month: 'March',
+     registrationUrl: 'https://www.amazon.jobs/en/'
   }, {
     id: 7,
     title: 'Hackathon 2025',
@@ -122,7 +129,8 @@ const Events = ({
     attendees: 200,
     maxCapacity: 250,
     status: 'Upcoming',
-    month: 'March'
+    month: 'March',
+     registrationUrl: 'https://www.amazon.jobs/en/'
   }, {
     id: 8,
     title: 'Amazon Recruitment Drive',
@@ -135,7 +143,8 @@ const Events = ({
     attendees: 180,
     maxCapacity: 200,
     status: 'Upcoming',
-    month: 'March'
+    month: 'March',
+     registrationUrl: 'https://www.amazon.jobs/en/'
   }, {
     id: 9,
     title: 'Robotics Workshop',
@@ -148,7 +157,8 @@ const Events = ({
     attendees: 90,
     maxCapacity: 100,
     status: 'Upcoming',
-    month: 'April'
+    month: 'April',
+     registrationUrl: 'https://www.amazon.jobs/en/'
   }, {
     id: 10,
     title: 'Research Symposium',
@@ -161,7 +171,8 @@ const Events = ({
     attendees: 300,
     maxCapacity: 350,
     status: 'Upcoming',
-    month: 'April'
+    month: 'April',
+     registrationUrl: 'https://www.amazon.jobs/en/'
   }, {
     id: 11,
     title: 'Industry-Academia Meet',
@@ -174,7 +185,8 @@ const Events = ({
     attendees: 250,
     maxCapacity: 300,
     status: 'Upcoming',
-    month: 'May'
+    month: 'May',
+     registrationUrl: 'https://www.amazon.jobs/en/'
   }, {
     id: 12,
     title: 'Summer Internship Fair',
@@ -187,7 +199,8 @@ const Events = ({
     attendees: 400,
     maxCapacity: 500,
     status: 'Upcoming',
-    month: 'May'
+    month: 'May',
+     registrationUrl: 'https://www.amazon.jobs/en/'
   }]);
   // Filter events based on selected filters
   const filteredEvents = allEvents.filter(event => {
@@ -254,7 +267,9 @@ const Events = ({
       attendees: 0,
       maxCapacity: 0,
       status: 'Upcoming',
-      month: ''
+      month: '',
+       registrationUrl: ''
+
     });
     
     setIsAddEventModalOpen(false);
@@ -282,6 +297,8 @@ const Events = ({
     }
   };
   return <div className="space-y-6">
+
+    
      {/* Add Event Modal */}
      
 {isAddEventModalOpen && (
@@ -515,7 +532,8 @@ const Events = ({
           <div className="flex flex-wrap gap-2">
             <div className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'} border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
               <select value={selectedMonth} onChange={e => setSelectedMonth(e.target.value)} className="appearance-none bg-transparent py-2 pl-3 pr-10 outline-none text-sm">
-                {months.map(month => <option key={month} value={month}>
+                {months.map(month => <option key={month} value={month}
+                className={darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}>
                     {month}
                   </option>)}
               </select>
@@ -527,7 +545,7 @@ const Events = ({
             </div>
             <div className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'} border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
               <select value={selectedDepartment} onChange={e => setSelectedDepartment(e.target.value)} className="appearance-none bg-transparent py-2 pl-3 pr-10 outline-none text-sm">
-                {departments.map(dept => <option key={dept} value={dept}>
+                {departments.map(dept => <option key={dept} value={dept} className={darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}>
                     {dept}
                   </option>)}
               </select>
@@ -539,7 +557,7 @@ const Events = ({
             </div>
             <div className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'} border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
               <select value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)} className="appearance-none bg-transparent py-2 pl-3 pr-10 outline-none text-sm">
-                {categories.map(cat => <option key={cat} value={cat}>
+                {categories.map(cat => <option key={cat} value={cat} className={darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}>
                     {cat}
                   </option>)}
               </select>
@@ -650,7 +668,8 @@ const Events = ({
         duration: 0.5,
         delay: 0.1
       }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-          <h2 className="text-xl font-semibold mb-6">Events Calendar</h2>
+          <h2 className="text-xl font-semibold mb-6 
+text-gray-800 dark:text-white">Events Calendar</h2>
           <div className="h-96">
             <EventsCalendar darkMode={darkMode} events={filteredEvents} />
           </div>
@@ -666,13 +685,15 @@ const Events = ({
         delay: 0.2
       }} className="space-y-6">
           <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-            <h2 className="text-xl font-semibold mb-4">Event Categories</h2>
+            <h2 className="text-xl font-semibold mb-4 
+text-gray-800 dark:text-white">Event Categories</h2>
             <div className="h-80">
               <EventCategoryChart darkMode={darkMode} events={filteredEvents} />
             </div>
           </div>
           <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-            <h2 className="text-xl font-semibold mb-4">Attendance Rate</h2>
+            <h2 className="text-xl font-semibold mb-4 
+text-gray-800 dark:text-white">Attendance Rate</h2>
             <div className="h-72">
               <EventAttendanceChart darkMode={darkMode} events={filteredEvents} />
             </div>
@@ -689,7 +710,8 @@ const Events = ({
       duration: 0.5,
       delay: 0.3
     }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-        <h2 className="text-xl font-semibold mb-6">Events Timeline</h2>
+        <h2 className="text-xl font-semibold mb-6 
+text-gray-800 dark:text-white">Events Timeline</h2>
         <div className="h-96">
           <EventsTimeline darkMode={darkMode} events={filteredEvents} />
         </div>
@@ -703,24 +725,30 @@ const Events = ({
     }} transition={{
       duration: 0.5,
       delay: 0.4
-    }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
+    }} 
+    
+    
+     className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}
+      >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold">Upcoming Events</h2>
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Upcoming Events</h2>
           <div className={`px-3 py-1 rounded-full text-sm ${darkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800'}`}>
             {filteredEvents.length} events
           </div>
         </div>
-        {filteredEvents.length === 0 ? <div className="text-center py-10">
-            <p className="text-gray-500">
-              No events found matching your filters.
-            </p>
-          </div> : <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
-            {filteredEvents.map(event => <motion.div key={event.id} variants={item} whileHover={{
-          y: -5,
-          transition: {
-            duration: 0.2
-          }
-        }} className={`p-4 rounded-xl ${darkMode ? 'bg-gray-700 shadow-[3px_3px_6px_#1a202c,-3px_-3px_6px_#2d3748]' : 'bg-gray-50 shadow-[3px_3px_6px_#d1d5db,-3px_-3px_6px_#ffffff]'}`}>
+        {filteredEvents.length === 0 ? (
+          <div className="text-center py-10">
+            <p className="text-gray-500">No events found matching your filters.</p>
+          </div>
+        ) : (
+          <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
+            {filteredEvents.map(event => (
+              <motion.div
+                key={event.id}
+                variants={item}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                className={`p-4 rounded-xl ${darkMode ? 'bg-gray-700 shadow-[3px_3px_6px_#1a202c,-3px_-3px_6px_#2d3748]' : 'bg-gray-50 shadow-[3px_3px_6px_#d1d5db,-3px_-3px_6px_#ffffff]'}`}
+              >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                   <div>
                     <div className="flex items-center">
@@ -729,7 +757,7 @@ const Events = ({
                         {event.category}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-400 mt-1">
                       {event.date} • {event.time}
                     </p>
                   </div>
@@ -747,21 +775,28 @@ const Events = ({
                     <span>{event.departments.join(', ')}</span>
                   </div>
                 </div>
-                <p className="mt-2 text-sm text-gray-500">
-                  {event.description}
-                </p>
+                <p className="mt-2 text-sm text-gray-400">{event.description}</p>
                 <div className="mt-4 flex justify-end">
-                  <motion.button whileHover={{
-              scale: 1.05
-            }} whileTap={{
-              scale: 0.95
-            }} className={`flex items-center text-sm font-medium ${darkMode ? 'bg-gradient-to-r from-teal-500 to-blue-600' : 'bg-gradient-to-r from-teal-400 to-blue-500'} text-white px-3 py-1.5 rounded-lg`}>
+                  <motion.a
+                    href={event.registrationUrl || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`flex items-center text-sm font-medium ${
+                      darkMode
+                        ? 'bg-gradient-to-r from-teal-500 to-blue-600'
+                        : 'bg-gradient-to-r from-teal-400 to-blue-500'
+                    } text-white px-3 py-1.5 rounded-lg ${!event.registrationUrl ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}
+                  >
                     Register <ArrowRightIcon className="h-3.5 w-3.5 ml-1" />
-                  </motion.button>
+                  </motion.a>
                 </div>
-              </motion.div>)}
-          </motion.div>}
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </motion.div>
-    </div>;
+    </div>
 };
 export default Events;

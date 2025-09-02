@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLinkIcon, ClockIcon, CheckIcon, XIcon, UserIcon,  FileTextIcon, BarChart2Icon } from 'lucide-react';
+import { ExternalLinkIcon, ClockIcon, CheckIcon, XIcon, UserIcon,  FileTextIcon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 // import { useData } from '../context/DataContext';
  
@@ -9,7 +9,7 @@ const CandidateTable = ({
   selectedCandidates,
   setSelectedCandidates,
   onViewDetails,
-  onViewAnalysis,
+  
   
 }) => {
   const { theme } = useTheme();
@@ -87,7 +87,7 @@ const CandidateTable = ({
             candidates.map((candidate) => (
               <motion.tr
                 key={candidate.id}
-                whileHover={{ scale: 1.01 }}
+                // whileHover={{ scale: 1.01 }}
                 className={`
                   border-b ${isDarkMode ? 'border-gray-700 hover:bg-gray-700/30' : 'border-gray-200 hover:bg-gray-50'}
                   transition-colors
@@ -139,7 +139,7 @@ const CandidateTable = ({
                     >
                       <FileTextIcon size={16} />
                     </motion.button>
-                    <motion.button
+                    {/* <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => onViewAnalysis(candidate.id)}
@@ -151,7 +151,7 @@ const CandidateTable = ({
                       title="View Analysis"
                     >
                       <BarChart2Icon size={16} />
-                    </motion.button>
+                    </motion.button> */}
                     {/* <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}

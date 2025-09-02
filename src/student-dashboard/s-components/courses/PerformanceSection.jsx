@@ -5,6 +5,7 @@ ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tool
 
 const PerformanceSection = () => {
   const [selectedCourse, setSelectedCourse] = useState('all');
+
   const courses = [
     { id: 'all', name: 'All Courses' },
     { id: 'cs101', name: 'CS101: Intro to Programming' },
@@ -13,22 +14,41 @@ const PerformanceSection = () => {
     { id: 'cs401', name: 'CS401: Machine Learning' }
   ];
 
+  // ✅ GPA dataset per course
+  const gpaByCourse = {
+    all: [3.5, 3.7, 3.6, 3.8, 3.9, 3.85],
+    cs101: [3.2, 3.3, 3.4, 3.5, 3.6, 3.55],
+    cs201: [3.6, 3.7, 3.8, 3.75, 3.85, 3.9],
+    cs301: [3.4, 3.5, 3.6, 3.7, 3.65, 3.7],
+    cs401: [3.7, 3.8, 3.85, 3.9, 3.95, 3.92]
+  };
+
+  // ✅ Placement dataset per course
+  const placementByCourse = {
+    all: [65, 30, 5],
+    cs101: [20, 10, 5],
+    cs201: [15, 8, 2],
+    cs301: [18, 7, 3],
+    cs401: [12, 5, 1]
+  };
+
   // GPA Data
   const gpaData = {
     labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Current'],
     datasets: [{
       label: 'GPA',
-      data: [3.5, 3.7, 3.6, 3.8, 3.9, 3.85],
+      data: gpaByCourse[selectedCourse],
       borderColor: 'rgb(56, 189, 248)',
       backgroundColor: 'rgba(56, 189, 248, 0.5)',
       tension: 0.3
     }]
   };
+
   // Placement Data
   const placementData = {
     labels: ['Placed', 'Pending', 'Rejected'],
     datasets: [{
-      data: [65, 30, 5],
+      data: placementByCourse[selectedCourse],
       backgroundColor: [
         'rgba(52, 211, 153, 0.8)',
         'rgba(251, 146, 60, 0.8)',
@@ -106,7 +126,6 @@ const PerformanceSection = () => {
         border border-gray-200 dark:border-gray-700 
         transition-colors duration-300
       "
-      // Ensures the component uses full available width, with max width for very wide screens
     >
       {/* Header with course selector */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
@@ -133,13 +152,12 @@ const PerformanceSection = () => {
         </select>
       </div>
 
-      {/* Main Chart Grid - adjust columns for wider look */}
+      {/* Main Chart Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8 w-full">
         
         {/* GPA Trends */}
         <div className="bg-white/70 dark:bg-gray-800/70 rounded-lg p-6 border border-gray-300 dark:border-gray-700 shadow-md flex flex-col">
           <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-5">GPA Trends</h4>
-          {/* Height set for responsive full-width charts */}
           <div className="flex-grow h-80 min-h-[18rem] relative">
             <Line options={lineOptions} data={gpaData} />
           </div>

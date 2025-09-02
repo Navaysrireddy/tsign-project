@@ -190,7 +190,7 @@ const StatusCards = ({ darkMode, department }) => {
                 <card.icon className={`h-6 w-6 ${card.color}`} />
               </div>
               <div className="text-left">
-                <p className="text-sm text-gray-500">{card.title}</p>
+                <p className="text-sm text-gray-400">{card.title}</p>
                 <h3 className="text-2xl font-bold mt-1 pl-4">{card.value}</h3>
 
               </div>

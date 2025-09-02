@@ -8,13 +8,13 @@ import {
   DownloadIcon,
 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
-import { useData } from "../context/DataContext";
+// import { useData } from "../context/DataContext";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 const InterviewList = ({ interviews }) => {
   const { theme } = useTheme();
-  const { updateInterviewStatus } = useData();
+  // const { updateInterviewStatus } = useData();
   const isDarkMode = theme === "dark";
 
   const getStatusColor = (status) => {
@@ -171,7 +171,7 @@ const InterviewList = ({ interviews }) => {
             interviews.map((interview) => (
               <motion.tr
                 key={interview.id}
-                whileHover={{ scale: 1.01 }}
+                // whileHover={{ scale: 1.01 }}
                 className={`border-b ${
                   isDarkMode
                     ? "border-gray-700 hover:bg-gray-700/30"

@@ -139,7 +139,7 @@ function App() {
 
               {/* Redirect /Profile and /profile to standalone student profile without sidebar */}
               <Route path="/Profile" element={<StandaloneStudentProfile />} />
-              <Route path="/profile" element={<StandaloneStudentProfile />} />
+              
 
               {/* ---------- Recruiter Dashboard ---------- */}
               <Route path="/recruiter" element={<Layout />}>

@@ -10,6 +10,7 @@ import {
   Legend
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { Link } from "react-router-dom";
 
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
@@ -168,13 +169,13 @@ const PlacementsChart = ({ setActiveSection }) => {
         <Line options={options} data={data} />
       </div>
       <div className="mt-4 flex justify-end">
-        <button
-          onClick={() => setActiveSection('placements')}
-          className="px-4 py-2 text-sm font-medium rounded-md bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all duration-200"
-        >
-          View All Placements
-        </button>
-      </div>
+  <Link
+    to="/student-dashboard/placements"
+    className="px-4 py-2 text-sm font-medium rounded-md bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all duration-200"
+  >
+    View All Placements
+  </Link>
+</div>
     </div>
   );
 };
