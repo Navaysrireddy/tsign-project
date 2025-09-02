@@ -273,7 +273,7 @@ const Register = () => {
             onClick={() => handleRoleChange('recruiter')}
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-blue-900 transition-all duration-300"></div>
-            <h3 className="text-xl font-semibold mb-2">recruiter</h3>
+            <h3 className="text-xl font-semibold mb-2">Recruiter</h3>
             <p className="text-sm">Hire top talent</p>
           </div>
         </div>
