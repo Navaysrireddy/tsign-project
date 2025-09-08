@@ -212,12 +212,16 @@ const Register = () => {
     if (recruiterStep > 1) setRecruiterStep(recruiterStep - 1);
   };
 
-  const handleCollegeSubmit = (e) => {
-    e.preventDefault();
-    console.log('College form submitted:', collegeFormData);
-    alert('College registration successful!');
-    navigate('/new-dashboard');
-  };
+ const handleCollegeSubmit = (e) => {
+  e.preventDefault();
+  console.log('College form submitted:', collegeFormData);
+  
+  // Store college data in localStorage
+  localStorage.setItem('collegeData', JSON.stringify(collegeFormData));
+  
+  alert('College registration successful!');
+  navigate('/new-dashboard');
+};
 // eslint-disable-next-line
   const handleRecruiterSubmit = (e) => {
     e.preventDefault();
@@ -976,4 +980,3 @@ const Register = () => {
 };
  
 export default Register;
- 

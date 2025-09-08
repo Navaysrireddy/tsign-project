@@ -107,7 +107,80 @@ const Dashboard = () => {
         <StatsCard title="Rejected" value={data.stats.rejected} icon="x" trend={-5} color="red" />
         <StatsCard title="In Review" value={data.stats.inReview} icon="clock" trend={3} color="yellow" />
       </motion.div>
-
+<motion.div
+        variants={itemVariants}
+        className={`
+          rounded-xl overflow-hidden
+          ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
+          p-5
+        `}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-medium">Recent Activity</h3>
+          <button className={`text-sm ${isDarkMode ? 'text-teal-400' : 'text-teal-600'} hover:underline`}>
+            View All
+          </button>
+        </div>
+        <div className="space-y-4">
+          {[
+            { id: 1, action: 'Selected', candidate: 'Ananya R', position: 'Software Intern', time: '10 minutes ago' },
+            { id: 2, action: 'Interviewed', candidate: 'Vikram S', position: 'ML Engineer', time: '1 hour ago' },
+            { id: 3, action: 'Rejected', candidate: 'Kiran T', position: 'Analytics Intern', time: '2 hours ago' },
+            { id: 4, action: 'In Review', candidate: 'Arun M', position: 'R&D Engineer', time: '3 hours ago' }
+          ].map(activity => (
+            <div
+              key={activity.id}
+              className={`
+                flex items-center gap-3 p-3 rounded-lg
+                ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}
+              `}
+            >
+              <div
+                className={`
+                  h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0
+                  ${
+                    activity.action === 'Selected'
+                      ? 'bg-green-100 text-green-600'
+                      : activity.action === 'Rejected'
+                      ? 'bg-red-100 text-red-600'
+                      : activity.action === 'Interviewed'
+                      ? 'bg-yellow-100 text-yellow-600'
+                      : 'bg-teal-100 text-teal-600'
+                  }
+                `}
+              >
+                {activity.action === 'Selected' && <span>✓</span>}
+                {activity.action === 'Rejected' && <span>✕</span>}
+                {activity.action === 'Interviewed' && <span>👁️</span>}
+                {activity.action === 'In Review' && <span>⟳</span>}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {activity.candidate} - {activity.position}
+                </p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  <span
+                    className={`
+                      ${
+                        activity.action === 'Selected'
+                          ? 'text-green-500'
+                          : activity.action === 'Rejected'
+                          ? 'text-red-500'
+                          : activity.action === 'Interviewed'
+                          ? 'text-yellow-500'
+                          : 'text-teal-500'
+                      }
+                    `}
+                  >
+                    {activity.action}
+                  </span>{' '}
+                  • {activity.time}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div
@@ -211,80 +284,7 @@ const Dashboard = () => {
         </div>
       </motion.div>
 
-      <motion.div
-        variants={itemVariants}
-        className={`
-          rounded-xl overflow-hidden
-          ${isDarkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1a1a1a,-5px_-5px_10px_#2a2a2a]' : 'bg-white shadow-[5px_5px_10px_#e0e0e0,-5px_-5px_10px_#ffffff]'}
-          p-5
-        `}
-      >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-medium">Recent Activity</h3>
-          <button className={`text-sm ${isDarkMode ? 'text-teal-400' : 'text-teal-600'} hover:underline`}>
-            View All
-          </button>
-        </div>
-        <div className="space-y-4">
-          {[
-            { id: 1, action: 'Selected', candidate: 'Ananya R', position: 'Software Intern', time: '10 minutes ago' },
-            { id: 2, action: 'Interviewed', candidate: 'Vikram S', position: 'ML Engineer', time: '1 hour ago' },
-            { id: 3, action: 'Rejected', candidate: 'Kiran T', position: 'Analytics Intern', time: '2 hours ago' },
-            { id: 4, action: 'In Review', candidate: 'Arun M', position: 'R&D Engineer', time: '3 hours ago' }
-          ].map(activity => (
-            <div
-              key={activity.id}
-              className={`
-                flex items-center gap-3 p-3 rounded-lg
-                ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}
-              `}
-            >
-              <div
-                className={`
-                  h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0
-                  ${
-                    activity.action === 'Selected'
-                      ? 'bg-green-100 text-green-600'
-                      : activity.action === 'Rejected'
-                      ? 'bg-red-100 text-red-600'
-                      : activity.action === 'Interviewed'
-                      ? 'bg-yellow-100 text-yellow-600'
-                      : 'bg-teal-100 text-teal-600'
-                  }
-                `}
-              >
-                {activity.action === 'Selected' && <span>✓</span>}
-                {activity.action === 'Rejected' && <span>✕</span>}
-                {activity.action === 'Interviewed' && <span>👁️</span>}
-                {activity.action === 'In Review' && <span>⟳</span>}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                  {activity.candidate} - {activity.position}
-                </p>
-                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                  <span
-                    className={`
-                      ${
-                        activity.action === 'Selected'
-                          ? 'text-green-500'
-                          : activity.action === 'Rejected'
-                          ? 'text-red-500'
-                          : activity.action === 'Interviewed'
-                          ? 'text-yellow-500'
-                          : 'text-teal-500'
-                      }
-                    `}
-                  >
-                    {activity.action}
-                  </span>{' '}
-                  • {activity.time}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </motion.div>
+      
     </motion.div>
   );
 };

@@ -256,13 +256,13 @@ const Contact = () => {
             <div className="w-full">
               <h3 className="text-2xl font-semibold mb-8 border-b border-white pb-4 relative">
                 Contact Information
-                <span className="absolute left-0 bottom-0 w-12 h-1 bg-white rounded-sm"></span>
+                <span className="absolute left-0 bottom-0 w-12 h-1  rounded-sm"></span>
               </h3>
               <div className="space-y-6">
                 <div className="flex gap-4 items-start">
                   <div className="text-2xl mt-1">📍</div>
-                  <div className="leading-relaxed text-sm">
-                    5th Floor Ektha Towers,<br />
+                  <div className="leading-relaxed text-ms">
+                    2nd Floor Ektha Towers,<br />
                     White Field Rd, Ashok Nagar,<br />
                     Golden Habitat Whitefields,<br />
                     HITEC City, Hyderabad,<br />
@@ -271,16 +271,15 @@ const Contact = () => {
                 </div>
                 <div className="flex gap-4 items-start">
                   <div className="text-2xl mt-1">📧</div>
-                  <div className="leading-relaxed text-sm">
+                  <div className="leading-relaxed text-ms">
                     contact@vidyardi.com<br />
                     <a href="mailto:info@vidyardi.com" className="underline hover:text-gray-300">info@vidyardi.com</a>
                   </div>
                 </div>
                 <div className="flex gap-4 items-start">
                   <div className="text-2xl mt-1">📞</div>
-                  <div className="leading-relaxed text-sm">
-                    +1 (800) EDU-VERIFY<br />
-                    +1 (800) T-SIGN-SALE
+                  <div className="leading-relaxed text-ms">
+                    +91 9666001192
                   </div>
                 </div>
               </div>
@@ -307,6 +306,52 @@ const Contact = () => {
       </section>
  
       <Footer />
+       <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+       
+        .font-inter {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+       
+        .bg-radial-circle {
+          background: radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, rgba(79, 70, 229, 0) 70%);
+        }
+       
+        @keyframes pulse-slow {
+          0% { transform: translate(-50%, -50%) scale(1); }
+          50% { transform: translate(-50%, -50%) scale(1.1); }
+          100% { transform: translate(-50%, -50%) scale(1); }
+        }
+       
+        .animate-pulse-slow {
+          animation: pulse-slow 8s infinite;
+        }
+       
+        @keyframes float {
+          0% { transform: translateY(0); }
+          50% { transform: translateY(-20px); }
+          100% { transform: translateY(0); }
+        }
+       
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+       
+        .animation-delay-1000 {
+          animation-delay: 1s;
+        }
+       
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+       
+       
+        @media (max-width: 600px) {
+          .text-5xl {
+            font-size: 2.5rem;
+          }
+        }
+      `}</style>
     </div>
   );
 };

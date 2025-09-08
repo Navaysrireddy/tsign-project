@@ -18,13 +18,44 @@ import Step4 from '../../assests/Step4.png';
 import { ReachImpactSection } from '../reach/reach';
  
 const coreValues = [
-  { letter: 'W', title: 'Services1', description: 'Lorem ipsum, dolor sit amet consectetur', icon: '💡' },
-  { letter: 'I', title: 'Services2', description: 'Adipisicing elit. Hic laudantium illo facilis', icon: '💡' },
-  { letter: 'N', title: 'Services3', description: 'Lorem ipsum, dolor sit amet consectetur', icon: '💡' },
-  { letter: 'G', title: 'Services4', description: 'Adipisicing elit. Hic laudantium illo facilis', icon: '💡' },
-  { letter: 'I', title: 'Services5', description: 'Lorem ipsum, dolor sit amet consectetur', icon: '💡' },
-  { letter: 'G', title: 'Services6', description: 'Adipisicing elit. Hic laudantium illo facilis', icon: '💡' }
+  { 
+    letter: 'T', 
+    title: 'Trust', 
+    description: 'Ensuring transparency and reliability in digital credentials with blockchain technology.', 
+    icon: '🔒' 
+  },
+  { 
+    letter: '-', 
+    title: 'Technology', 
+    description: 'Empowering institutions and recruiters with cutting-edge verification tools.', 
+    icon: '⚙️' 
+  },
+  { 
+    letter: 'S', 
+    title: 'Security', 
+    description: 'Protecting academic and professional records with tamper-proof digital certificates.', 
+    icon: '🛡️' 
+  },
+  { 
+    letter: 'I', 
+    title: 'Innovation', 
+    description: 'Driving forward new ways of validating and sharing achievements securely.', 
+    icon: '💡' 
+  },
+  { 
+    letter: 'G', 
+    title: 'Growth', 
+    description: 'Supporting students, colleges, and recruiters to grow through verified opportunities.', 
+    icon: '📈' 
+  },
+  { 
+    letter: 'N', 
+    title: 'Networking', 
+    description: 'Connecting students, institutions, and employers on a trusted digital ecosystem.', 
+    icon: '🌐' 
+  }
 ];
+
  
 const statsData = [
   { label: 'Students', value: 120000, icon: icon1 },

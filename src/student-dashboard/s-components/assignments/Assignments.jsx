@@ -1,8 +1,18 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {ClipboardListIcon,CheckCircleIcon,XCircleIcon,ClockIcon,AlertTriangleIcon,FilterIcon,XIcon,SearchIcon,UploadCloud
+import {
+  ClipboardListIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  ClockIcon,
+  AlertTriangleIcon,
+  FilterIcon,
+  XIcon,
+  SearchIcon,
+  UploadCloud,
 } from 'lucide-react';
 
 import { motion, AnimatePresence } from 'framer-motion';
+
 function formatDateTime(iso) {
   if (!iso) return 'N/A';
   const d = new Date(iso);
@@ -11,7 +21,7 @@ function formatDateTime(iso) {
     month: 'short',
     day: '2-digit',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 }
 
@@ -23,36 +33,32 @@ function daysBetween(iso) {
   return Math.round(diff / (1000 * 60 * 60 * 24));
 }
 
-// function clamp(v, a, b) {
-//   return Math.max(a, Math.min(b, v));
-// }
-
 const STATUS_META = {
   completed: {
     label: 'Completed',
     colorClass: 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
-    icon: <CheckCircleIcon className="w-5 h-5 text-green-500" />
+    icon: <CheckCircleIcon className="w-5 h-5 text-green-500" />,
   },
   pending: {
     label: 'Pending',
     colorClass: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400',
-    icon: <ClockIcon className="w-5 h-5 text-yellow-500" />
+    icon: <ClockIcon className="w-5 h-5 text-yellow-500" />,
   },
-  overdue: {
-    label: 'Overdue',
-    colorClass: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
-    icon: <XCircleIcon className="w-5 h-5 text-red-500" />
-  },
+  // overdue: {
+  //   label: 'Overdue',
+  //   colorClass: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
+  //   icon: <XCircleIcon className="w-5 h-5 text-red-500" />,
+  // },
   submitted: {
     label: 'Submitted',
     colorClass: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
-    icon: <AlertTriangleIcon className="w-5 h-5 text-blue-500" />
+    icon: <AlertTriangleIcon className="w-5 h-5 text-blue-500" />,
   },
   late: {
     label: 'Late',
     colorClass: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
-    icon: <XCircleIcon className="w-5 h-5 text-red-500" />
-  }
+    icon: <XCircleIcon className="w-5 h-5 text-red-500" />,
+  },
 };
 
 const MOCK_ASSIGNMENTS = [
@@ -328,8 +334,8 @@ const MOCK_ASSIGNMENTS = [
   }
 ];
 
-const Assignments = () => {
 
+const Assignments = () => {
   // master list (starts with mock data)
   const [assignments, setAssignments] = useState(() => {
     // create a copy so we can mutate safely later (upload)
@@ -347,6 +353,9 @@ const Assignments = () => {
   // modal state: modal shows submission preview / upload UI and ties to a selected assignment
   const [modalAssignmentId, setModalAssignmentId] = useState(null);
   const modalAssignment = assignments.find((a) => a.id === modalAssignmentId) || null;
+
+  // success message state (new)
+  const [showSuccessMsg, setShowSuccessMsg] = useState(false);
 
   // refs for closing modal on outside click
   const modalOverlayRef = useRef(null);
@@ -422,7 +431,8 @@ const Assignments = () => {
       assignmentId: id,
       text: a?.submission?.content || '',
       file: a?.submission?.file || null,
-      fileObject: null // used when user uploads a file locally (object URL)
+      fileObject: null, // used when user uploads a file locally (object URL)
+      fileName: a?.submission?.file?.name || null,
     });
   }
 
@@ -451,10 +461,10 @@ const Assignments = () => {
       }
     }
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);// eslint-disable-next-line
+    return () => window.removeEventListener('keydown', onKey); // eslint-disable-next-line
   }, [editingSubmission]);
 
-  // handle submission save (in-memory)
+  // handle submission save (in-memory) with success message trigger
   function saveSubmission({ assignmentId, text, fileObjectUrl, fileName }) {
     setAssignments((prev) =>
       prev.map((a) => {
@@ -463,17 +473,17 @@ const Assignments = () => {
           date: new Date().toISOString(),
           content: text,
           feedback: null,
-          file: fileObjectUrl ? { url: fileObjectUrl, name: fileName } : a.submission?.file || null
+          file: fileObjectUrl ? { url: fileObjectUrl, name: fileName } : a.submission?.file || null,
         };
         return {
           ...a,
           submission: newSubmission,
-          status: 'submitted'
+          status: 'submitted',
         };
       })
     );
-    // close modal after saving
     closeModal();
+    setShowSuccessMsg(true); // Show the success message
   }
 
   // handle file selection for upload in modal
@@ -507,11 +517,19 @@ const Assignments = () => {
     }
   }
 
+  // auto-hide success message after 3 seconds
+  useEffect(() => {
+    if (showSuccessMsg) {
+      const timer = setTimeout(() => setShowSuccessMsg(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessMsg]);
+
   const StatusBadge = ({ status }) => {
     const meta = STATUS_META[status] || {
       label: status || 'Unknown',
       colorClass: 'bg-gray-100 text-gray-700',
-      icon: <ClipboardListIcon className="w-5 h-5 text-gray-500" />
+      icon: <ClipboardListIcon className="w-5 h-5 text-gray-500" />,
     };
     return (
       <span className={`text-xs px-2 py-1 rounded-full flex items-center ${meta.colorClass}`}>
@@ -532,15 +550,15 @@ const Assignments = () => {
       maxScore,
       description,
       requirements,
-      link
+      link,
     } = assignment;
 
     const [showDetails, setShowDetails] = useState(false);
 
     // compute due state
-    const days = dueDate ? daysBetween(dueDate) : null;
-    const isOverdue = days !== null && days < 0 && !['completed', 'submitted'].includes(status);
-    const isDueSoon = days !== null && days >= 0 && days <= 7;
+    // const days = dueDate ? daysBetween(dueDate) : null;
+    // const isOverdue = days !== null && days < 0 && !['completed', 'submitted'].includes(status);
+    // const isDueSoon = days !== null && days >= 0 && days <= 7;
 
     // card hover lift animation uses framer-motion
     return (
@@ -566,12 +584,10 @@ const Assignments = () => {
             <div>
               <StatusBadge status={status} />
             </div>
-            {isOverdue && (
-              <div className="text-xs text-red-600 dark:text-red-400">Overdue</div>
-            )}
+            {/* {isOverdue && <div className="text-xs text-red-600 dark:text-red-400"></div>}
             {isDueSoon && !isOverdue && (
               <div className="text-xs text-yellow-600 dark:text-yellow-400">Due soon</div>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -616,9 +632,7 @@ const Assignments = () => {
             }}
             className="px-3 py-1.5 text-sm font-medium rounded-md bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600"
           >
-            {status === 'completed' || status === 'submitted'
-              ? 'View Submission'
-              : 'Start Assignment'}
+            {status === 'completed' || status === 'submitted' ? 'View Submission' : 'Start Assignment'}
           </button>
         </div>
 
@@ -663,12 +677,8 @@ const Assignments = () => {
     );
   };
 
-  /* ---------------------------------------------------------------------- */
-  /* ------------------------------- Render -------------------------------- */
-  /* ---------------------------------------------------------------------- */
-
   return (
-    <div className="p-6">
+    <div className="p-6 relative">
       {/* top controls */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
@@ -718,7 +728,10 @@ const Assignments = () => {
             className="flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300"
           >
             <FilterIcon className="w-4 h-4" />
-            <span>Sort: {sortBy === 'dueDate' ? 'Due Date' : sortBy === 'course' ? 'Course' : 'Title'}</span>
+            <span>
+              Sort:{' '}
+              {sortBy === 'dueDate' ? 'Due Date' : sortBy === 'course' ? 'Course' : 'Title'}
+            </span>
           </button>
         </div>
       </div>
@@ -758,7 +771,13 @@ const Assignments = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence>
           {filteredSorted.map((assignment) => (
-            <motion.div key={assignment.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.div
+              key={assignment.id}
+              layout
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
               <AssignmentCard assignment={assignment} />
             </motion.div>
           ))}
@@ -815,7 +834,9 @@ const Assignments = () => {
               {/* modal header */}
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-800 dark:text-white">{modalAssignment.title}</h2>
+                  <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+                    {modalAssignment.title}
+                  </h2>
                   <p className="text-sm text-gray-500 dark:text-gray-400">{modalAssignment.course}</p>
                 </div>
 
@@ -846,7 +867,9 @@ const Assignments = () => {
                     {modalAssignment.submission.feedback && (
                       <div>
                         <h4 className="font-medium text-gray-800 dark:text-white">Feedback</h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">{modalAssignment.submission.feedback}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                          {modalAssignment.submission.feedback}
+                        </p>
                       </div>
                     )}
 
@@ -866,7 +889,9 @@ const Assignments = () => {
                           <UploadCloud className="w-4 h-4" />
                           <span>
                             Download{' '}
-                            {modalAssignment.submission.file.name ? `(${modalAssignment.submission.file.name})` : ''}
+                            {modalAssignment.submission.file.name
+                              ? `(${modalAssignment.submission.file.name})`
+                              : ''}
                           </span>
                         </a>
                       </div>
@@ -882,7 +907,7 @@ const Assignments = () => {
                             text: modalAssignment.submission.content || '',
                             file: modalAssignment.submission.file || null,
                             fileObject: null,
-                            fileName: modalAssignment.submission.file?.name || null
+                            fileName: modalAssignment.submission.file?.name || null,
                           });
                         }}
                       >
@@ -896,7 +921,8 @@ const Assignments = () => {
                     <div>
                       <h4 className="font-medium text-gray-800 dark:text-white">Start / Submit Assignment</h4>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        You can start working on this assignment here. When ready upload any supporting file and submit.
+                        You can start working on this assignment here. When ready upload any supporting
+                        file and submit.
                       </p>
                     </div>
 
@@ -913,7 +939,11 @@ const Assignments = () => {
                     <div>
                       <label className="block text-sm text-gray-700 dark:text-gray-300 mb-1">Attach File</label>
                       <div className="flex items-center gap-3">
-                        <input type="file" onChange={handleFileSelect} className="text-sm text-gray-600 dark:text-gray-300" />
+                        <input
+                          type="file"
+                          onChange={handleFileSelect}
+                          className="text-sm text-gray-600 dark:text-gray-300"
+                        />
                         {editingSubmission?.fileObject && (
                           <div className="text-sm text-gray-600 dark:text-gray-300">
                             Selected: {editingSubmission.fileName}
@@ -940,7 +970,7 @@ const Assignments = () => {
                             assignmentId,
                             text,
                             fileObjectUrl: fileUrl,
-                            fileName: editingSubmission.fileName || editingSubmission.file?.name || null
+                            fileName: editingSubmission.fileName || editingSubmission.file?.name || null,
                           });
                         }}
                         className="px-3 py-1.5 rounded-md bg-blue-600 text-white"
@@ -952,6 +982,20 @@ const Assignments = () => {
                 )}
               </div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Success message popup */}
+      <AnimatePresence>
+        {showSuccessMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-5 right-5 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50"
+          >
+            Assignment submitted successfully!
           </motion.div>
         )}
       </AnimatePresence>

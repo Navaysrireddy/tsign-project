@@ -26,7 +26,8 @@ export const ModalProvider = ({ children }) => {
   const [isCandidateActionOpen, setIsCandidateActionOpen] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [selectedAction, setSelectedAction] = useState(null);
- 
+  // New state for college filter
+  const [collegeFilter, setCollegeFilter] = useState('All'); // default 'All' means no filte
   const openScheduleInterview = () => setIsScheduleInterviewOpen(true);
   const closeScheduleInterview = () => setIsScheduleInterviewOpen(false);
   const openAddPosition = () => setIsAddPositionOpen(true);
@@ -55,6 +56,8 @@ export const ModalProvider = ({ children }) => {
         isCandidateActionOpen,
         selectedCandidate,
         selectedAction,
+         collegeFilter,      // expose collegeFilter state
+        setCollegeFilter,
         openScheduleInterview,
         closeScheduleInterview,
         openAddPosition,

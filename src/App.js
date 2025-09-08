@@ -55,6 +55,7 @@ import Settings from "./student-dashboard/s-components/settings/Settings";
 // Profile components
 import Profilepage from "./student-dashboard/s-components/profile-page/Profilepage.jsx";
 import Profileform from "./student-dashboard/s-components/std profile-form/profileform.jsx";
+import Resume from "./student-dashboard/s-components/resume/Resume.jsx";
 
 // ---------------- New Admin Dashboard (Separated) ----------------
 import AdminRoutes from "./new-admindashboard/AdminRoutes";
@@ -94,6 +95,7 @@ function StudentLayout() {
               <Route path="settings" element={<Settings />} />
               {/* Profile inside layout has sidebar */}
               <Route path="profile" element={<Profilepage />} />
+              <Route path="resume" element={<Resume />}/>
               <Route path="*" element={<StudentDashboard />} />
             </Routes>
           </main>

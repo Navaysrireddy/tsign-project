@@ -208,11 +208,11 @@ const About = () => {
       answer: "T-Sign ID is a unique digital identity for students in Telangana, providing secure access to educational resources, verification services, and career opportunities through the Vidyardi platform."
     },
     {
-      question: "How do students benefit from Vidyardi?",
+      question: "How do students benefit from T-SIGN?",
       answer: "Students can manage their academic records, connect with recruiters, access learning resources, and verify their credentials seamlessly using their T-Sign ID across educational institutions and employers."
     },
     {
-      question: "How can colleges integrate with Vidyardi?",
+      question: "How can colleges integrate with T-SIGN?",
       answer: "Colleges can register on the platform to issue T-Sign IDs to their students, manage academic records digitally, and connect their students with employment opportunities through our recruiter network."
     },
     {
@@ -220,7 +220,7 @@ const About = () => {
       answer: "Recruiters can access verified student profiles, filter candidates by skills and qualifications, schedule interviews directly through the platform, and reduce hiring time with pre-verified credentials."
     },
     {
-      question: "Is Vidyardi secure for storing student data?",
+      question: "Is T-SIGN secure for storing student data?",
       answer: "Yes, we employ bank-level encryption, regular security audits, and comply with data protection regulations to ensure all student information remains secure and private."
     }
   ];
@@ -516,7 +516,7 @@ const About = () => {
             >
               <GlassCard className="h-full p-8 text-center hover:shadow-2xl transition-all duration-500">
                 <div className="mb-6">
-                  <div className="w-20 h-20 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
+                  <div className="w-20 h-20 mx-auto bg-blue-200 rounded-full flex items-center justify-center">
                     <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                     </svg>
@@ -539,7 +539,7 @@ const About = () => {
             >
               <GlassCard className="h-full p-8 text-center hover:shadow-2xl transition-all duration-500">
                 <div className="mb-6">
-                  <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center">
+                  <div className="w-20 h-20 mx-auto bg-green-200 rounded-full flex items-center justify-center">
                     <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>

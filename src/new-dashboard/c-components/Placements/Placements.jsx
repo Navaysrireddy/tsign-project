@@ -360,53 +360,7 @@ const Placements = ({ darkMode }) => {
           </div>
         </motion.div>
       </div>
-
-      {/* Company-wise placements and salary distribution charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}
-          style={{ height: '410px' }}
-        >
-          <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">Company-wise Placements</h2>
-          <div className="h-96">
-            <CompanyWisePlacementsChart darkMode={darkMode} companies={filteredCompanies.slice(0, 8)} />
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="space-y-6"
-        >
-          <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Salary Distribution</h2>
-            <div className="h-80">
-              <SalaryDistributionChart darkMode={darkMode} department={selectedDepartment} />
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Department Placement KPI section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}
-      >
-        <h2 className="text-xl font-semibold mb-6 
-text-gray-800 dark:text-white">{/* Department-wise Placement Performance */}</h2>
-        <div className="h-72">
-          <DepartmentPlacementKPI darkMode={darkMode} />
-        </div>
-      </motion.div>
-
-      {/* Top recruiting companies with expandable student list, Show More, Student Status Filter, and Download PDF */}
-      <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.5, delay:0.4}} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
+<motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.5, delay:0.4}} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Top Recruiting Companies</h2>
           <div className="flex items-center gap-4">
@@ -570,6 +524,52 @@ text-gray-800 dark:text-white">{/* Department-wise Placement Performance */}</h2
           </div>
         )}
       </motion.div>
+      {/* Company-wise placements and salary distribution charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}
+          style={{ height: '410px' }}
+        >
+          <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">Company-wise Placements</h2>
+          <div className="h-96">
+            <CompanyWisePlacementsChart darkMode={darkMode} companies={filteredCompanies.slice(0, 8)} />
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="space-y-6"
+        >
+          <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
+            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Salary Distribution</h2>
+            <div className="h-80">
+              <SalaryDistributionChart darkMode={darkMode} department={selectedDepartment} />
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Department Placement KPI section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}
+      >
+        <h2 className="text-xl font-semibold mb-6 
+text-gray-800 dark:text-white">{/* Department-wise Placement Performance */}</h2>
+        <div className="h-72">
+          <DepartmentPlacementKPI darkMode={darkMode} />
+        </div>
+      </motion.div>
+
+      {/* Top recruiting companies with expandable student list, Show More, Student Status Filter, and Download PDF */}
+      
     </div>
   );
 };

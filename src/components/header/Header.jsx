@@ -13,13 +13,12 @@ function Header() {
     <div className="w-full h-auto shadow-md my-2">
       <header className="h-20 flex items-center justify-between px-5 font-sans relative">
         {/* Logo */}
-        <a href="/">
-          <img
-            src={logo}
-            alt="Logo"
-            className="h-12 max-w-[150px] object-contain md:h-10 md:max-w-[120px]"
-          />
-        </a>
+        <img
+  src={logo}
+  alt="Logo"
+  className="w-[120px] h-[60px] object-contain md:w-[200px] md:h-[100px]"
+/>
+
  
         {/* Hamburger menu (visible on mobile) */}
         <div

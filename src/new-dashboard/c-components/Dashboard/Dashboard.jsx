@@ -6,7 +6,7 @@ import EventUpdates from './EventUpdates';
 import PlacementsChart from './PlacementsChart';
 import DepartmentPerformance from './DepartmentPerformance';
 import { FilterIcon } from 'lucide-react';
-
+ 
 const Dashboard = ({
   darkMode
 }) => {
@@ -72,7 +72,22 @@ const Dashboard = ({
           {selectedDepartment === 'All' ? 'Showing data for all departments' : `Showing data for ${selectedDepartment} department`}
         </p>
       </div> */}
+     
       <StatusCards darkMode={darkMode} department={selectedDepartment} />
+      <motion.div initial={{
+      opacity: 0,
+      y: 20
+    }} animate={{
+      opacity: 1,
+      y: 0
+    }} transition={{
+      duration: 0.5,
+      delay: 0.4
+    }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
+        <h2 className="text-xl font-semibold mb-4
+text-gray-800 dark:text-white">Event Updates</h2>
+        <EventUpdates darkMode={darkMode} department={selectedDepartment} />
+      </motion.div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div initial={{
         opacity: 0,
@@ -102,20 +117,7 @@ text-gray-800 dark:text-white">Placement Statistics</h2>
           <PlacementsChart darkMode={darkMode} department={selectedDepartment} />
         </motion.div>
       </div>
-      <motion.div initial={{
-      opacity: 0,
-      y: 20
-    }} animate={{
-      opacity: 1,
-      y: 0
-    }} transition={{
-      duration: 0.5,
-      delay: 0.4
-    }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-        <h2 className="text-xl font-semibold mb-4 
-text-gray-800 dark:text-white">Event Updates</h2>
-        <EventUpdates darkMode={darkMode} department={selectedDepartment} />
-      </motion.div>
+     
       <motion.div initial={{
       opacity: 0,
       y: 20
@@ -134,3 +136,4 @@ text-gray-800 dark:text-white">Event Updates</h2>
     </div>;
 };
 export default Dashboard;
+ 

@@ -114,48 +114,52 @@ export const recruiterTableData = [
 ];
 
 // Extended data for detailed management views
+// Extended student data with location, college, district
 export const detailedStudentData = [
-  { id: 1, name: 'Riya Sharma', email: 'riya@example.com', status: 'Active' },
-  { id: 3, name: 'Sneha Patel', email: 'sneha@example.com', status: 'Active' },
-  { id: 4, name: 'Karan Verma', email: 'karan@example.com', status: 'Active' },
-  { id: 6, name: 'Rahul Singh', email: 'rahul@example.com', status: 'Active' },
-  { id: 8, name: 'Arjun Das', email: 'arjun@example.com', status: 'Active' },
-  { id: 9, name: 'Meera Joshi', email: 'meera@example.com', status: 'Active' },
-  { id: 10, name: 'Vikram Malhotra', email: 'vikram@example.com', status: 'Inactive' },
-  { id: 11, name: 'Neha Gupta', email: 'neha@example.com', status: 'Active' },
-  { id: 12, name: 'Rohit Kumar', email: 'rohit@example.com', status: 'Active' },
-  { id: 13, name: 'Ananya Reddy', email: 'ananya@example.com', status: 'Inactive' },
-  { id: 14, name: 'Aditya Sharma', email: 'aditya@example.com', status: 'Active' },
-  { id: 15, name: 'Priya Mehta', email: 'priya@example.com', status: 'Active' }
+  { id: 1, name: 'Riya Sharma', email: 'riya@example.com', status: 'Active', college: 'Delhi Technical University', district: 'Delhi', location: 'New Delhi' },
+  { id: 3, name: 'Sneha Patel', email: 'sneha@example.com', status: 'Active', college: 'Mumbai Institute of Technology', district: 'Mumbai', location: 'Maharashtra' },
+  { id: 4, name: 'Karan Verma', email: 'karan@example.com', status: 'Active', college: 'Bangalore College of Engineering', district: 'Bangalore Urban', location: 'Karnataka' },
+  { id: 6, name: 'Rahul Singh', email: 'rahul@example.com', status: 'Active', college: 'Chennai Arts and Science College', district: 'Chennai', location: 'Tamil Nadu' },
+  { id: 8, name: 'Arjun Das', email: 'arjun@example.com', status: 'Active', college: 'Kolkata Medical Institute', district: 'Kolkata', location: 'West Bengal' },
+  { id: 9, name: 'Meera Joshi', email: 'meera@example.com', status: 'Active', college: 'Hyderabad Business School', district: 'Hyderabad', location: 'Telangana' },
+  { id: 10, name: 'Vikram Malhotra', email: 'vikram@example.com', status: 'Inactive', college: 'Pune Law College', district: 'Pune', location: 'Maharashtra' },
+  { id: 11, name: 'Neha Gupta', email: 'neha@example.com', status: 'Active', college: 'Ahmedabad Management Institute', district: 'Ahmedabad', location: 'Gujarat' },
+  { id: 12, name: 'Rohit Kumar', email: 'rohit@example.com', status: 'Active', college: 'Jaipur College of Design', district: 'Jaipur', location: 'Rajasthan' },
+  { id: 13, name: 'Ananya Reddy', email: 'ananya@example.com', status: 'Inactive', college: 'Lucknow University', district: 'Lucknow', location: 'Uttar Pradesh' },
+  { id: 14, name: 'Aditya Sharma', email: 'aditya@example.com', status: 'Active', college: 'Delhi Technical University', district: 'Delhi', location: 'New Delhi' },
+  { id: 15, name: 'Priya Mehta', email: 'priya@example.com', status: 'Active', college: 'Mumbai Institute of Technology', district: 'Mumbai', location: 'Maharashtra' },
 ];
 
+// Extended college data with location and district
 export const detailedCollegeData = [
-  { id: 1, name: 'Delhi Technical University', email: 'admin@dtu.edu', status: 'Active' },
-  { id: 2, name: 'Mumbai Institute of Technology', email: 'info@mit.edu', status: 'Active' },
-  { id: 3, name: 'Bangalore College of Engineering', email: 'admin@bce.edu', status: 'Active' },
-  { id: 4, name: 'Chennai Arts and Science College', email: 'contact@casc.edu', status: 'Inactive' },
-  { id: 5, name: 'Kolkata Medical Institute', email: 'info@kmi.edu', status: 'Active' },
-  { id: 6, name: 'Hyderabad Business School', email: 'admin@hbs.edu', status: 'Active' },
-  { id: 7, name: 'Pune Law College', email: 'info@plc.edu', status: 'Active' },
-  { id: 8, name: 'Ahmedabad Management Institute', email: 'contact@ami.edu', status: 'Inactive' },
-  { id: 9, name: 'Jaipur College of Design', email: 'admin@jcd.edu', status: 'Active' },
-  { id: 10, name: 'Lucknow University', email: 'info@lu.edu', status: 'Active' }
+  { id: 1, name: 'Delhi Technical University', email: 'admin@dtu.edu', status: 'Active', district: 'Delhi', location: 'New Delhi' },
+  { id: 2, name: 'Mumbai Institute of Technology', email: 'info@mit.edu', status: 'Active', district: 'Mumbai', location: 'Maharashtra' },
+  { id: 3, name: 'Bangalore College of Engineering', email: 'admin@bce.edu', status: 'Active', district: 'Bangalore Urban', location: 'Karnataka' },
+  { id: 4, name: 'Chennai Arts and Science College', email: 'contact@casc.edu', status: 'Inactive', district: 'Chennai', location: 'Tamil Nadu' },
+  { id: 5, name: 'Kolkata Medical Institute', email: 'info@kmi.edu', status: 'Active', district: 'Kolkata', location: 'West Bengal' },
+  { id: 6, name: 'Hyderabad Business School', email: 'admin@hbs.edu', status: 'Active', district: 'Hyderabad', location: 'Telangana' },
+  { id: 7, name: 'Pune Law College', email: 'info@plc.edu', status: 'Active', district: 'Pune', location: 'Maharashtra' },
+  { id: 8, name: 'Ahmedabad Management Institute', email: 'contact@ami.edu', status: 'Inactive', district: 'Ahmedabad', location: 'Gujarat' },
+  { id: 9, name: 'Jaipur College of Design', email: 'admin@jcd.edu', status: 'Active', district: 'Jaipur', location: 'Rajasthan' },
+  { id: 10, name: 'Lucknow University', email: 'info@lu.edu', status: 'Active', district: 'Lucknow', location: 'Uttar Pradesh' },
 ];
 
+// Extended recruiter data with location and district
 export const detailedRecruiterData = [
-  { id: 1, name: 'Infosys Technologies', email: 'careers@infosys.com', status: 'Active' },
-  { id: 2, name: 'Tata Consultancy Services', email: 'hr@tcs.com', status: 'Active' },
-  { id: 3, name: 'Wipro Limited', email: 'jobs@wipro.com', status: 'Active' },
-  { id: 4, name: 'HCL Technologies', email: 'careers@hcl.com', status: 'Active' },
-  { id: 5, name: 'Tech Mahindra', email: 'hr@techmahindra.com', status: 'Inactive' },
-  { id: 6, name: 'Cognizant Technology Solutions', email: 'recruitment@cognizant.com', status: 'Active' },
-  { id: 7, name: 'Accenture India', email: 'jobs@accenture.com', status: 'Active' },
-  { id: 8, name: 'Capgemini India', email: 'careers@capgemini.com', status: 'Active' },
-  { id: 9, name: 'Deloitte India', email: 'hr@deloitte.com', status: 'Inactive' },
-  { id: 10, name: 'IBM India', email: 'recruitment@ibm.com', status: 'Active' },
-  { id: 11, name: 'Amazon India', email: 'jobs@amazon.in', status: 'Active' },
-  { id: 12, name: 'Flipkart', email: 'careers@flipkart.com', status: 'Active' }
+  { id: 1, name: 'Infosys Technologies', email: 'careers@infosys.com', status: 'Active', district: 'Bangalore Urban', location: 'Karnataka' },
+  { id: 2, name: 'Tata Consultancy Services', email: 'hr@tcs.com', status: 'Active', district: 'Mumbai', location: 'Maharashtra' },
+  { id: 3, name: 'Wipro Limited', email: 'jobs@wipro.com', status: 'Active', district: 'Bangalore Urban', location: 'Karnataka' },
+  { id: 4, name: 'HCL Technologies', email: 'careers@hcl.com', status: 'Active', district: 'Noida', location: 'Uttar Pradesh' },
+  { id: 5, name: 'Tech Mahindra', email: 'hr@techmahindra.com', status: 'Inactive', district: 'Pune', location: 'Maharashtra' },
+  { id: 6, name: 'Cognizant Technology Solutions', email: 'recruitment@cognizant.com', status: 'Active', district: 'Chennai', location: 'Tamil Nadu' },
+  { id: 7, name: 'Accenture India', email: 'jobs@accenture.com', status: 'Active', district: 'Bangalore Urban', location: 'Karnataka' },
+  { id: 8, name: 'Capgemini India', email: 'careers@capgemini.com', status: 'Active', district: 'Gurgaon', location: 'Haryana' },
+  { id: 9, name: 'Deloitte India', email: 'hr@deloitte.com', status: 'Inactive', district: 'Mumbai', location: 'Maharashtra' },
+  { id: 10, name: 'IBM India', email: 'recruitment@ibm.com', status: 'Active', district: 'Bangalore Urban', location: 'Karnataka' },
+  { id: 11, name: 'Amazon India', email: 'jobs@amazon.in', status: 'Active', district: 'Hyderabad', location: 'Telangana' },
+  { id: 12, name: 'Flipkart', email: 'careers@flipkart.com', status: 'Active', district: 'Bangalore Urban', location: 'Karnataka' },
 ];
+
 
 // Notifications
 export const notificationsData = [

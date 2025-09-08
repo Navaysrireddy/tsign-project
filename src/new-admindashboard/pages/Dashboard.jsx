@@ -19,9 +19,6 @@ import {
 } from '../utils/mockData'
 
 
-import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
-
 
 
 const totalUsersDetailedData = [
@@ -109,133 +106,6 @@ export const Dashboard = () => {
     : totalUsersDetailedData.filter(item => item.type === userTypeFilter)
 
 
-  // PDF Download Functions
-  function downloadPDFForTotalUsers(data) {
-    const doc = new jsPDF()
-    doc.text('Total Users Details', 14, 15)
-
-
-    const tableColumn = ['ID', 'Type', 'Name', 'Details']
-    const tableRows = []
-
-
-    data.forEach(item => {
-      const row = [
-        item.id,
-        item.type,
-        item.name,
-        item.type === 'Student'
-          ? `Dept: ${item.department}, Year: ${item.year}, Status: ${item.status}`
-          : item.type === 'College'
-            ? `State: ${item.state}, Students: ${item.totalStudents}`
-            : item.type === 'Recruiter'
-              ? `Industry: ${item.industry}, Active Jobs: ${item.activeJobs}`
-              : ''
-      ]
-      tableRows.push(row)
-    })
-
-
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-      startY: 20,
-    })
-
-
-    doc.save('total_users_details.pdf')
-  }
-
-
-
-  function downloadActiveJobsPDF(data) {
-    const doc = new jsPDF()
-    doc.text('Active Jobs Details', 14, 15)
-
-
-    const tableColumn = ['ID', 'Job Title', 'Applications Submitted', 'Pending Approvals']
-    const tableRows = []
-
-
-    data.forEach(item => {
-      tableRows.push([
-        item.id,
-        item.jobTitle,
-        item.applicationsSubmitted,
-        item.pendingApprovals,
-      ])
-    })
-
-
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-      startY: 20,
-    })
-
-
-    doc.save('active_jobs_details.pdf')
-  }
-
-
-
-  function downloadApplicationsPDF(data) {
-    const doc = new jsPDF()
-    doc.text('Applications Submitted Details', 14, 15)
-
-
-    const tableColumn = ['ID', 'Job Title', 'Applications Submitted']
-    const tableRows = []
-
-
-    data.forEach(item => {
-      tableRows.push([
-        item.id,
-        item.jobTitle,
-        item.applicationsSubmitted,
-      ])
-    })
-
-
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-      startY: 20,
-    })
-
-
-    doc.save('applications_submitted_details.pdf')
-  }
-
-
-
-  function downloadPendingApprovalsPDF(data) {
-    const doc = new jsPDF()
-    doc.text('Pending Approvals Details', 14, 15)
-
-
-    const tableColumn = ['ID', 'Job Title', 'Pending Approvals']
-    const tableRows = []
-
-
-    data.forEach(item => {
-      tableRows.push([
-        item.id,
-        item.jobTitle,
-        item.pendingApprovals,
-      ])
-    })
-
-
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-      startY: 20,
-    })
-
-
-    doc.save('pending_approvals_details.pdf')
-  }
 
 
 
@@ -268,14 +138,7 @@ export const Dashboard = () => {
             <option value="Recruiter">Recruiters</option>
           </select>
         </div>
-        <div>
-          <button
-            onClick={() => downloadPDFForTotalUsers(filteredData)}
-            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
-          >
-            Download PDF
-          </button>
-        </div>
+        
       </div>
 
 
@@ -311,15 +174,7 @@ export const Dashboard = () => {
 
   const renderActiveJobsModalContent = () => (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="font-semibold text-lg">Active Jobs Details</h3>
-        <button
-          onClick={() => downloadActiveJobsPDF(activeJobsDetailedData)}
-          className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
-        >
-          Download PDF
-        </button>
-      </div>
+      
 
 
       <table className="w-full text-sm table-auto border-collapse border border-gray-300 dark:border-gray-600">
@@ -349,16 +204,7 @@ export const Dashboard = () => {
 
   const renderApplicationsModalContent = () => (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="font-semibold text-lg">Applications Submitted Details</h3>
-        <button
-          onClick={() => downloadApplicationsPDF(activeJobsDetailedData)}
-          className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
-        >
-          Download PDF
-        </button>
-      </div>
-
+      
 
       <table className="w-full text-sm table-auto border-collapse border border-gray-300 dark:border-gray-600">
         <thead className="bg-gray-100 dark:bg-gray-800">
@@ -385,15 +231,7 @@ export const Dashboard = () => {
 
   const renderPendingApprovalsModalContent = () => (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="font-semibold text-lg">Pending Approvals Details</h3>
-        <button
-          onClick={() => downloadPendingApprovalsPDF(activeJobsDetailedData)}
-          className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
-        >
-          Download PDF
-        </button>
-      </div>
+     
 
 
       <table className="w-full text-sm table-auto border-collapse border border-gray-300 dark:border-gray-600">

@@ -91,7 +91,7 @@ const StudentProfilePage = () => {
             Update Profile
           </button>
           <Link
-            to="/resume"
+            to="/student-dashboard/resume"
             className="block mb-2 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700"
           >
             Resume

@@ -111,10 +111,10 @@ const Services = () => {
             className="flex-1"
           >
             <h1 className={`${textGradient} text-4xl md:text-5xl font-bold mb-8 leading-tight`}>
-              <span className="text-blue-700">T</span>elangana <br />
-              <span className="text-blue-700">S</span>tudent  
+              <span className="text-sm-blue-700">Telangana Student Identity Genrated Number</span>
+              {/* <span className="text-blue-700">S</span>tudent  
               <br /><span className="text-blue-700 ml-2">I</span>dentity<br />
-              <span className="text-blue-700">G</span>enerated <br /><span className="text-blue-700">N</span>umber
+              <span className="text-blue-700">G</span>enerated <br /><span className="text-blue-700">N</span>umber */}
             </h1>
             <p className="text-xl opacity-90 mb-8 max-w-xl">
               The complete platform for verifiable academic credentials and seamless institutional operations
@@ -225,7 +225,7 @@ const Services = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Trusted by <span className={textGradient}>Global</span> Institutions
           </h2>
-          <p className="text-base md:text-lg text-gray-100 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-black-100 max-w-2xl mx-auto">
             Join 850+ universities and colleges transforming their operations
           </p>
         </div>

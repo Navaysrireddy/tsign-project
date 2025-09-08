@@ -204,7 +204,7 @@ const Header = ({ toggleSidebar }) => {
               </div>
               <div className="py-2">
                 <button
-                  onClick={() => navigate("/profile-form")}
+                  onClick={() => navigate("/profile")}
                   className="flex items-center w-full px-4 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                   <UserIcon className="w-4 h-4 mr-3" />
                   My Profile

@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { BookOpenIcon, UsersIcon, ClockIcon, ArrowRightIcon, FilterIcon, PlusIcon, XIcon } from 'lucide-react';
 import EnrollmentTrendsChart from './EnrollmentTrendsChart';
 import DepartmentSubjectsChart from './DepartmentSubjectsChart';
-
 // --- All initial courses below (as previously) --- //
 const BASE_COURSES = [
   // Computer Science courses
@@ -15,6 +14,7 @@ const BASE_COURSES = [
     credits: 3,
     department: 'Computer Science',
     semester: 'SEM1',
+    year: '2024',
     enrolled: 120,
     category: 'Core',
     degree: 'B.Tech',
@@ -33,6 +33,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Computer Science',
     semester: 'SEM2',
+    year: '2024',
     enrolled: 95,
     category: 'Core',
     degree: 'B.Tech',
@@ -51,6 +52,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Computer Science',
     semester: 'SEM2',
+    year: '2024',
     enrolled: 85,
     category: 'Core',
     degree: 'B.Tech',
@@ -69,6 +71,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Computer Science',
     semester: 'SEM3',
+    year: '2025',
     enrolled: 75,
     category: 'Elective',
     degree: 'B.Tech',
@@ -87,6 +90,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Computer Science',
     semester: 'SEM1',
+    year: '2025',
     enrolled: 65,
     category: 'Elective',
     degree: 'M.Tech',
@@ -105,6 +109,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Computer Science',
     semester: 'SEM2',
+    year: '2025',
     enrolled: 55,
     category: 'Elective',
     degree: 'M.Tech',
@@ -124,6 +129,7 @@ const BASE_COURSES = [
     credits: 3,
     department: 'Mechanical',
     semester: 'SEM1',
+    year: '2024',
     enrolled: 110,
     category: 'Core',
     degree: 'B.Tech',
@@ -142,6 +148,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Mechanical',
     semester: 'SEM2',
+    year: '2024',
     enrolled: 90,
     category: 'Core',
     degree: 'B.Tech',
@@ -160,6 +167,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Mechanical',
     semester: 'SEM1',
+    year: '2025',
     enrolled: 85,
     category: 'Core',
     degree: 'B.Tech',
@@ -178,6 +186,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Mechanical',
     semester: 'SEM2',
+    year: '2025',
     enrolled: 80,
     category: 'Core',
     degree: 'B.Tech',
@@ -196,6 +205,7 @@ const BASE_COURSES = [
     credits: 3,
     department: 'Mechanical',
     semester: 'SEM3',
+    year: '2025',
     enrolled: 50,
     category: 'Elective',
     degree: 'M.Tech',
@@ -215,6 +225,7 @@ const BASE_COURSES = [
     credits: 3,
     department: 'Electrical',
     semester: 'SEM1',
+    year: '2024',
     enrolled: 100,
     category: 'Core',
     degree: 'B.Tech',
@@ -233,6 +244,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Electrical',
     semester: 'SEM2',
+    year: '2024',
     enrolled: 85,
     category: 'Core',
     degree: 'B.Tech',
@@ -251,6 +263,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Electrical',
     semester: 'SEM1',
+    year: '2025',
     enrolled: 80,
     category: 'Core',
     degree: 'B.Tech',
@@ -269,6 +282,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Electrical',
     semester: 'SEM2',
+    year: '2025',
     enrolled: 75,
     category: 'Core',
     degree: 'B.Tech',
@@ -287,6 +301,7 @@ const BASE_COURSES = [
     credits: 3,
     department: 'Electrical',
     semester: 'SEM3',
+    year: '2025',
     enrolled: 45,
     category: 'Elective',
     degree: 'M.Tech',
@@ -306,6 +321,7 @@ const BASE_COURSES = [
     credits: 3,
     department: 'Engineering',
     semester: 'SEM1',
+    year: '2024',
     enrolled: 150,
     category: 'Core',
     degree: 'B.Tech',
@@ -324,6 +340,7 @@ const BASE_COURSES = [
     credits: 4,
     department: 'Engineering',
     semester: 'SEM2',
+    year: '2024',
     enrolled: 140,
     category: 'Core',
     degree: 'B.Tech',
@@ -342,6 +359,7 @@ const BASE_COURSES = [
     credits: 3,
     department: 'Engineering',
     semester: 'SEM1',
+    year: '2024',
     enrolled: 130,
     category: 'Core',
     degree: 'B.Tech',
@@ -360,6 +378,7 @@ const BASE_COURSES = [
     credits: 3,
     department: 'Engineering',
     semester: 'SEM2',
+    year: '2024',
     enrolled: 120,
     category: 'Elective',
     degree: 'B.Tech',
@@ -371,17 +390,20 @@ const BASE_COURSES = [
     ],
   },
 ];
-
 const Courses = ({ darkMode }) => {
   const departments = ['All', 'Computer Science', 'Mechanical', 'Electrical', 'Engineering'];
   const semesters = ['All', 'SEM1', 'SEM2', 'SEM3'];
+  // Extract years from courses
+  const courseYears = Array.from(new Set(BASE_COURSES.map(c => c.year))).sort();
+  const years = ['All', ...courseYears];
+
   const [department, setDepartment] = useState('All');
   const [semester, setSemester] = useState('All');
+  const [year, setYear] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedView, setSelectedView] = useState('courses');
   const [expandedCourseId, setExpandedCourseId] = useState(null);
   const [allCourses, setAllCourses] = useState(BASE_COURSES);
-
   // Persist data with localStorage (on change/load)
   useEffect(() => {
     const stored = localStorage.getItem('allCourses');
@@ -390,7 +412,6 @@ const Courses = ({ darkMode }) => {
   useEffect(() => {
     localStorage.setItem('allCourses', JSON.stringify(allCourses));
   }, [allCourses]);
-
   // Add Course Modal state
   const [isAdding, setIsAdding] = useState(false);
   const [newCourse, setNewCourse] = useState({
@@ -400,23 +421,23 @@ const Courses = ({ darkMode }) => {
     credits: 3,
     department: 'Computer Science',
     semester: 'SEM1',
+    year: courseYears[0] || '2024',
     enrolled: 0,
     category: 'Core',
     degree: 'B.Tech',
     content: [],
   });
-
   // Filtering logic
   const filteredCourses = allCourses.filter(course => {
     const departmentMatch = department === 'All' || course.department === department;
     const semesterMatch = semester === 'All' || course.semester === semester;
+    const yearMatch = year === 'All' || course.year === year;
     const searchMatch =
       course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       course.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
       course.instructor.toLowerCase().includes(searchQuery.toLowerCase());
-    return departmentMatch && semesterMatch && searchMatch;
+    return departmentMatch && semesterMatch && yearMatch && searchMatch;
   });
-
   const enrolledCourses = allCourses.filter(course => department === 'All' || course.department === department);
   const totalCredits = enrolledCourses.reduce((sum, course) => sum + course.credits, 0);
   const degreeDistribution = enrolledCourses.reduce((acc, course) => {
@@ -425,12 +446,10 @@ const Courses = ({ darkMode }) => {
   const categoryDistribution = enrolledCourses.reduce((acc, course) => {
     acc[course.category] = (acc[course.category] || 0) + 1; return acc;
   }, {});
-
   // Sample GPA and progress
   const averageGPA = 3.7;
   const completedCourses = 4;
   const totalCourses = 6;
-
   const container = {
     hidden: { opacity: 0 },
     show: { opacity: 1, transition: { staggerChildren: 0.1 } },
@@ -439,7 +458,6 @@ const Courses = ({ darkMode }) => {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 },
   };
-
   // Add Course handler
   const handleAddCourse = (e) => {
     e.preventDefault();
@@ -452,6 +470,7 @@ const Courses = ({ darkMode }) => {
       credits: 3,
       department: 'Computer Science',
       semester: 'SEM1',
+      year: courseYears[0] || '2024',
       enrolled: 0,
       category: 'Core',
       degree: 'B.Tech',
@@ -459,7 +478,6 @@ const Courses = ({ darkMode }) => {
     });
     setIsAdding(false);
   };
-
   // Related courses logic: same department or same semester, but not self
   const relatedCourses = (course) =>
     allCourses.filter(
@@ -467,7 +485,6 @@ const Courses = ({ darkMode }) => {
         c.id !== course.id &&
         (c.department === course.department || c.semester === course.semester)
     );
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -567,6 +584,32 @@ const Courses = ({ darkMode }) => {
             <div
               className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${
                 darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
+              } border ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}
+            >
+              <select
+                value={year}
+                onChange={e => setYear(e.target.value)}
+                className={`
+    appearance-none bg-transparent py-2 pl-3 pr-10 outline-none
+    ${darkMode ? 'text-white bg-gray-700' : 'text-gray-900 bg-white'}
+  `}
+              >
+                {years.map(yr => (
+                  <option key={yr} value={yr}
+                      className={darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}>
+                    {yr}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                <svg className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                </svg>
+              </div>
+            </div>
+            <div
+              className={`relative rounded-lg overflow-hidden backdrop-blur-sm ${
+                darkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
               } border ${darkMode ? 'border-gray-600' : 'border-gray-200'} flex-grow max-w-xs`}
             >
               <input
@@ -646,7 +689,7 @@ const Courses = ({ darkMode }) => {
                         </div>
                         <div className="flex items-center text-sm">
                           <ClockIcon className="h-4 w-4 mr-2 text-gray-500" />
-                          <span>{course.semester}</span>
+                          <span>{course.semester} - {course.year}</span>
                         </div>
                       </div>
                       <div className="mt-3 flex flex-wrap gap-2">
@@ -724,8 +767,8 @@ const Courses = ({ darkMode }) => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`p-6 rounded-xl ${darkMode
                 ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]'
-                : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`
-              }
+                : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
+              }`}
             >
               <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Course Load Summary</h2>
               <div className="space-y-4">
@@ -759,8 +802,8 @@ const Courses = ({ darkMode }) => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`p-6 rounded-xl ${darkMode
                 ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]'
-                : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`
-              }
+                : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
+              }`}
             >
               <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Enrollment Trends</h2>
               <div className="h-64">
@@ -770,7 +813,7 @@ const Courses = ({ darkMode }) => {
           </div>
           {isAdding && (
             <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
-              <div className={`p-6 rounded-xl w-full max-w-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-white text-gray  -800'}`}>
+              <div className={`p-6 rounded-xl w-full max-w-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-white text-gray-800'}`}>
                 <div className="flex justify-between items-center mb-4">
                   <h2 className={`text-xl font-semibold ${darkMode ? 'text-white' : 'text-gray-800'}`}>Add New Course</h2>  
               <button
@@ -793,7 +836,6 @@ const Courses = ({ darkMode }) => {
                dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
     required
   />
-
   <input
     type="text"
     placeholder="Course Name"
@@ -804,7 +846,6 @@ const Courses = ({ darkMode }) => {
                dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
     required
   />
-
   <input
     type="text"
     placeholder="Instructor"
@@ -814,7 +855,6 @@ const Courses = ({ darkMode }) => {
                bg-white text-gray-800 border-gray-300
                dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
   />
-
   <input
     type="number"
     min="1"
@@ -829,7 +869,6 @@ const Courses = ({ darkMode }) => {
                dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
     required
   />
-
   <select
     value={newCourse.department}
     onChange={e => setNewCourse({ ...newCourse, department: e.target.value })}
@@ -842,7 +881,6 @@ const Courses = ({ darkMode }) => {
     <option>Electrical</option>
     <option>Engineering</option>
   </select>
-
   <select
     value={newCourse.semester}
     onChange={e => setNewCourse({ ...newCourse, semester: e.target.value })}
@@ -854,7 +892,17 @@ const Courses = ({ darkMode }) => {
     <option>SEM2</option>
     <option>SEM3</option>
   </select>
-
+  <select
+    value={newCourse.year}
+    onChange={e => setNewCourse({ ...newCourse, year: e.target.value })}
+    className="w-full px-3 py-2 border rounded 
+               bg-white text-gray-800 border-gray-300
+               dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600"
+  >
+    {years.filter(y => y !== 'All').map(y => (
+      <option key={y}>{y}</option>
+    ))}
+  </select>
   <select
     value={newCourse.category}
     onChange={e => setNewCourse({ ...newCourse, category: e.target.value })}
@@ -865,7 +913,6 @@ const Courses = ({ darkMode }) => {
     <option>Core</option>
     <option>Elective</option>
   </select>
-
   <select
     value={newCourse.degree}
     onChange={e => setNewCourse({ ...newCourse, degree: e.target.value })}
@@ -876,7 +923,6 @@ const Courses = ({ darkMode }) => {
     <option>B.Tech</option>
     <option>M.Tech</option>
   </select>
-
   <button
     type="submit"
     className="w-full bg-blue-600 text-white py-2 rounded-lg mt-2 
@@ -886,7 +932,6 @@ const Courses = ({ darkMode }) => {
     Save Course
   </button>
 </form>
-
               </div>
             </div>
           )}
@@ -900,8 +945,8 @@ const Courses = ({ darkMode }) => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className={`p-6 rounded-xl ${darkMode
               ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]'
-              : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`
-            }
+              : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
+            }`}
           >
             <h2 className="text-xl font-semibold mb-4">Department Subjects Distribution</h2>
             <div className="h-80">
@@ -914,8 +959,8 @@ const Courses = ({ darkMode }) => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className={`p-6 rounded-xl ${darkMode
               ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]'
-              : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`
-            }
+              : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'
+            }`}
           >
             <h2 className="text-xl font-semibold mb-4">Course Distribution</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -1006,7 +1051,6 @@ const Courses = ({ darkMode }) => {
                       const electiveCourses = deptCourses.filter(course => course.category === 'Elective').length;
                       const btechCourses = deptCourses.filter(course => course.degree === 'B.Tech').length;
                       const mtechCourses = deptCourses.filter(course => course.degree === 'M.Tech').length;
-
                       return (
                         <tr key={dept} className={darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
                           <td className="px-4 py-3 text-sm">{dept}</td>
@@ -1027,5 +1071,4 @@ const Courses = ({ darkMode }) => {
     </div>
   );
 };
-
 export default Courses;
