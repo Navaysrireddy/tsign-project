@@ -65,7 +65,7 @@ const MOCK_ASSIGNMENTS = [
   {
     id: 'a1',
     title: 'C  ',
-    course: 'CS101: Introduction to Programming',
+    course: 'CS101: c Programming',
     dueDate: '2025-01-20T23:59:00',
     status: 'completed',
     grade: '95',
@@ -140,7 +140,7 @@ const MOCK_ASSIGNMENTS = [
   {
     id: 'a5',
     title: 'ML',
-    course: 'CS501: Introduction to Machine Learning',
+    course: 'CS501:Machine Learning',
     dueDate: '2025-02-10T23:59:00',
     status: 'completed',
     grade: '91',
@@ -555,11 +555,6 @@ const Assignments = () => {
 
     const [showDetails, setShowDetails] = useState(false);
 
-    // compute due state
-    // const days = dueDate ? daysBetween(dueDate) : null;
-    // const isOverdue = days !== null && days < 0 && !['completed', 'submitted'].includes(status);
-    // const isDueSoon = days !== null && days >= 0 && days <= 7;
-
     // card hover lift animation uses framer-motion
     return (
       <motion.article
@@ -584,10 +579,7 @@ const Assignments = () => {
             <div>
               <StatusBadge status={status} />
             </div>
-            {/* {isOverdue && <div className="text-xs text-red-600 dark:text-red-400"></div>}
-            {isDueSoon && !isOverdue && (
-              <div className="text-xs text-yellow-600 dark:text-yellow-400">Due soon</div>
-            )} */}
+          
           </div>
         </div>
 

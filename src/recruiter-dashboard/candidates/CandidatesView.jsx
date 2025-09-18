@@ -314,7 +314,7 @@ const CandidatesView = () => {
           onClick={handleEmailSelected}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
             selectedCandidates.length === 0
-              ? 'bg-gradient-to-r from-blue-400 to-indigo-400 text-white opacity-50 cursor-not-allowed'
+              ? 'bg-gradient-to-r from-blue-400 to-indigo-400 text-white opacity-50 '
               : 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:shadow-lg'
           } shadow-[3px_3px_6px_rgba(0,0,0,0.1)] transition-all`}
           disabled={selectedCandidates.length === 0}
@@ -329,7 +329,7 @@ const CandidatesView = () => {
           onClick={handleShortlistSelected}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
             selectedCandidates.length === 0
-              ? 'bg-gradient-to-r from-green-400 to-emerald-400 text-white opacity-50 cursor-not-allowed'
+              ? 'bg-gradient-to-r from-green-400 to-emerald-400 text-white opacity-50 '
               : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:shadow-lg'
           } shadow-[3px_3px_6px_rgba(0,0,0,0.1)] transition-all`}
           disabled={selectedCandidates.length === 0}
@@ -344,7 +344,7 @@ const CandidatesView = () => {
           onClick={handleRejectSelected}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
             selectedCandidates.length === 0
-              ? 'bg-gradient-to-r from-red-400 to-rose-400 text-white opacity-50 cursor-not-allowed'
+              ? 'bg-gradient-to-r from-red-400 to-rose-400 text-white opacity-50 '
               : 'bg-gradient-to-r from-red-500 to-rose-500 text-white hover:shadow-lg'
           } shadow-[3px_3px_6px_rgba(0,0,0,0.1)] transition-all`}
           disabled={selectedCandidates.length === 0}

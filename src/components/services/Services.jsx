@@ -91,7 +91,7 @@ const Services = () => {
 
   // Map service ID to images used in .service-visual CSS background
   const serviceImages = {
-    identity: require('../../assests/next-gen.png'),
+    identity: require('../../assests/photo.png'),
     registration: require('../../assests/healthy-hands.jpg'),
     recruitment: require('../../assests/istockphoto.jpg'),
     documents: require('../../assests/healthy-hands.jpg')
@@ -220,7 +220,7 @@ const Services = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 md:px-24 px-2 bg-gradient-to-tr from-blue-200 via-blue-100 to-cyan-100">
+      {/* <section className="py-20 md:px-24 px-2 bg-gradient-to-tr from-blue-200 via-blue-100 to-cyan-100">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Trusted by <span className={textGradient}>Global</span> Institutions
@@ -257,7 +257,7 @@ const Services = () => {
             </motion.div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* CTA */}
       <section className="py-20 md:px-24 px-2 bg-white">
@@ -287,7 +287,7 @@ const Services = () => {
               </button>
             </form>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             <div className="bg-white rounded-xl shadow p-6 text-center transition hover:-translate-y-1">
               <FiPhone className="text-blue-600 text-2xl mb-4 mx-auto" />
               <h4 className="font-semibold mb-1">Global Support</h4>
@@ -306,7 +306,7 @@ const Services = () => {
               <p className="text-gray-500 mb-2">San Francisco • Hyderabad • London</p>
               <a href="#map" className="text-blue-700 font-semibold hover:underline transition">View locations</a>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
       <Footer />

@@ -97,12 +97,13 @@ export const studentTableData = [
 ];
 
 export const collegeTableData = [
-  { id: 1, name: 'University of Technology', email: 'admin@uot.edu', status: 'Approved', registrationDate: '2023-03-05' },
-  { id: 2, name: 'National College', email: 'info@natcollege.edu', status: 'On Hold', registrationDate: '2023-03-12' },
-  { id: 3, name: 'Metropolitan University', email: 'admin@metuni.edu', status: 'Approved', registrationDate: '2023-03-08' },
-  { id: 4, name: 'Technical Institute', email: 'contact@techinst.edu', status: 'Rejected', registrationDate: '2023-03-15' },
-  { id: 5, name: 'Liberal Arts College', email: 'info@lac.edu', status: 'Approved', registrationDate: '2023-03-20' }
+  { id:1, collegeId: 'UOT001', name: 'University of Technology', email: 'admin@uot.edu', location: 'Delhi', registrationDate: '2023-03-05' },
+  { id: 2, collegeId: 'NC002', name: 'National College', email: 'info@natcollege.edu', location: 'Mumbai', registrationDate: '2023-03-12' },
+  { id: 3, collegeId: 'MU003', name: 'Metropolitan University', email: 'admin@metuni.edu', location: 'Kolkata', registrationDate: '2023-03-08' },
+  { id: 4, collegeId: 'TI004', name: 'Technical Institute', email: 'contact@techinst.edu', location: 'Chennai', registrationDate: '2023-03-15' },
+  { id:5, collegeId: 'LAC005', name: 'Liberal Arts College', email: 'info@lac.edu', location: 'Bangalore', registrationDate: '2023-03-20' }
 ];
+
 
 export const recruiterTableData = [
   { id: 1, name: 'Tech Solutions Inc.', email: 'hr@techsolutions.com', status: 'Approved', registrationDate: '2023-04-03' },
@@ -113,7 +114,6 @@ export const recruiterTableData = [
   { id: 6, name: 'NextGen Systems', email: 'hiring@nextgen.com', status: 'Approved', registrationDate: '2023-04-18' }
 ];
 
-// Extended data for detailed management views
 // Extended student data with location, college, district
 export const detailedStudentData = [
   { id: 1, name: 'Riya Sharma', email: 'riya@example.com', status: 'Active', college: 'Delhi Technical University', district: 'Delhi', location: 'New Delhi' },

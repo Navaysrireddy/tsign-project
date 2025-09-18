@@ -1,23 +1,189 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon, SearchIcon, DownloadIcon } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
-import { detailedCollegeData, collegeManagementSummary } from '../utils/mockData';
+import jsPDF from 'jspdf';
 
-const ManageColleges: React.FC = () => {
+// Simple theme context stub (replace with your actual ThemeContext if using)
+const ThemeContext = React.createContext({ theme: 'light' });
+const useTheme = () => React.useContext(ThemeContext);
+
+// Mock summary data (update for total accordingly)
+const collegeManagementSummary = {
+  total: 10,
+  active: 6,
+  new: 3,
+};
+
+// Expanded mock college data without status field
+const detailedCollegeData = [
+  {
+    id: 1,
+    name: 'ABC College',
+    email: 'contact@abccollege.edu',
+    location: 'Hyderabad',
+    district: 'Ranga Reddy',
+    tSignNumber: 'T123456',
+  },
+  {
+    id: 2,
+    name: 'XYZ Institute',
+    email: 'info@xyzinstitute.edu',
+    location: 'Warangal',
+    district: 'Warangal Urban',
+    tSignNumber: 'T654321',
+  },
+  {
+    id: 3,
+    name: 'St. Joseph College',
+    email: 'admin@stjoseph.edu',
+    location: 'Secunderabad',
+    district: 'Hyderabad',
+    tSignNumber: 'T112233',
+  },
+  {
+    id: 4,
+    name: 'Green Valley College',
+    email: 'contact@greenvalley.edu',
+    location: 'Karimnagar',
+    district: 'Karimnagar',
+    tSignNumber: 'T223344',
+  },
+  {
+    id: 5,
+    name: 'Brilliant Group',
+    email: 'office@brilliantgroup.edu',
+    location: 'Nalgonda',
+    district: 'Nalgonda',
+    tSignNumber: 'T334455',
+  },
+  {
+    id: 6,
+    name: 'Vision Degree College',
+    email: 'info@visiondegree.edu',
+    location: 'Adilabad',
+    district: 'Adilabad',
+    tSignNumber: 'T445566',
+  },
+  {
+    id: 7,
+    name: 'Genius Institute',
+    email: 'genius@genius.edu',
+    location: 'Mahbubnagar',
+    district: 'Mahbubnagar',
+    tSignNumber: 'T556677',
+  },
+  {
+    id: 8,
+    name: 'Telangana College',
+    email: 'contact@telanganacollege.edu',
+    location: 'Khammam',
+    district: 'Khammam',
+    tSignNumber: 'T667788',
+  },
+  {
+    id: 9,
+    name: 'Sri Chaitanya',
+    email: 'info@srichaithanya.edu',
+    location: 'Suryapet',
+    district: 'Suryapet',
+    tSignNumber: 'T778899',
+  },
+  {
+    id: 10,
+    name: 'Vardhaman College of Engineering',
+    email: 'contact@vardhaman.edu',
+    location: 'Shamshabad',
+    district: 'Ranga Reddy',
+    tSignNumber: 'T889900',
+  },
+];
+
+// Utility function for exporting filtered colleges to CSV (without status)
+const collegesToCSV = (colleges) => {
+  const headers = [
+    'ID',
+    'Name',
+    'Email',
+    'Location',
+    'District',
+    'T-Sign Number',
+  ];
+  const rows = colleges.map((college) =>
+    [
+      college.id,
+      `"${college.name}"`,
+      `"${college.email}"`,
+      `"${college.location}"`,
+      `"${college.district}"`,
+      `"${college.tSignNumber}"`,
+    ].join(',')
+  );
+  return [headers.join(','), ...rows].join('\n');
+};
+
+const ManageColleges = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('Active');
+  // const [statusFilter] = useState('All'); // Dummy to preserve layout if needed
 
-  // Filter data based on search term and status filter
-  const filteredData = detailedCollegeData.filter(college => {
+  // Filter data based on search (no status here)
+  const filteredData = detailedCollegeData.filter((college) => {
     const matchesSearch =
       college.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      college.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'All' || college.status === statusFilter;
-    return matchesSearch && matchesStatus;
+      college.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (college.location &&
+        college.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (college.district &&
+        college.district.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (college.tSignNumber &&
+        college.tSignNumber.toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchesSearch;
   });
+
+  const handleExportCSV = () => {
+    const csvString = collegesToCSV(filteredData);
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'colleges_list.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Dynamically import jspdf-autotable inside the function to avoid plugin attach issues
+  const handleExportPDF = async () => {
+    const autoTable = (await import('jspdf-autotable')).default;
+    const doc = new jsPDF();
+
+    const columns = [
+      'ID',
+      'Name',
+      'Email',
+      'Location',
+      'District',
+      'T-Sign Number',
+    ];
+
+    const rows = filteredData.map((college) => [
+      college.id,
+      college.name,
+      college.email,
+      college.location,
+      college.district,
+      college.tSignNumber,
+    ]);
+
+    doc.text('Colleges List', 14, 15);
+    autoTable(doc, {
+      head: [columns],
+      body: rows,
+      startY: 20,
+    });
+
+    doc.save('colleges_list.pdf');
+  };
 
   return (
     <div className="space-y-6 w-full">
@@ -50,7 +216,7 @@ const ManageColleges: React.FC = () => {
             theme === 'dark' ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-gray-200'
           }`}
         >
-          <h3 className="text-sm font-medium text-gray-500">A</h3>
+          <h3 className="text-sm font-medium text-gray-500">Active</h3>
           <p className="text-2xl font-semibold mt-1">{collegeManagementSummary.active}</p>
         </div>
         <div
@@ -63,7 +229,7 @@ const ManageColleges: React.FC = () => {
         </div>
       </div>
 
-      {/* Search and filters */}
+      {/* Search and export buttons */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
         <div
           className={`relative flex-1 max-w-md rounded-lg overflow-hidden border ${
@@ -75,27 +241,17 @@ const ManageColleges: React.FC = () => {
           </div>
           <input
             type="text"
-            placeholder="Search by name or email..."
+            placeholder="Search by name, email, location, district or T-Sign..."
             value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className={`w-full py-2 pl-10 pr-4 focus:outline-none ${
               theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'
             }`}
           />
         </div>
         <div className="flex gap-2">
-          <select
-            value={statusFilter}
-            onChange={e => setStatusFilter(e.target.value)}
-            className={`px-4 py-2 rounded-lg border ${
-              theme === 'dark' ? 'bg-gray-900 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'
-            } focus:outline-none`}
-          >
-            <option value="All">All</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
           <button
+            onClick={handleExportCSV}
             className={`px-4 py-2 rounded-lg border flex items-center gap-2 ${
               theme === 'dark'
                 ? 'bg-gray-900 border-gray-700 hover:bg-gray-800'
@@ -103,7 +259,19 @@ const ManageColleges: React.FC = () => {
             }`}
           >
             <DownloadIcon size={16} />
-            <span className="hidden sm:inline">Export</span>
+            <span className="hidden sm:inline">Export CSV</span>
+          </button>
+
+          <button
+            onClick={handleExportPDF}
+            className={`px-4 py-2 rounded-lg border flex items-center gap-2 ${
+              theme === 'dark'
+                ? 'bg-gray-900 border-gray-700 hover:bg-gray-800'
+                : 'bg-white border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            <DownloadIcon size={16} />
+            <span className="hidden sm:inline">Export PDF</span>
           </button>
         </div>
       </div>
@@ -121,7 +289,9 @@ const ManageColleges: React.FC = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Location</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">District</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">T-Sign</th>
               </tr>
             </thead>
             <tbody
@@ -130,34 +300,24 @@ const ManageColleges: React.FC = () => {
               }`}
             >
               {filteredData.length > 0 ? (
-                filteredData.map(college => (
+                filteredData.map((college) => (
                   <tr
                     key={college.id}
-                    className={`${theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-gray-50'} transition-colors`}
+                    className={`${
+                      theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-gray-50'
+                    } transition-colors`}
                   >
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{college.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{college.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{college.email}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          college.status === 'Active'
-                            ? theme === 'dark'
-                              ? 'bg-green-900/30 text-green-400'
-                              : 'bg-green-100 text-green-600'
-                            : theme === 'dark'
-                            ? 'bg-gray-800 text-gray-400'
-                            : 'bg-gray-100 text-gray-600'
-                        }`}
-                      >
-                        {college.status}
-                      </span>
-                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{college.location}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{college.district}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{college.tSignNumber}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                  <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
                     No colleges found
                   </td>
                 </tr>

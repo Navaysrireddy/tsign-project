@@ -4,7 +4,7 @@ import Header from '../header/Header';
 import Footer from '../footer/Footer';
 import CollegeSearch from '../college-search/CollegeSearch';
 import HTechNews from '../htechnews/HTechNews';
-import img1 from '../../assests/Students.png';
+import img1 from '../../assests/Student.png';
 import img2 from '../../assests/College.png';
 import video1 from '../../assests/Video1.mp4';
 import icon1 from '../../assests/icon_1.png';
@@ -16,6 +16,7 @@ import Step2 from '../../assests/Step2.png';
 import Step3 from '../../assests/Step3.png';
 import Step4 from '../../assests/Step4.png';
 import { ReachImpactSection } from '../reach/reach';
+import { Link } from 'react-router-dom';
  
 const coreValues = [
   { 
@@ -186,21 +187,38 @@ const Home = () => {
       {/* === Hero Slider Section === */}
     <section className="relative">
   <section className="w-full overflow-hidden relative">
-    <div
-      className="flex transition-transform duration-1000 ease-in-out"
-      style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-    >
-      {slides.map((slide, index) => (
-        <div className="flex-shrink-0 w-full" key={index}>
-          <img
-            src={slide.image}
-            alt={`Slide ${index + 1}`}
-            className="w-full h-auto object-contain md:h-auto"
-          />
-        </div>
-      ))}
-    </div>
-  </section>
+  <div
+    className="flex transition-transform duration-1000 ease-in-out"
+    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+  >
+    {slides.map((slide, index) => {
+      // Only wrap student and college images with Link
+      if (slide.image === img1 || slide.image === img2) {
+        return (
+          <div className="flex-shrink-0 w-full" key={index}>
+            <Link to="/login">
+              <img
+                src={slide.image}
+                alt={`Slide ${index + 1}`}
+                className="w-full h-auto object-contain md:h-auto cursor-pointer"
+              />
+            </Link>
+          </div>
+        );
+      } else {
+        return (
+          <div className="flex-shrink-0 w-full" key={index}>
+            <img
+              src={slide.image}
+              alt={`Slide ${index + 1}`}
+              className="w-full h-auto object-contain md:h-auto"
+            />
+          </div>
+        );
+      }
+    })}
+  </div>
+</section>
 </section>
  
  

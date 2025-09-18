@@ -6,12 +6,14 @@ import EventUpdates from './EventUpdates';
 import PlacementsChart from './PlacementsChart';
 import DepartmentPerformance from './DepartmentPerformance';
 import { FilterIcon } from 'lucide-react';
- 
+
 const Dashboard = ({
   darkMode
 }) => {
   const [selectedDepartment, setSelectedDepartment] = useState('All');
+
   const departments = ['All', 'Engineering', 'Computer Science', 'Mechanical', 'Electrical'];
+  
   return <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
         <motion.div initial={{
@@ -56,6 +58,7 @@ const Dashboard = ({
       {dept}
     </option>
   ))}
+  
 </select>
  
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">

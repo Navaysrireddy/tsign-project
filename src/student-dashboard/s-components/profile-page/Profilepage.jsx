@@ -79,7 +79,7 @@ const StudentProfilePage = () => {
             </div>
           </Link>
           <Link
-            to="/StudentProfilePage"
+            to="/profile"
             className="block mb-2 px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700"
           >
             Student Profile

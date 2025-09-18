@@ -11,7 +11,7 @@ import {
   XIcon,
   PlusIcon
 } from 'lucide-react';
-import EventsCalendar from './EventsCalendar';
+// import EventsCalendar from './EventsCalendar';
 import EventCategoryChart from './EventCategoryChart';
 import EventAttendanceChart from './EventAttendanceChart';
 import EventsTimeline from './EventsTimeline';
@@ -717,7 +717,7 @@ const Events = ({ darkMode }) => {
       </motion.div>
 
       {/* Statistics & Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
           <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">Events Calendar</h2>
           <div className="h-96">
@@ -738,7 +738,46 @@ const Events = ({ darkMode }) => {
             </div>
           </div>
         </motion.div>
-      </div>
+      </div> */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  {/* Event Categories */}
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: 0.1 }}
+    className={`p-6 rounded-xl ${darkMode
+      ? "bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]"
+      : "bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]"}`}
+  >
+    <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+      Event Categories
+    </h2>
+    <div className="h-80">
+      <EventCategoryChart darkMode={darkMode} events={filteredEvents} />
+    </div>
+  </motion.div>
+
+  {/* Attendance Rate */}
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: 0.2 }}
+    className={`p-6 rounded-xl ${darkMode
+      ? "bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]"
+      : "bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]"}`}
+  >
+    <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+      Attendance Rate
+    </h2>
+    <div className="h-72">
+      <EventAttendanceChart darkMode={darkMode} events={filteredEvents} />
+    </div>
+  </motion.div>
+
+  {/* Events Calendar (Full Width) */}
+ 
+</div>
+
 
       <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} transition={{duration: 0.5, delay: 0.3}} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
         <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">Events Timeline</h2>

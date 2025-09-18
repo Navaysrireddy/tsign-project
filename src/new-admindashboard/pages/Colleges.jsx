@@ -78,52 +78,54 @@ const Colleges = () => {
   const { theme } = useTheme();
   const [activeModal, setActiveModal] = useState(null); // "total", "hold", "rejected", "approved", or null
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Approved': return theme === 'dark' ? 'text-green-400' : 'text-green-600';
-      case 'On Hold': return theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600';
-      case 'Rejected': return theme === 'dark' ? 'text-red-400' : 'text-red-600';
-      default: return '';
-    }
-  };
+  // const getStatusColor = (status) => {
+  //   switch (status) {
+  //     case 'Approved': return theme === 'dark' ? 'text-green-400' : 'text-green-600';
+  //     case 'On Hold': return theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600';
+  //     case 'Rejected': return theme === 'dark' ? 'text-red-400' : 'text-red-600';
+  //     default: return '';
+  //   }
+  // };
 
-  const getStatusBg = (status) => {
-    switch (status) {
-      case 'Approved': return theme === 'dark' ? 'bg-green-900/30' : 'bg-green-100';
-      case 'On Hold': return theme === 'dark' ? 'bg-yellow-900/30' : 'bg-yellow-100';
-      case 'Rejected': return theme === 'dark' ? 'bg-red-900/30' : 'bg-red-100';
-      default: return '';
-    }
-  };
+  // const getStatusBg = (status) => {
+  //   switch (status) {
+  //     case 'Approved': return theme === 'dark' ? 'bg-green-900/30' : 'bg-green-100';
+  //     case 'On Hold': return theme === 'dark' ? 'bg-yellow-900/30' : 'bg-yellow-100';
+  //     case 'Rejected': return theme === 'dark' ? 'bg-red-900/30' : 'bg-red-100';
+  //     default: return '';
+  //   }
+  // };
 
-  const columns = [
-    {
-      header: 'Name',
-      accessor: 'name',
-      sortable: true,
-    },
-    {
-      header: 'Email',
-      accessor: 'email',
-      sortable: true,
-    },
-    {
-      header: 'Status',
-      accessor: 'status',
-      sortable: true,
-      cell: (value) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBg(value)} ${getStatusColor(value)}`}>
-          {value}
-        </span>
-      ),
-    },
-    {
-      header: 'Registration Date',
-      accessor: 'registrationDate',
-      sortable: true,
-      cell: (value) => new Date(value).toLocaleDateString(),
-    },
-  ];
+ const columns = [
+  {
+    header: 'College ID',
+    accessor: 'collegeId', // assuming 'collegeId' is the correct field name
+    sortable: true,
+  },
+  {
+    header: 'Name',
+    accessor: 'name',
+    sortable: true,
+  },
+  {
+    header: 'Email',
+    accessor: 'email',
+    sortable: true,
+  },
+  
+  {
+    header: 'Location',
+    accessor: 'location',
+    sortable: true,
+  },
+  {
+    header: 'Registration Date',
+    accessor: 'registrationDate',
+    sortable: true,
+    cell: (value) => new Date(value).toLocaleDateString(),
+  },
+];
+
 
   // Removed renderActions and actions prop to hide action icons
 

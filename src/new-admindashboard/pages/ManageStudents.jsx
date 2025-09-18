@@ -6,12 +6,16 @@ import { detailedStudentData, studentManagementSummary } from '../utils/mockData
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
+// Helper function: Generate 12-character T-Sign ID
+const generateTSignId = (id) => {
+  return `TSIGN${id.toString().padStart(8, '0')}`;
+};
+
 const ManageStudents = () => {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('Active');
   const [collegeFilter, setCollegeFilter] = useState('All');
 
   // Extract distinct colleges for the college filter dropdown
@@ -22,17 +26,15 @@ const ManageStudents = () => {
     return ['All', ...Array.from(uniqueColleges)];
   }, []);
 
-  // Filter data based on search term, status filter, and college filter
+  // Filter data based on search term and college filter
   const filteredData = detailedStudentData.filter(student => {
     const matchesSearch =
       student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.email.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus = statusFilter === 'All' || student.status === statusFilter;
-
     const matchesCollege = collegeFilter === 'All' || student.college === collegeFilter;
 
-    return matchesSearch && matchesStatus && matchesCollege;
+    return matchesSearch && matchesCollege;
   });
 
   // Function to download college-wise filtered data as PDF
@@ -43,17 +45,18 @@ const ManageStudents = () => {
     doc.text('Students List', 14, 22);
 
     const headers = [
-      ['ID', 'Name', 'Email', 'Status', 'College', 'Location', 'District'],
+      ['ID', 'T-Sign ID', 'Name', 'Email', 'College', 'Location', 'District', 'College Dist Code'],
     ];
 
     const dataRows = filteredData.map(student => [
       student.id.toString(),
+      generateTSignId(student.id), // ✅ use generator
       student.name,
       student.email,
-      student.status,
       student.college || '-',
       student.location || '-',
       student.district || '-',
+      student.collegeDistCode || '-' // College District Code
     ]);
 
     autoTable(doc, {
@@ -84,27 +87,15 @@ const ManageStudents = () => {
 
       {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div
-          className={`p-4 rounded-lg border ${
-            isDarkMode ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-gray-200'
-          }`}
-        >
+        <div className={`p-4 rounded-lg border ${isDarkMode ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-gray-200'}`}>
           <h3 className="text-sm font-medium text-gray-500">Total Students</h3>
           <p className="text-2xl font-semibold mt-1">{studentManagementSummary.total}</p>
         </div>
-        <div
-          className={`p-4 rounded-lg border ${
-            isDarkMode ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-gray-200'
-          }`}
-        >
+        <div className={`p-4 rounded-lg border ${isDarkMode ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-gray-200'}`}>
           <h3 className="text-sm font-medium text-gray-500">Active</h3>
           <p className="text-2xl font-semibold mt-1">{studentManagementSummary.active}</p>
         </div>
-        <div
-          className={`p-4 rounded-lg border ${
-            isDarkMode ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-gray-200'
-          }`}
-        >
+        <div className={`p-4 rounded-lg border ${isDarkMode ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-gray-200'}`}>
           <h3 className="text-sm font-medium text-gray-500">New</h3>
           <p className="text-2xl font-semibold mt-1">{studentManagementSummary.new}</p>
         </div>
@@ -132,18 +123,6 @@ const ManageStudents = () => {
         </div>
         <div className="flex gap-2 flex-wrap">
           <select
-            value={statusFilter}
-            onChange={e => setStatusFilter(e.target.value)}
-            className={`px-4 py-2 rounded-lg border ${
-              isDarkMode ? 'bg-gray-900 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'
-            } focus:outline-none`}
-          >
-            <option value="All">All Statuses</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-
-          <select
             value={collegeFilter}
             onChange={e => setCollegeFilter(e.target.value)}
             className={`px-4 py-2 rounded-lg border ${
@@ -169,34 +148,28 @@ const ManageStudents = () => {
             }`}
           >
             <DownloadIcon size={16} />
-            <span className="hidden sm:inline">Download  PDF</span>
+            <span className="hidden sm:inline">Download PDF</span>
           </button>
         </div>
       </div>
 
       {/* Students Table */}
-      <div
-        className={`rounded-lg border overflow-hidden ${
-          isDarkMode ? 'border-gray-800' : 'border-gray-200'
-        }`}
-      >
+      <div className={`rounded-lg border overflow-hidden ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className={`${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">T-Sign ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">College</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Location</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">District</th>
               </tr>
             </thead>
             <tbody
-              className={`divide-y ${
-                isDarkMode ? 'divide-gray-800 bg-[#1E1E1E]' : 'divide-gray-200 bg-white'
-              }`}
+              className={`divide-y ${isDarkMode ? 'divide-gray-800 bg-[#1E1E1E]' : 'divide-gray-200 bg-white'}`}
             >
               {filteredData.length > 0 ? (
                 filteredData.map(student => (
@@ -205,23 +178,9 @@ const ManageStudents = () => {
                     className={`${isDarkMode ? 'hover:bg-gray-900' : 'hover:bg-gray-50'} transition-colors`}
                   >
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{student.id}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{generateTSignId(student.id)}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{student.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{student.email}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          student.status === 'Active'
-                            ? isDarkMode
-                              ? 'bg-green-900/30 text-green-400'
-                              : 'bg-green-100 text-green-600'
-                            : isDarkMode
-                            ? 'bg-gray-800 text-gray-400'
-                            : 'bg-gray-100 text-gray-600'
-                        }`}
-                      >
-                        {student.status}
-                      </span>
-                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{student.college || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{student.location || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{student.district || '-'}</td>
@@ -229,7 +188,7 @@ const ManageStudents = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="px-6 py-4 text-center text-sm text-gray-500">
+                  <td colSpan={8} className="px-6 py-4 text-center text-sm text-gray-500">
                     No students found
                   </td>
                 </tr>

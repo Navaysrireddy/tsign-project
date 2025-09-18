@@ -5,7 +5,6 @@ import VanillaTilt from 'vanilla-tilt';
 // Import all images
 import heroBackground from '../../assests/stud.webp';
 import telanganaEducation from '../../assests/College.png';
-import Logo from '../../assests/TG-SIGN (2).png';
 
 import rajeshKumar from '../../assests/College.png';
 import priyaSharma from '../../assests/College.png';
@@ -13,7 +12,7 @@ import arjunSingh from '../../assests/College.png';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
 import Decor from '../../assests/decor.svg';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+// import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 // Define color palette
 const colors = {
@@ -43,7 +42,7 @@ const GlassCard = ({ children, className = '', ...props }) => (
     {children}
   </div>
 );
-
+// eslint-disable-next-line
 const StatCard = ({ title, count, suffix = "+" }) => {
   const controls = useAnimation();
   const ref = useRef(null);
@@ -123,7 +122,7 @@ const AccordionItem = ({ question, answer, index }) => {
     </GlassCard>
   );
 };
-
+// eslint-disable-next-line
 const TeamMemberCard = ({ name, role, image, linkedin }) => {
   return (
     <GlassCard className="text-center p-6 group hover:border-[#3B5CB1] transition-all duration-300">
@@ -186,6 +185,7 @@ const About = () => {
     }
     
     return () => {
+      // eslint-disable-next-line
       tiltRefs.current.forEach(el => {
         if (el && el.vanillaTilt) {
           el.vanillaTilt.destroy();
@@ -226,6 +226,7 @@ const About = () => {
   ];
   
   // Team data
+  // eslint-disable-next-line
   const teamData = [
     {
       name: "Rajesh Kumar",
@@ -247,10 +248,10 @@ const About = () => {
     }
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // const [ setCurrentIndex] = useState(0);
    const members = [
     {
-      name: "Person1",
+      name: "sudhakar ",
       role: "xxxx",
       description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. dolores animi voluptas neque magnam et distinctio!",
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSx0vJF7ccBUmVSx21PGxpoVE8WC6kaPMR-xQ&s",
@@ -269,15 +270,15 @@ const About = () => {
     },
   ];
  
-  const nextMember = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % members.length);
-  };
+  // const nextMember = () => {
+  //   setCurrentIndex((prevIndex) => (prevIndex + 1) % members.length);
+  // };
  
-  const prevMember = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? members.length - 1 : prevIndex - 1
-    );
-  };
+  // const prevMember = () => {
+  //   setCurrentIndex((prevIndex) =>
+  //     prevIndex === 0 ? members.length - 1 : prevIndex - 1
+  //   );
+  // };
  
   
   return (
@@ -443,56 +444,37 @@ const About = () => {
       </section>
       
       {/* Team Section */}
+
        {/* Team Carousel Section - Improved mobile layout */}
-      <section className="bg-white rounded-xl shadow-md max-w-4xl mx-auto my-12 md:my-16 p-6 md:p-8">
-        <div className="flex items-center mb-6 md:mb-8">
-          <img src={Decor} alt="decor" className="h-5 sm:h-6 md:h-8 mr-3 md:mr-4" />
-          <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 font-system">OUR DEDICATED TEAM</h2>
-        </div>
+      <section className="bg-white rounded-xl shadow-md max-w-6xl mx-auto my-12 md:my-16 p-6 md:p-10">
+  {/* Section Heading */}
+  <div className="flex items-center mb-8 justify-center">
+    <img src={Decor} alt="decor" className="h-6 md:h-8 mr-3 md:mr-4" />
+    <h2 className="text-2xl md:text-3xl font-bold text-gray-800 font-system text-center">
+      OUR DEDICATED TEAM
+    </h2>
+  </div>
  
-        <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
-          <div className="md:w-1/2 order-2 md:order-1 text-center md:text-left">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">{members[currentIndex].name}</h2>
-            <h4 className="text-sm sm:text-md md:text-lg text-gray-700 mt-1">{members[currentIndex].role}</h4>
-            <p className="text-gray-600 mt-3 md:mt-4 text-sm sm:text-base">{members[currentIndex].description}</p>
-           
-            <div className="flex items-center mt-4 md:mt-6 justify-center md:justify-start">
-              <button
-                onClick={prevMember}
-                className="p-2 rounded-full bg-[#5a94f7] text-white hover:bg-navy-800 transition-colors mr-4"
-                aria-label="Previous team member"
-              >
-                <FaArrowLeft />
-              </button>
-              <button
-                onClick={nextMember}
-                className="p-2 rounded-full bg-[#5a94f7] text-white hover:bg-navy-800 transition-colors"
-                aria-label="Next team member"
-              >
-                <FaArrowRight />
-              </button>
-             
-              <div className="flex gap-2 ml-4 md:ml-6">
-                {members.map((_, i) => (
-                  <span
-                    key={i}
-                    className={`h-2 w-2 rounded-full ${i === currentIndex ? 'bg-[#0b0378]' : 'bg-gray-400'}`}
-                    aria-hidden="true"
-                  ></span>
-                ))}
-              </div>
-            </div>
-          </div>
-         
-          <div className="md:w-1/2 order-1 md:order-2 flex justify-center mb-4 md:mb-0">
-            <img
-              src={members[currentIndex].image}
-              alt={members[currentIndex].name}
-              className="w-40 h-40 sm:w-48 sm:h-48 md:w-60 md:h-60 object-cover rounded-lg shadow-md"
-            />
-          </div>
-        </div>
-      </section>
+  {/* Grid Layout */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {members.map((member, index) => (
+      <div
+        key={index}
+        className="bg-gray-50 rounded-xl p-6 text-center shadow-md hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:bg-gradient-to-b hover:from-[#f9fafb] hover:to-[#eef2ff]"
+      >
+        <img
+          src={member.image}
+          alt={member.name}
+          className="w-32 h-32 mx-auto rounded-full object-cover shadow-md mb-4 transition-transform duration-300 hover:rotate-1"
+        />
+        <h3 className="text-lg font-semibold text-gray-800">{member.name}</h3>
+        <p className="text-sm text-gray-600">{member.role}</p>
+        {/* <p className="text-gray-500 mt-3 text-sm">{member.description}</p> */}
+      </div>
+    ))}
+  </div>
+</section>
+ 
  <section className="py-20 px-4 relative bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="container mx-auto">
           <motion.h2 

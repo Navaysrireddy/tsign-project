@@ -5,6 +5,7 @@ import {
   Route,
   Navigate,
   useNavigate,
+  useParams,
 } from "react-router-dom";
 
 // Recruiter Contexts
@@ -60,7 +61,7 @@ import Resume from "./student-dashboard/s-components/resume/Resume.jsx";
 // ---------------- New Admin Dashboard (Separated) ----------------
 import AdminRoutes from "./new-admindashboard/AdminRoutes";
 
-// Student Layout with Sidebar
+// ---------------- Student Layout with Sidebar ----------------
 function StudentLayout() {
   const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
   const [sidebarOpen, setSidebarOpen] = React.useState(!isMobile);
@@ -95,7 +96,7 @@ function StudentLayout() {
               <Route path="settings" element={<Settings />} />
               {/* Profile inside layout has sidebar */}
               <Route path="profile" element={<Profilepage />} />
-              <Route path="resume" element={<Resume />}/>
+              <Route path="resume" element={<Resume />} />
               <Route path="*" element={<StudentDashboard />} />
             </Routes>
           </main>
@@ -105,9 +106,7 @@ function StudentLayout() {
   );
 }
 
-// Standalone StudentProfilePage without sidebar
-// used for route /studentprofilepage
-// to show profile page only, no sidebar
+// ---------------- Standalone Student Profile ----------------
 function StandaloneStudentProfile() {
   return <Profilepage />;
 }
@@ -119,6 +118,20 @@ function EnrollpageWrapper() {
     navigate("/profile-form");
   };
   return <Enrollpage onRegisterSuccess={handleRegisterSuccess} />;
+}
+
+// ---------------- Company Page (Dynamic Route) ----------------
+function CompanyPage() {
+  const { slug } = useParams();
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl font-bold">Company / Location: {slug}</h2>
+      <p className="mt-2 text-gray-600">
+        Showing details for <strong>{slug}</strong>.  
+        (Later you can fetch recruiters from this location or company.)
+      </p>
+    </div>
+  );
 }
 
 // ---------------- Main App ----------------
@@ -139,9 +152,8 @@ function App() {
               <Route path="/forgot" element={<ForgotPassword />} />
               <Route path="/profile-form" element={<Profileform />} />
 
-              {/* Redirect /Profile and /profile to standalone student profile without sidebar */}
+              {/* Standalone student profile (no sidebar) */}
               <Route path="/Profile" element={<StandaloneStudentProfile />} />
-              
 
               {/* ---------- Recruiter Dashboard ---------- */}
               <Route path="/recruiter" element={<Layout />}>
@@ -155,10 +167,10 @@ function App() {
                 <Route path="settings" element={<SettingsView />} />
               </Route>
 
-              {/* ---------- Student Dashboard with sidebar ---------- */}
+              {/* ---------- Student Dashboard ---------- */}
               <Route path="/student-dashboard/*" element={<StudentLayout />} />
 
-              {/* ---------- New Admin Dashboard with Theme ---------- */}
+              {/* ---------- New Admin Dashboard ---------- */}
               <Route
                 path="/new-admindashboard/*"
                 element={
@@ -170,6 +182,9 @@ function App() {
 
               {/* ---------- Other Dashboard ---------- */}
               <Route path="/new-dashboard/*" element={<NewDashboard />} />
+
+              {/* ---------- Company / Location Page ---------- */}
+              <Route path="/company/:slug" element={<CompanyPage />} />
 
               {/* ---------- 404 ---------- */}
               <Route path="*" element={<h2>404 - Page Not Found</h2>} />

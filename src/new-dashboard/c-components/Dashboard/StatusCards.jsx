@@ -6,10 +6,10 @@ import {
   XCircleIcon,
   BriefcaseIcon
 } from 'lucide-react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const StatusCards = ({ darkMode, department }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [selectedCard, setSelectedCard] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -101,67 +101,49 @@ const StatusCards = ({ darkMode, department }) => {
   const data = getDepartmentData();
   
   const cards = [
-    {
-      title: 'Total Students',
-      value: data.totalStudents,
-      icon: UsersIcon,
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-100',
-      darkBgColor: 'bg-blue-900/20',
-      breakdown: departmentBreakdown['All'].totalStudents
-    },
-    {
-      title: 'Selected Students',
-      value: data.selectedStudents,
-      icon: CheckCircleIcon,
-      color: 'text-green-500',
-      bgColor: 'bg-green-100',
-      darkBgColor: 'bg-green-900/20',
-      breakdown: departmentBreakdown['All'].selectedStudents
-    },
-    {
-      title: 'Rejected Students',
-      value: data.rejectedStudents,
-      icon:XCircleIcon,
-      color: 'text-red-500',
-      bgColor: 'bg-red-100',
-      darkBgColor: 'bg-red-900/20',
-      breakdown: departmentBreakdown['All'].rejectedStudents
-    },
-    {
-      title: 'Placements',
-      value: data.placements,
-      icon: BriefcaseIcon,
-      color: 'text-teal-500',
-      bgColor: 'bg-teal-100',
-      darkBgColor: 'bg-teal-900/20',
-      breakdown: departmentBreakdown['All'].placements
-    },
-    // {
-    //   title: 'Total Events',
-    //   value: data.totalEvents,
-    //   icon: UsersIcon, // You might want to use a different icon
-    //   color: 'text-purple-500',
-    //   bgColor: 'bg-purple-100',
-    //   darkBgColor: 'bg-purple-900/20'
-    // },
-    // {
-    //   title: 'Workshops',
-    //   value: data.workshops,
-    //   icon: UsersIcon, // You might want to use a different icon
-    //   color: 'text-orange-500',
-    //   bgColor: 'bg-orange-100',
-    //   darkBgColor: 'bg-orange-900/20'
-    // },
-    // {
-    //   title: 'Recruitments',
-    //   value: data.recruitments,
-    //   icon: BriefcaseIcon,
-    //   color: 'text-indigo-500',
-    //   bgColor: 'bg-indigo-100',
-    //   darkBgColor: 'bg-indigo-900/20'
-    // }
-  ];
+  {
+    title: 'Total Students',
+    value: data.totalStudents,
+    icon: UsersIcon,
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-100',
+    darkBgColor: 'bg-blue-900/20',
+    hoverGradient: 'hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-blue-500/20',
+    breakdown: departmentBreakdown['All'].totalStudents
+  },
+  {
+    title: 'Selected Students',
+    value: data.selectedStudents,
+    icon: CheckCircleIcon,
+    color: 'text-green-500',
+    bgColor: 'bg-green-100',
+    darkBgColor: 'bg-green-900/20',
+    hoverGradient: 'hover:bg-gradient-to-r hover:from-green-500/10 hover:to-green-500/20',
+    breakdown: departmentBreakdown['All'].selectedStudents
+  },
+  {
+    title: 'Rejected Students',
+    value: data.rejectedStudents,
+    icon: XCircleIcon,
+    color: 'text-red-500',
+    bgColor: 'bg-red-100',
+    darkBgColor: 'bg-red-900/20',
+    hoverGradient: 'hover:bg-gradient-to-r hover:from-red-500/10 hover:to-red-500/20',
+    breakdown: departmentBreakdown['All'].rejectedStudents
+  },
+  {
+    title: 'Placements',
+    value: data.placements,
+    icon: BriefcaseIcon,
+    color: 'text-teal-500',
+    bgColor: 'bg-teal-100',
+    darkBgColor: 'bg-teal-900/20',
+    hoverGradient: 'hover:bg-gradient-to-r hover:from-teal-500/10 hover:to-teal-500/20',
+    breakdown: departmentBreakdown['All'].placements,
+     onClick: () => navigate('/new-dashboard/placements')
+  }
+];
+
 
   const handleCardClick = (card) => {
     if (card.onClick) {
@@ -177,25 +159,27 @@ const StatusCards = ({ darkMode, department }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {cards.map((card, index) => (
           <motion.div 
-            key={card.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-            whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            className={`p-4 rounded-xl cursor-pointer ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-md`}
-            onClick={() => handleCardClick(card)}
-          >
-            <div className="flex items-center">
-              <div className={`p-3 rounded-full mr-3 ${darkMode ? card.darkBgColor : card.bgColor}`}>
-                <card.icon className={`h-6 w-6 ${card.color}`} />
-              </div>
-              <div className="text-left">
-                <p className="text-sm text-gray-400">{card.title}</p>
-                <h3 className="text-2xl font-bold mt-1 pl-4">{card.value}</h3>
+  key={card.title}
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.3, delay: index * 0.1 }}
+  whileHover={{ y: -5, transition: { duration: 0.2 } }}
+  className={`p-4 rounded-xl cursor-pointer shadow-md transition-all duration-300 
+    ${darkMode ? `bg-gray-800 ${card.hoverGradient}` : `bg-white ${card.hoverGradient}`}
+  `}
+  onClick={() => handleCardClick(card)}
+>
+  <div className="flex items-center">
+    <div className={`p-3 rounded-full mr-3 ${darkMode ? card.darkBgColor : card.bgColor}`}>
+      <card.icon className={`h-6 w-6 ${card.color}`} />
+    </div>
+    <div className="text-left">
+      <p className="text-sm text-gray-400">{card.title}</p>
+      <h3 className="text-2xl font-bold mt-1 pl-4">{card.value}</h3>
+    </div>
+  </div>
+</motion.div>
 
-              </div>
-            </div>
-          </motion.div>
         ))}
       </div>
 
@@ -247,3 +231,12 @@ const StatusCards = ({ darkMode, department }) => {
 };
 
 export default StatusCards;
+
+
+
+
+
+
+
+
+

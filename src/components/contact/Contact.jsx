@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../header/Header";
 import Footer from "../footer/Footer";
-import service1 from "../../assests/image.png";
+import service1 from "../../assests/contact-img.png";
 import service2 from "../../assests/image copy.png";
 import service3 from "../../assests/image copy 2.png";
  

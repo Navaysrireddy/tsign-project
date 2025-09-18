@@ -302,7 +302,7 @@ const Assignments = ({ darkMode }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.1 }} className={`flex items-center p-4 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[3px_3px_6px_#1a202c,-3px_-3px_6px_#2d3748]' : 'bg-white shadow-[3px_3px_6px_#d1d5db,-3px_-3px_6px_#ffffff]'}`}>
-          <div className={`p-3 rounded-full ${darkMode ? 'bg-blue-900/20' : 'bg-blue-100'}`}>
+          <div className={`p-3 rounded-full ${darkMode ? 'bg-blue-900/20' : 'bg-blue-100'}`} >
             <ClipboardListIcon className="h-6 w-6 text-blue-500" />
           </div>
           <div className="ml-4">

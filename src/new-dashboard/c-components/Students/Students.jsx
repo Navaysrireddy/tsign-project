@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { SearchIcon, FilterIcon, DownloadIcon } from 'lucide-react'
+import {  FilterIcon, DownloadIcon } from 'lucide-react'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import {
@@ -17,7 +17,6 @@ import {
 } from 'chart.js'
 import { Line, Bar } from 'react-chartjs-2'
 
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -30,14 +29,12 @@ ChartJS.register(
   Filler,
 )
 
-
 const departments = [
   { id: 'dept1', name: 'B.Tech' },
   { id: 'dept2', name: 'M.Tech' },
   { id: 'dept3', name: 'MBA' },
   { id: 'dept4', name: 'Degree' },
 ]
-
 
 const courses = [
   { id: 'course1', departmentId: 'dept1', name: 'Computer Science and Engineering (CSE)' },
@@ -48,7 +45,6 @@ const courses = [
   { id: 'course6', departmentId: 'dept3', name: 'Master of Business Administration (MBA)' },
   { id: 'course7', departmentId: 'dept4', name: 'Bachelor of Science (BSc)' },
 ]
-
 
 const students = [
   { id: 'stu1', name: 'John Doe', email: 'john@example.com', department: 'B.Tech', course: 'CSE', year: 4, gpa: 8.5, placement: { status: 'Placed', company: 'Google', package: '12 LPA' }, },
@@ -279,7 +275,6 @@ const courseAcademicData = {
   },
 }
 
-
 const LineChart = ({ title, labels, datasets, darkMode }) => {
   const options = {
     responsive: true,
@@ -314,7 +309,6 @@ const LineChart = ({ title, labels, datasets, darkMode }) => {
   return <Line options={options} data={data} />
 }
 
-
 const BarChart = ({ title, labels, datasets, stacked = false, darkMode }) => {
   const options = {
     responsive: true,
@@ -348,19 +342,22 @@ const BarChart = ({ title, labels, datasets, stacked = false, darkMode }) => {
   return <Bar options={options} data={data} />
 }
 
-
 const Students = ({ darkMode }) => {
   const [view, setView] = useState('all') // options: all, placed, non_placed
   const [selectedDepartment, setSelectedDepartment] = useState('All')
   const [selectedCourse, setSelectedCourse] = useState('All')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery] = useState('')
   const [filteredStudents, setFilteredStudents] = useState(students)
+  const [selectedYear, setSelectedYear] = useState('All')
+  const [selectedGpa, setSelectedGpa] = useState('All') // NEW complex GPA filter state
   const [studentPerformanceData, setStudentPerformanceData] = useState(null)
   const [studentDistributionData, setStudentDistributionData] = useState(null)
+
   const getShortName = useCallback((courseName) => {
     const shortName = courseName.match(/\(([^)]+)\)/)
     return shortName ? shortName[1] : courseName
   }, [])
+
   const generateStudentPerformanceData = useCallback(
     (filteredStudents) => {
       if (selectedDepartment !== 'All' && selectedCourse === 'All') {
@@ -426,6 +423,7 @@ const Students = ({ darkMode }) => {
     },
     [selectedDepartment, selectedCourse, view],
   )
+
   const generateStudentDistributionData = useCallback(
     (filteredStudents) => {
       if (selectedDepartment === 'All' && selectedCourse === 'All') {
@@ -500,21 +498,49 @@ const Students = ({ darkMode }) => {
     },
     [selectedDepartment, selectedCourse, view, getShortName],
   )
+
   useEffect(() => {
     let result = [...students]
+
     if (view === 'placed') {
       result = result.filter((student) => student.placement.status === 'Placed')
     } else if (view === 'non_placed') {
       result = result.filter((student) => student.placement.status === 'Not Placed')
     }
+
     if (selectedDepartment !== 'All') {
-      result = result.filter(
-        (student) => student.department === selectedDepartment,
-      )
+      result = result.filter((student) => student.department === selectedDepartment)
     }
+
     if (selectedCourse !== 'All') {
       result = result.filter((student) => student.course === selectedCourse)
     }
+
+    if (selectedYear !== 'All') {
+      result = result.filter((student) => student.year === Number(selectedYear))
+    }
+
+    // GPA filtering with extended options
+    if (selectedGpa === 'Highest' && result.length > 0) {
+      const maxGpa = Math.max(...result.map(student => student.gpa))
+      result = result.filter(student => student.gpa === maxGpa)
+    } else if (selectedGpa === 'Lowest' && result.length > 0) {
+      const minGpa = Math.min(...result.map(student => student.gpa))
+      result = result.filter(student => student.gpa === minGpa)
+    } else if (selectedGpa === 'Middle' && result.length > 2) {
+      const uniqueGpas = Array.from(new Set(result.map(student => student.gpa))).sort((a, b) => a - b)
+      if (uniqueGpas.length > 2) {
+        const minGpa = uniqueGpas[0]
+        const maxGpa = uniqueGpas[uniqueGpas.length - 1]
+        result = result.filter(student => student.gpa !== minGpa && student.gpa !== maxGpa)
+      } else {
+        // If only two or fewer unique GPAs, middle group is empty
+        result = []
+      }
+    } else if (selectedGpa !== 'All' && selectedGpa !== 'Highest' && selectedGpa !== 'Lowest' && selectedGpa !== 'Middle') {
+      result = result.filter(student => student.gpa >= Number(selectedGpa))
+    }
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
       result = result.filter(
@@ -530,13 +556,13 @@ const Students = ({ darkMode }) => {
     view,
     selectedDepartment,
     selectedCourse,
+    selectedYear,
+    selectedGpa,
     searchQuery,
     generateStudentPerformanceData,
     generateStudentDistributionData,
   ])
 
-
-  // PDF Download function
   const downloadPDF = () => {
     const doc = new jsPDF()
     doc.setFontSize(16)
@@ -572,7 +598,6 @@ const Students = ({ darkMode }) => {
     doc.save('filtered_students.pdf')
   }
 
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
@@ -587,85 +612,106 @@ const Students = ({ darkMode }) => {
           </p>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
-        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          {/* <div className={`flex items-center ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded-lg pl-4 pr-2 py-2 w-full md:w-auto`}>
-            <SearchIcon className={`h-4 w-4 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-            <input
-              type="text"
-              placeholder="Search students..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className={`bg-transparent border-none outline-none ml-2 w-full ${darkMode ? 'text-gray-200 placeholder-gray-400' : 'text-gray-700 placeholder-gray-500'}`}
-            />
-          </div> */}
-          <select
-            value={selectedDepartment}
-            onChange={(e) => {
-              setSelectedDepartment(e.target.value)
-              setSelectedCourse('All')
-            }}
-            className={`${darkMode ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-white border-gray-200 text-gray-700'} border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500`}
-          >
-            <option value="All">All Departments</option>
-            {departments.map((dept) => (
-              <option key={dept.id} value={dept.name}>
-                {dept.name}
-              </option>
-            ))}
-          </select>
-          <select
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-            className={`${darkMode ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-white border-gray-200 text-gray-700'} border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500`}
-          >
-            <option value="All">All Courses</option>
-            {courses
-              .filter(
-                (course) =>
-                  selectedDepartment === 'All' ||
-                  course.departmentId ===
-                  departments.find((d) => d.name === selectedDepartment)?.id,
-              )
-              .map((course) => {
-                const shortName = (course.name.match(/\(([^)]+)\)/) || [])[1] || course.name
-                return (
-                  <option key={course.id} value={shortName}>
-                    {course.name}
-                  </option>
-                )
-              })}
-          </select>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => setView('all')}
-              className={`px-4 py-2 rounded-md ${view === 'all' ? 'bg-teal-100 text-teal-600 dark:bg-teal-900 dark:text-teal-300' : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}
-            >
-              All Students
-            </button>
-            <button
-              onClick={() => setView('placed')}
-              className={`px-4 py-2 rounded-md ${view === 'placed' ? 'bg-teal-100 text-teal-600 dark:bg-teal-900 dark:text-teal-300' : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}
-            >
-              Placed Students
-            </button>
-            <button
-              onClick={() => setView('non_placed')}
-              className={`px-4 py-2 rounded-md ${view === 'non_placed' ? 'bg-teal-100 text-teal-600 dark:bg-teal-900 dark:text-teal-300' : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}
-            >
-              Non-Placed Students
-            </button>
-          </div>
-        </div>
-        <button
-          onClick={downloadPDF}
-          className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow disabled:opacity-40 mt-2 md:mt-0"
-          title="Download PDF"
-        >
-          <DownloadIcon className="w-4 h-4 mr-1" />
-          Download PDF
-        </button>
-      </div>
+      <div className="flex flex-col gap-4 mb-4">
+  {/* First row: Departments and Courses */}
+  <div className="flex flex-row gap-3 flex-wrap">
+    <select
+      value={selectedDepartment}
+      onChange={(e) => {
+        setSelectedDepartment(e.target.value)
+        setSelectedCourse('All')
+      }}
+      className={`${darkMode ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-white border-gray-200 text-gray-700'} border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500`}
+    >
+      <option value="All">All Departments</option>
+      {departments.map((dept) => (
+        <option key={dept.id} value={dept.name}>
+          {dept.name}
+        </option>
+      ))}
+    </select>
+    <select
+      value={selectedCourse}
+      onChange={(e) => setSelectedCourse(e.target.value)}
+      className={`${darkMode ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-white border-gray-200 text-gray-700'} border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500`}
+    >
+      <option value="All">All Courses</option>
+      {courses
+        .filter(
+          (course) =>
+            selectedDepartment === 'All' ||
+            course.departmentId === departments.find((d) => d.name === selectedDepartment)?.id,
+        )
+        .map((course) => {
+          const shortName = (course.name.match(/\(([^)]+)\)/) || [])[1] || course.name
+          return (
+            <option key={course.id} value={shortName}>
+              {course.name}
+            </option>
+          )
+        })}
+    </select>
+  </div>
+
+  {/* Second row: Year, GPA, View buttons and Download PDF button */}
+  <div className="flex flex-row gap-3 flex-wrap items-center">
+    <select
+      value={selectedYear}
+      onChange={e => setSelectedYear(e.target.value)}
+      className={`${darkMode ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-white border-gray-200 text-gray-700'} border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500`}
+    >
+      <option value="All">All Years</option>
+      <option value="1">Year 1</option>
+      <option value="2">Year 2</option>
+      <option value="3">Year 3</option>
+      <option value="4">Year 4</option>
+    </select>
+
+    <select
+      value={selectedGpa}
+      onChange={e => setSelectedGpa(e.target.value)}
+      className={`${darkMode ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-white border-gray-200 text-gray-700'} border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500`}
+    >
+      <option value="All">All GPA</option>
+      <option value="Highest">Highest GPA</option>
+      <option value="Middle">Middle GPA</option>
+      <option value="Lowest">Lowest GPA</option>
+      <option value="9">Above 9.0</option>
+      <option value="8">Above 8.0</option>
+    </select>
+
+    <div className="flex space-x-2">
+      <button
+        onClick={() => setView('all')}
+        className={`px-4 py-2 rounded-md ${view === 'all' ? 'bg-teal-100 text-teal-600 dark:bg-teal-900 dark:text-teal-300' : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}
+      >
+        All Students
+      </button>
+      <button
+        onClick={() => setView('placed')}
+        className={`px-4 py-2 rounded-md ${view === 'placed' ? 'bg-teal-100 text-teal-600 dark:bg-teal-900 dark:text-teal-300' : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}
+      >
+        Placed Students
+      </button>
+      <button
+        onClick={() => setView('non_placed')}
+        className={`px-4 py-2 rounded-md ${view === 'non_placed' ? 'bg-teal-100 text-teal-600 dark:bg-teal-900 dark:text-teal-300' : darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}
+      >
+        Non-Placed Students
+      </button>
+    </div>
+
+    <button
+      onClick={downloadPDF}
+      className="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow disabled:opacity-40"
+      title="Download PDF"
+    >
+      <DownloadIcon className="w-4 h-4 mr-1" />
+      Download PDF
+    </button>
+  </div>
+</div>
+
       <motion.div
         className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-xl p-5 shadow-sm border overflow-x-auto`}
         initial={{ opacity: 0, y: 20 }}
@@ -683,13 +729,23 @@ const Students = ({ darkMode }) => {
           >
             <FilterIcon className="h-4 w-4 mr-1" />
             <span>
-              Filtered by {selectedDepartment !== 'All'
-                ? selectedDepartment
-                : 'All Departments'}
+              Filtered by {selectedDepartment !== 'All' ? selectedDepartment : 'All Departments'}
               , {selectedCourse !== 'All' ? selectedCourse : 'All Courses'}
+              , {selectedYear !== 'All' ? `Year ${selectedYear}` : 'All Years'}
+              , {selectedGpa === 'All'
+                  ? 'All GPA'
+                  : selectedGpa === 'Highest'
+                    ? 'Highest GPA'
+                    : selectedGpa === 'Lowest'
+                      ? 'Lowest GPA'
+                      : selectedGpa === 'Middle'
+                        ? 'Middle GPA'
+                        : `GPA > ${selectedGpa}`
+                }
             </span>
           </div>
         </div>
+
         <table className={`min-w-full divide-y ${darkMode ? 'divide-gray-700' : 'divide-gray-200'}`}>
           <thead className={darkMode ? 'bg-gray-700' : 'bg-gray-50'}>
             <tr>
@@ -698,7 +754,7 @@ const Students = ({ darkMode }) => {
               <th className={`px-6 py-3 text-left text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>Course</th>
               <th className={`px-6 py-3 text-left text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>Year</th>
               <th className={`px-6 py-3 text-left text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>GPA</th>
-              {(view === 'placed' ) && (
+              {(view === 'placed') && (
                 <th className={`px-6 py-3 text-left text-xs font-medium ${darkMode ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>Package</th>
               )}
             </tr>
@@ -727,13 +783,14 @@ const Students = ({ darkMode }) => {
                 <td className={`px-6 py-4 whitespace-nowrap text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{student.course}</td>
                 <td className={`px-6 py-4 whitespace-nowrap text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{student.year}</td>
                 <td className={`px-6 py-4 whitespace-nowrap text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{student.gpa}</td>
-                {(view === 'placed' ) && (
+                {(view === 'placed') && (
                   <td className={`px-6 py-4 whitespace-nowrap text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{student.placement.package}</td>
                 )}
               </motion.tr>
             ))}
           </tbody>
         </table>
+
         {filteredStudents.length === 0 && (
           <div className="text-center py-8">
             <p className={darkMode ? 'text-gray-400' : 'text-gray-500'}>
@@ -742,6 +799,7 @@ const Students = ({ darkMode }) => {
           </div>
         )}
       </motion.div>
+
       {/* Charts Section */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
@@ -749,7 +807,7 @@ const Students = ({ darkMode }) => {
             Student Analytics
           </h2>
         </div>
-        {/* Charts */}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <motion.div
             className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-xl p-5 shadow-sm border`}
@@ -773,6 +831,7 @@ const Students = ({ darkMode }) => {
               />
             )}
           </motion.div>
+
           <motion.div
             className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-xl p-5 shadow-sm border`}
             initial={{ opacity: 0, y: 20 }}
@@ -801,4 +860,4 @@ const Students = ({ darkMode }) => {
     </div>
   )
 }
-export default Students;
+export default Students

@@ -1,23 +1,187 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeftIcon, SearchIcon, DownloadIcon } from 'lucide-react';
+import jsPDF from 'jspdf';
+
+// Simple theme context stub (replace with your actual ThemeContext if using)
 import { useTheme } from '../context/ThemeContext';
-import { detailedRecruiterData, recruiterManagementSummary } from '../utils/mockData';
+
+// Mock data imports (replace with your actual data source)
+import { recruiterManagementSummary } from '../utils/mockData';
+
+// Recruiter dataset with career page URLs
+const detailedRecruiterData = [
+  {
+    id: 1,
+    name: "Capgemini India",
+    email: "hr@capgemini.com",
+    location: "Bangalore",
+    careersUrl: "https://www.capgemini.com/in-en/careers/"
+  },
+  {
+    id: 2,
+    name: "TCS",
+    email: "careers@tcs.com",
+    location: "Hyderabad",
+    careersUrl: "https://www.tcs.com/careers"
+  },
+  {
+    id: 3,
+    name: "Infosys",
+    email: "jobs@infosys.com",
+    location: "Pune",
+    careersUrl: "https://www.infosys.com/careers"
+  },
+  {
+    id: 4,
+    name: "Wipro",
+    email: "hr@wipro.com",
+    location: "Chennai",
+    careersUrl: "https://careers.wipro.com"
+  },
+  {
+    id: 5,
+    name: "HCL Technologies",
+    email: "jobs@hcl.com",
+    location: "Noida",
+    careersUrl: "https://www.hcltech.com/careers"
+  },
+  {
+    id: 6,
+    name: "Tech Mahindra",
+    email: "careers@techmahindra.com",
+    location: "Pune",
+    careersUrl: "https://careers.techmahindra.com"
+  },
+  {
+    id: 7,
+    name: "IBM India",
+    email: "jobs@ibm.com",
+    location: "Bangalore",
+    careersUrl: "https://www.ibm.com/careers/in-en"
+  },
+  {
+    id: 8,
+    name: "Accenture India",
+    email: "careers@accenture.com",
+    location: "Gurgaon",
+    careersUrl: "https://www.accenture.com/in-en/careers"
+  },
+  {
+    id: 9,
+    name: "Deloitte India",
+    email: "jobs@deloitte.com",
+    location: "Hyderabad",
+    careersUrl: "https://jobs.deloitte.com/"
+  },
+  {
+    id: 10,
+    name: "EY India",
+    email: "careers@ey.com",
+    location: "Mumbai",
+    careersUrl: "https://www.ey.com/en_in/careers"
+  },
+  {
+    id: 11,
+    name: "KPMG India",
+    email: "jobs@kpmg.com",
+    location: "Gurgaon",
+    careersUrl: "https://home.kpmg/in/en/home/careers.html"
+  },
+  {
+    id: 12,
+    name: "Oracle India",
+    email: "oracle@oracle.com",
+    location: "Bangalore",
+    careersUrl: "https://careers.oracle.com"
+  },
+  {
+    id: 13,
+    name: "Microsoft India",
+    email: "jobs@microsoft.com",
+    location: "Hyderabad",
+    careersUrl: "https://careers.microsoft.com"
+  },
+  {
+    id: 14,
+    name: "Google India",
+    email: "careers@google.com",
+    location: "Bangalore",
+    careersUrl: "https://careers.google.com"
+  },
+  {
+    id: 15,
+    name: "Amazon India",
+    email: "jobs@amazon.com",
+    location: "Hyderabad",
+    careersUrl: "https://www.amazon.jobs/en/locations/india"
+  }
+];
+
+// Utility to export filtered recruiters to CSV
+const recruitersToCSV = (recruiters) => {
+  const headers = ['ID', 'Name', 'Email', 'Location', 'Careers URL'];
+  const rows = recruiters.map(recruiter =>
+    [
+      recruiter.id,
+      `"${recruiter.name}"`,
+      `"${recruiter.email}"`,
+      `"${recruiter.location || ''}"`,
+      `"${recruiter.careersUrl || ''}"`,
+    ].join(',')
+  );
+  return [headers.join(','), ...rows].join('\n');
+};
 
 const ManageRecruiters = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('Active');
 
-  // Filter data based on search term and status filter
+  // Filter data based on search term
   const filteredData = detailedRecruiterData.filter(recruiter => {
     const matchesSearch =
       recruiter.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      recruiter.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'All' || recruiter.status === statusFilter;
-    return matchesSearch && matchesStatus;
+      recruiter.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (recruiter.location && recruiter.location.toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchesSearch;
   });
+
+  const handleExportCSV = () => {
+    const csvString = recruitersToCSV(filteredData);
+    const blob = new Blob([csvString], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'recruiters_list.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Export to PDF
+  const handleExportPDF = async () => {
+    const autoTable = (await import('jspdf-autotable')).default;
+    const doc = new jsPDF();
+
+    const columns = ['ID', 'Name', 'Email', 'Location', 'Careers URL'];
+
+    const rows = filteredData.map(recruiter => [
+      recruiter.id,
+      recruiter.name,
+      recruiter.email,
+      recruiter.location || '',
+      recruiter.careersUrl || '',
+    ]);
+
+    doc.text('Recruiters List', 14, 15);
+    autoTable(doc, {
+      head: [columns],
+      body: rows,
+      startY: 20,
+    });
+
+    doc.save('recruiters_list.pdf');
+  };
 
   return (
     <div className="space-y-6 w-full">
@@ -63,7 +227,7 @@ const ManageRecruiters = () => {
         </div>
       </div>
 
-      {/* Search and filters */}
+      {/* Search and export */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
         <div
           className={`relative flex-1 max-w-md rounded-lg overflow-hidden border ${
@@ -75,7 +239,7 @@ const ManageRecruiters = () => {
           </div>
           <input
             type="text"
-            placeholder="Search by name or email..."
+            placeholder="Search by name, email or location..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             className={`w-full py-2 pl-10 pr-4 focus:outline-none ${
@@ -84,18 +248,8 @@ const ManageRecruiters = () => {
           />
         </div>
         <div className="flex gap-2">
-          <select
-            value={statusFilter}
-            onChange={e => setStatusFilter(e.target.value)}
-            className={`px-4 py-2 rounded-lg border ${
-              theme === 'dark' ? 'bg-gray-900 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'
-            } focus:outline-none`}
-          >
-            <option value="All">All</option>
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
           <button
+            onClick={handleExportCSV}
             className={`px-4 py-2 rounded-lg border flex items-center gap-2 ${
               theme === 'dark'
                 ? 'bg-gray-900 border-gray-700 hover:bg-gray-800'
@@ -103,7 +257,18 @@ const ManageRecruiters = () => {
             }`}
           >
             <DownloadIcon size={16} />
-            <span className="hidden sm:inline">Export</span>
+            <span className="hidden sm:inline">Export CSV</span>
+          </button>
+          <button
+            onClick={handleExportPDF}
+            className={`px-4 py-2 rounded-lg border flex items-center gap-2 ${
+              theme === 'dark'
+                ? 'bg-gray-900 border-gray-700 hover:bg-gray-800'
+                : 'bg-white border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            <DownloadIcon size={16} />
+            <span className="hidden sm:inline">Export PDF</span>
           </button>
         </div>
       </div>
@@ -121,7 +286,7 @@ const ManageRecruiters = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Name</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Location</th>
               </tr>
             </thead>
             <tbody
@@ -133,31 +298,35 @@ const ManageRecruiters = () => {
                 filteredData.map(recruiter => (
                   <tr
                     key={recruiter.id}
-                    className={`${theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-gray-50'} transition-colors`}
+                    className={`${
+                      theme === 'dark' ? 'hover:bg-gray-900' : 'hover:bg-gray-50'
+                    } transition-colors`}
                   >
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{recruiter.id}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{recruiter.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{recruiter.email}</td>
+
+                    {/* Name column → external company careers page */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          recruiter.status === 'Active'
-                            ? theme === 'dark'
-                              ? 'bg-green-900/30 text-green-400'
-                              : 'bg-green-100 text-green-600'
-                            : theme === 'dark'
-                            ? 'bg-gray-800 text-gray-400'
-                            : 'bg-gray-100 text-gray-600'
-                        }`}
-                      >
-                        {recruiter.status}
-                      </span>
+                      {recruiter.careersUrl ? (
+                        <a
+                          href={recruiter.careersUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          {recruiter.name}
+                        </a>
+                      ) : (
+                        recruiter.name
+                      )}
                     </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{recruiter.email}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{recruiter.location || '-'}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
+                  <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
                     No recruiters found
                   </td>
                 </tr>
