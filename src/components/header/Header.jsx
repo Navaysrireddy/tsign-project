@@ -169,7 +169,7 @@ function Header() {
               ${isActive 
                 ? "bg-[#004aad] text-white shadow-md" 
                 : "text-[#004aad] hover:bg-[#004aad]/10 hover:text-[#004aad]"}`
-            }
+            }  
           >
             Login/Enroll
           </NavLink>

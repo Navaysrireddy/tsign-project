@@ -268,6 +268,31 @@ const About = () => {
       description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit voluptatum facere ab dolorem dolores animi voluptas neque magnam et distinctio!",
       image: "https://img.freepik.com/premium-vector/vector-image-business-woman-shirt-suit_1213699-3044.jpg",
     },
+    {
+      name: "person4",
+      role: "xxxxxxxxxxxxxxx",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit voluptatum facere ab dolorem dolores animi voluptas neque magnam et distinctio!",
+      image: "https://img.freepik.com/premium-vector/vector-image-business-woman-shirt-suit_1213699-3044.jpg",
+    },
+    {
+      name: "person5",
+      role: "xxxxxxxxxxxxxxx",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit voluptatum facere ab dolorem dolores animi voluptas neque magnam et distinctio!",
+      image: "https://img.freepik.com/premium-vector/vector-image-business-woman-shirt-suit_1213699-3044.jpg",
+    },
+    {
+      name: "person6",
+      role: "xxxxxxxxxxxxxxx",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit voluptatum facere ab dolorem dolores animi voluptas neque magnam et distinctio!",
+      image: "https://img.freepik.com/premium-vector/vector-image-business-woman-shirt-suit_1213699-3044.jpg",
+    },
+    {
+      name: "person7",
+      role: "xxxxxxxxxxxxxxx",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit voluptatum facere ab dolorem dolores animi voluptas neque magnam et distinctio!",
+      image: "https://img.freepik.com/premium-vector/vector-image-business-woman-shirt-suit_1213699-3044.jpg",
+    },
+    
   ];
  
   // const nextMember = () => {

@@ -11,6 +11,7 @@ import {
   XIcon,
   PlusIcon
 } from 'lucide-react';
+import jsPDF from 'jspdf';
 // import EventsCalendar from './EventsCalendar';
 import EventCategoryChart from './EventCategoryChart';
 import EventAttendanceChart from './EventAttendanceChart';
@@ -41,7 +42,7 @@ const Events = ({ darkMode }) => {
         registrationUrl: 'https://careers.google.com/jobs/results/',
         image: ''
       },
-      {
+      { 
         id: 2,
         title: 'AI Workshop by Microsoft',
         date: 'Jan 25, 2025',
@@ -94,6 +95,11 @@ const Events = ({ darkMode }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddEventModalOpen, setIsAddEventModalOpen] = useState(false);
+   // Registration modal state
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [registeringEvent, setRegisteringEvent] = useState(null);
+  const [studentName, setStudentName] = useState('');
+  const [studentEmail, setStudentEmail] = useState('');
 
   // Filter events based on filters and search
   const filteredEvents = allEvents.filter(event => {
@@ -199,6 +205,40 @@ const Events = ({ darkMode }) => {
 
     setIsAddEventModalOpen(false);
   };
+    const openRegisterModal = (event) => {
+    setRegisteringEvent(event);
+    setStudentName('');
+    setStudentEmail('');
+    setIsRegisterModalOpen(true);
+  };
+
+  const handleRegisterSubmit = (e) => {
+    e.preventDefault();
+    if (!studentName.trim() || !studentEmail.trim() || !registeringEvent) return;
+
+    setAllEvents((prevEvents) =>
+      prevEvents.map((event) => {
+        if (event.id === registeringEvent.id) {
+          if (event.registeredStudents.length >= event.maxCapacity) {
+            alert('Event capacity full.');
+            return event;
+          }
+          return {
+            ...event,
+            registeredStudents: [
+              ...event.registeredStudents,
+              { id: Date.now(), name: studentName.trim(), email: studentEmail.trim() },
+            ],
+            attendees: event.attendees + 1,
+          };
+        }
+        return event;
+      }),
+    );
+
+    setIsRegisterModalOpen(false);
+    alert(`Registered successfully for ${registeringEvent.title}`);
+  };
 
   // Framer motion animation config
   const container = {
@@ -210,6 +250,55 @@ const Events = ({ darkMode }) => {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 }
   };
+  const handleDownloadPDF = (event) => {
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const registeredStudents = Array.isArray(event.registeredStudents)
+        ? event.registeredStudents
+        : [];
+
+      doc.setFontSize(20);
+      doc.text('Event Registration Report', 10, 20);
+
+      doc.setFontSize(14);
+      doc.text(`Event: ${event.title}`, 10, 40);
+      doc.text(`Date: ${event.date}`, 10, 50);
+      doc.text(`Location: ${event.location}`, 10, 60);
+      doc.text(`Category: ${event.category}`, 10, 70);
+      doc.text(`Departments: ${event.departments ? event.departments.join(', ') : ''}`, 10, 80);
+      doc.text(`Registered Students: ${registeredStudents.length}`, 10, 90);
+
+      doc.setFontSize(12);
+      doc.text('No.', 10, 100);
+      doc.text('Name', 30, 100);
+      doc.text('Email', 110, 100);
+      doc.line(10, 102, pageWidth - 10, 102);
+
+      let y = 110;
+      registeredStudents.forEach((student, idx) => {
+        if (y > 280) {
+          doc.addPage();
+          y = 20;
+          doc.text('No.', 10, y);
+          doc.text('Name', 30, y);
+          doc.text('Email', 110, y);
+          doc.line(10, y + 2, pageWidth - 10, y + 2);
+          y += 10;
+        }
+        doc.text(`${idx + 1}`, 10, y);
+        doc.text(student.name || '', 30, y);
+        doc.text(student.email || '', 110, y);
+        y += 8;
+      });
+
+      doc.save(`registration_${event.title ? event.title.replace(/\s/g, '_') : 'event'}.pdf`);
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      alert('Failed to generate PDF. See console for details.');
+    }
+  };
+
 
   return (
     <div className="space-y-6">
@@ -508,23 +597,81 @@ const Events = ({ darkMode }) => {
           </motion.div>
         </div>
       )}
+        {/* Registration Modal */}
+      {isRegisterModalOpen && registeringEvent && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className={`relative rounded-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto ${
+              darkMode ? 'bg-gray-800' : 'bg-white'
+            }`}
+          >
+            <button
+              onClick={() => setIsRegisterModalOpen(false)}
+              className="absolute top-4 right-4 p-1 rounded-full"
+            >
+              <XIcon className={`h-5 w-5 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`} />
+            </button>
+            <h2 className={`text-xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              Register for "{registeringEvent.title}"
+            </h2>
+            <form onSubmit={handleRegisterSubmit} className="space-y-4">
+              <div>
+                <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Name *</label>
+                <input
+                  type="text"
+                  value={studentName}
+                  onChange={(e) => setStudentName(e.target.value)}
+                  required
+                  className={`w-full p-2 rounded-lg ${
+                    darkMode ? 'bg-gray-700 text-white placeholder-gray-400' : 'bg-gray-100 text-gray-900 placeholder-gray-500'
+                  }`}
+                  placeholder="Enter your full name"
+                />
+              </div>
+              <div>
+                <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Email *</label>
+                <input
+                  type="email"
+                  value={studentEmail}
+                  onChange={(e) => setStudentEmail(e.target.value)}
+                  required
+                  className={`w-full p-2 rounded-lg ${
+                    darkMode ? 'bg-gray-700 text-white placeholder-gray-400' : 'bg-gray-100 text-gray-900 placeholder-gray-500'
+                  }`}
+                  placeholder="Enter your email address"
+                />
+              </div>
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsRegisterModalOpen(false)}
+                  className={`px-4 py-2 rounded-lg ${
+                    darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-800'
+                  }`}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-teal-500 to-blue-600 text-white shadow-md"
+                >
+                  Register
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+
 
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <h1 className="text-2xl font-bold">Events</h1>
         </motion.div>
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          onClick={() => setIsAddEventModalOpen(true)}
-          className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-teal-500 to-blue-600 text-white shadow-md`}
-        >
+        <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} onClick={() => setIsAddEventModalOpen(true)} className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-teal-500 to-blue-600 text-white shadow-md`}>
           <PlusIcon className="h-4 w-4 mr-2" />
           Add Event
         </motion.button>
@@ -638,12 +785,12 @@ const Events = ({ darkMode }) => {
       </div>
 
       {/* Events List */}
-      <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} transition={{duration: 0.5, delay: 0.4}} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
+     
+      {/* Events List with Register and Download PDF buttons */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Upcoming Events</h2>
-          <div className={`px-3 py-1 rounded-full text-sm ${darkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800'}`}>
-            {filteredEvents.length} events
-          </div>
+          <div className={`px-3 py-1 rounded-full text-sm ${darkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800'}`}>{filteredEvents.length} events</div>
         </div>
         {filteredEvents.length === 0 ? (
           <div className="text-center py-10">
@@ -651,37 +798,17 @@ const Events = ({ darkMode }) => {
           </div>
         ) : (
           <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
-            {filteredEvents.map(event => (
-              <motion.div
-                key={event.id}
-                variants={item}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className={`p-4 rounded-xl ${darkMode ? 'bg-gray-700 shadow-[3px_3px_6px_#1a202c,-3px_-3px_6px_#2d3748]' : 'bg-gray-50 shadow-[3px_3px_6px_#d1d5db,-3px_-3px_6px_#ffffff]'}`}
-              >
-                {/* Event Image */}
-                {/* {event.image && (
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-48 object-cover rounded-lg mb-3"
-                  />
-                )} */}
-
+            {filteredEvents.map((event) => (
+              <motion.div key={event.id} variants={item} whileHover={{ y: -5, transition: { duration: 0.2 } }} className={`p-4 rounded-xl ${darkMode ? 'bg-gray-700 shadow-[3px_3px_6px_#1a202c,-3px_-3px_6px_#2d3748]' : 'bg-gray-50 shadow-[3px_3px_6px_#d1d5db,-3px_-3px_6px_#ffffff]'}`}>
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                   <div>
                     <div className="flex items-center">
                       <h3 className="font-semibold">{event.title}</h3>
-                      <span className={`ml-3 px-2 py-1 text-xs rounded-full ${darkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800'}`}>
-                        {event.category}
-                      </span>
+                      <span className={`ml-3 px-2 py-1 text-xs rounded-full ${darkMode ? 'bg-blue-900/30 text-blue-300' : 'bg-blue-100 text-blue-800'}`}>{event.category}</span>
                     </div>
-                    <p className="text-sm text-gray-400 mt-1">
-                      {event.date} • {event.time}
-                    </p>
+                    <p className="text-sm text-gray-400 mt-1">{event.date} • {event.time}</p>
                   </div>
-                  <div className={`mt-2 md:mt-0 px-3 py-1 rounded-lg text-sm ${darkMode ? 'bg-green-900/20 text-green-300' : 'bg-green-50 text-green-800'}`}>
-                    {event.attendees}/{event.maxCapacity} Attendees
-                  </div>
+                  <div className={`mt-2 md:mt-0 px-3 py-1 rounded-lg text-sm ${darkMode ? 'bg-green-900/20 text-green-300' : 'bg-green-50 text-green-800'}`}>{event.attendees}/{event.maxCapacity} Attendees</div>
                 </div>
                 <div className="mt-3 space-y-2">
                   <div className="flex items-center text-sm">
@@ -694,21 +821,13 @@ const Events = ({ darkMode }) => {
                   </div>
                 </div>
                 <p className="mt-2 text-sm text-gray-400">{event.description}</p>
-                <div className="mt-4 flex justify-end">
-                  <motion.a
-                    href={event.registrationUrl || '#'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`flex items-center text-sm font-medium ${
-                      darkMode
-                        ? 'bg-gradient-to-r from-teal-500 to-blue-600'
-                        : 'bg-gradient-to-r from-teal-400 to-blue-500'
-                    } text-white px-3 py-1.5 rounded-lg ${!event.registrationUrl ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}
-                  >
+                <div className="mt-4 flex justify-end gap-2">
+                  <button onClick={() => openRegisterModal(event)} className={`flex items-center text-sm font-medium px-3 py-1.5 rounded-lg text-white bg-gradient-to-r from-teal-500 to-blue-600`}>
                     Register <ArrowRightIcon className="h-3.5 w-3.5 ml-1" />
-                  </motion.a>
+                  </button>
+                  <button onClick={() => handleDownloadPDF(event)} className={`flex items-center px-3 py-1.5 rounded-lg font-medium ml-2 text-white bg-gradient-to-r from-green-500 to-blue-600`}>
+                    Download PDF
+                  </button>
                 </div>
               </motion.div>
             ))}
@@ -716,29 +835,44 @@ const Events = ({ darkMode }) => {
         )}
       </motion.div>
 
-      {/* Statistics & Charts */}
-      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-          <h2 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">Events Calendar</h2>
-          <div className="h-96">
-            <EventsCalendar darkMode={darkMode} events={filteredEvents} />
+      {/* Registered Students Data Table */}
+      {allEvents.some((event) => event.registeredStudents && event.registeredStudents.length > 0) && (
+        <div className={`p-6 mt-6 rounded-xl shadow ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+          <h2 className={`text-xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+            Registered Students Data
+          </h2>
+          <div className="overflow-x-auto">
+            {allEvents
+              .filter((event) => event.registeredStudents && event.registeredStudents.length > 0)
+              .map((event) => (
+                <div key={event.id} className="mb-8">
+                  <h3 className={`font-semibold mb-2 ${darkMode ? 'text-blue-400' : 'text-blue-700'}`}>
+                    {event.title} ({event.registeredStudents.length} registered)
+                  </h3>
+                  <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-600 text-sm">
+                    <thead>
+                      <tr className={`${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                        <th className="border border-gray-300 dark:border-gray-600 py-2 px-3 text-left">#</th>
+                        <th className="border border-gray-300 dark:border-gray-600 py-2 px-3 text-left">Name</th>
+                        <th className="border border-gray-300 dark:border-gray-600 py-2 px-3 text-left">Email</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {event.registeredStudents.map((student, idx) => (
+                        <tr key={student.id} className={idx % 2 === 0 ? (darkMode ? 'bg-gray-800' : 'bg-white') : (darkMode ? 'bg-gray-700' : 'bg-gray-50')}>
+                          <td className="border border-gray-300 dark:border-gray-600 py-1 px-3">{idx + 1}</td>
+                          <td className="border border-gray-300 dark:border-gray-600 py-1 px-3">{student.name}</td>
+                          <td className="border border-gray-300 dark:border-gray-600 py-1 px-3">{student.email}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
           </div>
-        </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="space-y-6">
-          <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Event Categories</h2>
-            <div className="h-80">
-              <EventCategoryChart darkMode={darkMode} events={filteredEvents} />
-            </div>
-          </div>
-          <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-800 shadow-[5px_5px_10px_#1f2937,-5px_-5px_10px_#374151]' : 'bg-white shadow-[5px_5px_10px_#bebebe,-5px_-5px_10px_#ffffff]'}`}>
-            <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Attendance Rate</h2>
-            <div className="h-72">
-              <EventAttendanceChart darkMode={darkMode} events={filteredEvents} />
-            </div>
-          </div>
-        </motion.div>
-      </div> */}
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
   {/* Event Categories */}
   <motion.div

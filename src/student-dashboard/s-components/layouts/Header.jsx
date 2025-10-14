@@ -10,11 +10,11 @@ import {
   ChevronDownIcon
 } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
- 
+
 const Header = ({ toggleSidebar }) => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
- 
+
   const [notifications, setNotifications] = useState([
     { id: 1, type: 'assignment', message: 'Data Structures assignment due tomorrow', unread: true },
     { id: 2, type: 'event', message: 'Google recruiting event on Jan 20, 2025', unread: true },
@@ -28,40 +28,50 @@ const Header = ({ toggleSidebar }) => {
     email: "john.smith@example.com",
     degreeCollege: "Computer Science, Year 3"
   });
- 
+
   const notificationRef = useRef(null);
   const profileRef = useRef(null);
   const unreadCount = notifications.filter(n => n.unread).length;
- 
-  useEffect(() => {
-    // Load student profile data from localStorage
-    const savedData = localStorage.getItem("StudentProfile");
+
+  // ---- UPDATED: Proper key name and live update ----
+  function loadProfile() {
+    const savedData = localStorage.getItem("StudentProfileData");
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
-        setStudentData(prevData => ({
-          ...prevData,
+        return {
+          ...studentData,
           ...parsedData,
-          // Ensure we have fallback values if some fields are missing
-          studentName: parsedData.studentName || prevData.studentName,
-          email: parsedData.email || prevData.email,
-          degreeCollege: parsedData.degreeCollege || prevData.degreeCollege
-        }));
-      } catch (e) {
-        console.error("Error parsing student profile data:", e);
-      }
+          studentName: parsedData.studentName || studentData.studentName,
+          email: parsedData.email || studentData.email,
+          degreeCollege: parsedData.degreeCollege || studentData.degreeCollege
+        };
+      } catch (e) {}
     }
+    return studentData;
+  }
+
+  useEffect(() => {
+    setStudentData(loadProfile());
+    const reload = () => setStudentData(loadProfile());
+    window.addEventListener('profile-updated', reload);
+    window.addEventListener('storage', reload);
+    return () => {
+      window.removeEventListener('profile-updated', reload);
+      window.removeEventListener('storage', reload);
+    };
+    // eslint-disable-next-line
   }, []);
- 
+
   const markAllAsRead = () => {
     setNotifications(notifications.map(n => ({ ...n, unread: false })));
   };
- 
+
   const handleLogout = () => {
     alert('Logging out...');
     navigate("/login");
   };
- 
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
@@ -76,7 +86,7 @@ const Header = ({ toggleSidebar }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
- 
+
   // Function to get initials from name
   const getInitials = (name) => {
     if (!name) return "JS";
@@ -87,7 +97,7 @@ const Header = ({ toggleSidebar }) => {
       .toUpperCase()
       .slice(0, 2);
   };
- 
+
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 md:px-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
       <div className="flex items-center">
@@ -99,7 +109,7 @@ const Header = ({ toggleSidebar }) => {
           <MenuIcon className="w-6 h-6 text-gray-700 dark:text-gray-200" />
         </button>
       </div>
- 
+
       <div className="flex items-center space-x-4">
         {/* 🔔 Notifications */}
         <div className="relative" ref={notificationRef}>
@@ -144,7 +154,7 @@ const Header = ({ toggleSidebar }) => {
             </div>
           )}
         </div>
- 
+
         {/* 🌙 Theme Toggle */}
         <button
           onClick={toggleTheme}
@@ -157,7 +167,7 @@ const Header = ({ toggleSidebar }) => {
             <MoonIcon className="w-6 h-6 text-gray-700" />
           )}
         </button>
- 
+
         {/* 👤 Profile Menu */}
         <div className="relative" ref={profileRef}>
           <button
@@ -172,7 +182,7 @@ const Header = ({ toggleSidebar }) => {
               />
             ) : (
               <div className="w-9 h-9 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold">
-                {getInitials(studentData.studentName)}
+                  {getInitials(studentData.studentName)}
               </div>
             )}
             <span className="hidden md:flex items-center text-gray-800 dark:text-white font-medium">
@@ -209,7 +219,7 @@ const Header = ({ toggleSidebar }) => {
                   <UserIcon className="w-4 h-4 mr-3" />
                   My Profile
                 </button>
- 
+
               </div>
               <div className="py-2 border-t border-gray-200 dark:border-gray-700">
                 <button
@@ -227,6 +237,5 @@ const Header = ({ toggleSidebar }) => {
     </header>
   );
 };
- 
+
 export default Header;
- 
